@@ -308,47 +308,115 @@ nav {
             transform: translateX(5px);
         }
         
+    .director-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .director-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .director-info {
+        padding: 2.5rem;
+    }
+    
+    .director-title {
+        color: #f59e0b;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 1.5rem;
+    }
+    
+    .expertise-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+    
+    .tag {
+        background: #f1f5ff;
+        color: #2563eb;
+        padding: 0.3rem 0.8rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .achievement-list {
+        margin: 1.5rem 0;
+        list-style: none;
+    }
+    
+    .achievement-list li {
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.7rem;
+        color: #1e293b;
+    }
+    
+    .achievement-list i {
+        color: #f59e0b;
+        margin-top: 0.2rem;
+    }
+    
+    .director-quote {
+        font-style: italic;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-left: 3px solid #2563eb;
+        margin: 1.5rem 0;
+    }
+    
+    .director-cta {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .outline-button {
+        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        border: 2px solid #2563eb;
+        color: #2563eb;
+        background: transparent;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .outline-button:hover {
+        background: #2563eb;
+        color: white;
+    }
+    
+    @media (max-width: 768px) {
         .director-card {
-            background-color: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            max-width: 800px;
-            margin: 2rem auto;
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 1.5rem;
-            align-items: center;
-            text-align: left;
+            grid-template-columns: 1fr;
         }
         
         .director-image {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
+            height: 300px;
         }
         
-        .director-info h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
+        .director-cta {
+            flex-direction: column;
         }
-        
-        .director-title {
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            display: block;
-        }
-        
-        .director-bio {
-            color: #6c757d;
-            margin-bottom: 1rem;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-        
+    }        
         .enquiry-form {
             max-width: 600px;
             margin: 2rem auto 0;
@@ -635,19 +703,19 @@ nav {
             <h1>Empowering Institutions & Learners with Digital Excellence</h1>
             <p>We provide cutting-edge digital solutions for organizations and transformative education programs to prepare the workforce of tomorrow.</p>
             <div class="hero-buttons">
-                <button class="cta-button">Explore Solutions</button>
-                <button class="secondary-button">View Courses</button>
+                <a href="services.html" class="cta-button">Explore Solutions</a>
+                <a href="academy.html" class="secondary-button">View Courses</a>
             </div>
         </div>
     </section>
 
     <div class="stats">
         <div class="stat-item">
-            <div class="stat-number">150+</div>
+            <div class="stat-number">5+</div>
             <div class="stat-label">Institutions Served</div>
         </div>
         <div class="stat-item">
-            <div class="stat-number">8,000+</div>
+            <div class="stat-number">15+</div>
             <div class="stat-label">Students Trained</div>
         </div>
         <div class="stat-item">
@@ -656,30 +724,41 @@ nav {
         </div>
     </div>
 
-    <section class="section" id="services">
-        <h2 class="section-title">Our Digital Solutions</h2>
-        <p class="section-subtitle">Comprehensive services to help your organization thrive in the digital age</p>
+   <section class="section" id="services">
+    <h2 class="section-title">Our Digital Solutions</h2>
+    <p class="section-subtitle">Key services to power your digital transformation</p>
+    
+    <div class="services-grid">
+        <!-- Data & Analytics -->
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="service-title">Data Solutions</h3>
+            <p class="service-description">Analytics, BI systems, and database management to turn data into decisions.</p>
+            <a href="#" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
+        </div>
         
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-network-wired"></i>
-                </div>
-                <h3 class="service-title">Network Solutions</h3>
-                <p class="service-description">Design and implementation of robust network infrastructure for businesses and institutions.</p>
-                <a href="#" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
+        <!-- Custom Development -->
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-laptop-code"></i>
             </div>
-            
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3 class="service-title">Cybersecurity</h3>
-                <p class="service-description">Protect your digital assets with our comprehensive security assessments and implementation.</p>
-                <a href="#" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
+            <h3 class="service-title">Custom Development</h3>
+            <p class="service-description">Web, mobile, and software solutions tailored to your business needs.</p>
+            <a href="#" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <!-- System Integration -->
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-server"></i>
             </div>
-            
-            <div class="service-card">
+            <h3 class="service-title">System Integration</h3>
+            <p class="service-description">CBT, accounting, and infrastructure setup for seamless operations.</p>
+            <a href="#" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
+        </div>
+         <div class="service-card">
                 <div class="service-icon">
                     <i class="fas fa-laptop-code"></i>
                 </div>
@@ -687,23 +766,56 @@ nav {
                 <p class="service-description">Upskill your team with our industry-aligned digital skills programs.</p>
                 <a href="#" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
             </div>
-        </div>
-    </section>
+    </div>
+    
+    <div class="text-center" style="margin-top: 3rem;">
+        <a href="services.html" class="cta-button">Explore All Services</a>
+    </div>
+</section>
 
     <section class="section" id="director">
-        <h2 class="section-title">Our Leadership</h2>
-        <p class="section-subtitle">Meet the visionary behind DigSkills</p>
-        
-        <div class="director-card">
-            <img src="images/CEO.jpg" alt="Director" class="director-image">
-            <div class="director-info">
-                <h3>Emmanuel Ademuyiwa</h3>
-                <span class="director-title">Founder & CEO</span>
-                <p class="director-bio">With over 15 years in the tech industry, Emmanuel founded DigSkills to bridge the digital skills gap in Africa. His vision has grown the organization from a small training initiative to a leading digital solutions provider.</p>
-                <a href="team-section.about.html" class="learn-more">Read more <i class="fas fa-arrow-right"></i></a>
+    <h2 class="section-title">Driving Digital Transformation</h2>
+    <p class="section-subtitle">The Visionary Leadership Behind DigSkills</p>
+    
+    <div class="director-card">
+        <img src="images/CEO.jpg" alt="Emmanuel Ademuyiwa, Founder & CEO" class="director-image">
+        <div class="director-info">
+            <h3>Emmanuel Ademuyiwa</h3>
+            <span class="director-title">Founder & CEO | DigSkills</span>
+            
+            <div class="expertise-tags">
+                <span class="tag">Business Technology</span>
+                <span class="tag">Data Analytics</span>
+                <span class="tag">Web Development</span>
+                <span class="tag">Digital Education</span>
+            </div>
+            
+            <p class="director-bio">
+                A dynamic leader with dual expertise in <strong>Business Administration</strong> and <strong>Information Technology</strong>, Emmanuel founded DigSkills to bridge Africa's digital divide. His unique blend of technical mastery and business acumen drives our mission to deliver:
+            </p>
+            
+            <ul class="achievement-list">
+                <li><i class="fas fa-check-circle"></i> Practical digital solutions for businesses</li>
+                <li><i class="fas fa-check-circle"></i> Data-driven decision making frameworks</li>
+                <li><i class="fas fa-check-circle"></i> Scalable tech infrastructure</li>
+                <li><i class="fas fa-check-circle"></i> Future-proof skills training</li>
+            </ul>
+            
+            <p class="director-quote">
+                "At DigSkills, we don't just adapt to the digital age - we help shape it through innovative solutions and empowered talent."
+            </p>
+            
+            <div class="director-cta">
+                <a href="team-section.about.html" class="cta-button">
+                    <i class="fas fa-book-open"></i> Full Profile
+                </a>
+                <a href="contact.html" class="outline-button">
+                    <i class="fas fa-handshake"></i> Consult CEO
+                </a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="section" id="partners">
         <h2 class="section-title">Our Partners</h2>
