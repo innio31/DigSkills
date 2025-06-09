@@ -673,6 +673,56 @@ nav {
         font-size: 1rem;
     }
 }
+/* Add this CSS to your styles */
+.hero {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    background-color: var(--dark); /* Fallback color */
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.6); /* Dark overlay for better text visibility */
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 3rem 5%;
+    }
+    
+    .hero-content {
+        padding: 1.5rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -698,16 +748,29 @@ nav {
         </nav>
     </header>
 
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>Empowering Institutions & Learners with Digital Excellence</h1>
-            <p>We provide cutting-edge digital solutions for organizations and transformative education programs to prepare the workforce of tomorrow.</p>
-            <div class="hero-buttons">
+<section class="hero" id="home">
+    <div class="hero-slider">
+        <!-- Slide 1 -->
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');"></div>
+        <!-- Slide 2 -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+        <!-- Slide 3 -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+        <!-- Slide 4 -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1677442135136-760c813a743e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+        <!-- Slide 5 -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+    </div>
+    
+    <div class="hero-content">
+        <h1>Empowering Institutions & Learners with Digital Excellence</h1>
+        <p>We provide cutting-edge digital solutions for organizations and transformative education programs to prepare the workforce of tomorrow.</p>
+        <div class="hero-buttons">
                 <a href="services.html" class="cta-button">Explore Solutions</a>
                 <a href="academy.html" class="secondary-button">View Courses</a>
-            </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <div class="stats">
         <div class="stat-item">
@@ -960,5 +1023,28 @@ nav {
         <i class="fab fa-linkedin-in"></i>
     </a>
 </div>
+// Add this script at the bottom of your body (before closing </body> tag)
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+        
+        // Change slide every 5 seconds
+        setInterval(nextSlide, 5000);
+        
+        // Show first slide immediately
+        showSlide(0);
+    });
+</script>
 </body>
 </html>
