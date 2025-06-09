@@ -7,4 +7,4 @@
   status = 200
 
 [context.production.environment]
-  NETLIFY_IDENTITY_URL = "https://your-site.netlify.app/.netlify/identity"
+  NETLIFY_IDENTITY_URL = "https://digskills.netlify.app/.netlify/identity"
