@@ -581,6 +581,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="JavaScipt Essentials I">Enroll Now</a>
         </div>
     </div>
 
@@ -598,6 +599,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="JavaScript Essentials II">Enroll Now</a>
         </div>
     </div>
 
@@ -615,6 +617,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="Python Essentials I">Enroll Now</a>
         </div>
     </div>
 
@@ -632,6 +635,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="Python Essentials II">Enroll Now</a>
         </div>
     </div>
 
@@ -649,6 +653,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="HTML Essentials">Enroll Now</a>
         </div>
     </div>
 
@@ -666,6 +671,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="CSS Essentials">Enroll Now</a>
         </div>
     </div>
 
@@ -683,6 +689,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="Introduction to Cybersecurity">Enroll Now</a>
         </div>
     </div>
 
@@ -700,6 +707,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="Cybersecurity Essentials">Enroll Now</a>
         </div>
     </div>
 
@@ -717,6 +725,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> In-person</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="Computer Fundamentals">Enroll Now</a>
         </div>
     </div>
 
@@ -734,6 +743,7 @@
             <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
         </div>
         <a href="#" class="program-cta">Enroll Now</a>
+        <a href="#" class="program-cta" data-course="Excel Essentials I">Enroll Now</a>
     </div>
 </div>
 
@@ -751,6 +761,7 @@
             <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
         </div>
         <a href="#" class="program-cta">Enroll Now</a>
+        <a href="#" class="program-cta" data-course="Excel Essentials II">Enroll Now</a>
     </div>
 </div>
 
@@ -768,6 +779,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="PowerBI">Enroll Now</a>
         </div>
     </div>
 
@@ -785,6 +797,7 @@
                 <span class="program-mode"><i class="fas fa-laptop"></i> In-person</span>
             </div>
             <a href="#" class="program-cta">Enroll Now</a>
+            <a href="#" class="program-cta" data-course="Scratch">Enroll Now</a>
         </div>
     </div>
 </div> 
@@ -895,6 +908,45 @@
                 // In a real implementation, you would filter programs here
             });
         });
+        document.querySelectorAll('.program-cta').forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.preventDefault();
+    const courseName = e.target.getAttribute('data-course');
+    
+    if (netlifyIdentity.currentUser()) {
+      // User is logged in - proceed to enrollment
+      enrollUser(courseName);
+    } else {
+      // User needs to login/signup first
+      document.getElementById('course-name').value = courseName;
+      netlifyIdentity.open('signup');
+      netlifyIdentity.on('login', () => {
+        enrollUser(courseName);
+      });
+    }
+  });
+});
+
+async function enrollUser(courseName) {
+  // Save to user's dashboard
+  const user = netlifyIdentity.currentUser();
+  const response = await fetch('/.netlify/functions/enroll', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${user.token.access_token}`
+    },
+    body: JSON.stringify({
+      userId: user.id,
+      course: courseName,
+      enrolledAt: new Date().toISOString()
+    })
+  });
+  
+  if (response.ok) {
+    window.location.href = '/dashboard/';
+  }
+        }
     </script>
 </body>
 </html>
