@@ -467,42 +467,44 @@ nav {
         
         <div class="contact-form">
             <h2>Send Us a Message</h2>
-            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-               
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="Your name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="Your email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone">Phone Number (Optional)</label>
-                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="Your phone number">
-                </div>
-                
-                <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <select id="subject" name="subject" class="form-control" required>
-                        <option value="" disabled selected>Select a subject</option>
-                        <option value="training">Training Programs</option>
-                        <option value="corporate">Corporate Solutions</option>
-                        <option value="partnership">Partnership Inquiry</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="message">Your Message</label>
-                    <textarea id="message" name="message" class="form-control" placeholder="How can we help you?" required></textarea>
-                </div>
-                
-                <button type="submit" class="submit-btn">Send Message</button>
-            </form>
-        </div>
+            <form action="https://formsubmit.co/dig2skills@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="New Contact Form Submission">
+    <input type="hidden" name="_next" value="https://yourwebsite.com/thank-you.html">
+    <input type="hidden" name="_captcha" value="false">
+    
+    <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="Your name" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="Your email" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="phone">Phone Number (Optional)</label>
+        <input type="tel" id="phone" name="phone" class="form-control" placeholder="Your phone number">
+    </div>
+    
+    <div class="form-group">
+        <label for="subject">Subject</label>
+        <select id="subject" name="subject" class="form-control" required>
+            <option value="" disabled selected>Select a subject</option>
+            <option value="training">Training Programs</option>
+            <option value="corporate">Corporate Solutions</option>
+            <option value="partnership">Partnership Inquiry</option>
+            <option value="other">Other</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="message">Your Message</label>
+        <textarea id="message" name="message" class="form-control" placeholder="How can we help you?" required></textarea>
+    </div>
+    
+    <button type="submit" class="submit-btn">Send Message</button>
+    </form>
         
         <div class="map-container">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.585444464403!2d3.379295415393318!3d6.450972595338273!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae68280c1%3A0xdc9e87a367c3d9cb!2sYaba%20College%20of%20Technology!5e0!3m2!1sen!2sng!4v1620000000000!5m2!1sen!2sng" allowfullscreen="" loading="lazy"></iframe>
