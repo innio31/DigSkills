@@ -1,0 +1,20 @@
+<h1>Your Dashboard</h1>
+<div id="enrollments"></div>
+
+<script>
+  auth.onAuthStateChanged(user => {
+    if (!user) window.location.href = "/academy.html";
+    
+    db.collection("enrollments")
+      .where("userId", "==", user.uid)
+      .get()
+      .then(snapshot => {
+        let html = "<h3>Your Enrollments:</h3>";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          html += `<p>${data.program} (Enrolled on ${data.enrolledAt.toDate().toLocaleDateString()})</p>`;
+        });
+        document.getElementById("enrollments").innerHTML = html;
+      });
+  });
+</script>
