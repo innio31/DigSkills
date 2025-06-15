@@ -985,6 +985,29 @@ async function enrollUser(courseName) {
 </script>
     <script>
   // Firebase Initialization (paste your config here)
+        <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyC_gMaLMek6wMhZRp7zm9vhewjI1xbkg18",
+    authDomain: "digskills-academy.firebaseapp.com",
+    projectId: "digskills-academy",
+    storageBucket: "digskills-academy.firebasestorage.app",
+    messagingSenderId: "468547526976",
+    appId: "1:468547526976:web:e73c59923ae5c4da84daa5",
+    measurementId: "G-8BRN5MXBLW"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
   const firebaseConfig = { ... }; // Your config from Firebase Console
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
