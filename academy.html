@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigSkills Academy | Cisco-Accredited Digital Training</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    
     <style>
         :root {
             --primary: #2563eb;
@@ -92,6 +98,73 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+
+        /* Auth Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.8rem;
+            cursor: pointer;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .auth-tab.active {
+            border-bottom: 2px solid var(--primary);
+            font-weight: 600;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .auth-form input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+        }
+        
+        .auth-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
         }
         
         /* Academy Hero Section */
@@ -255,6 +328,7 @@
             border-radius: 8px;
             font-weight: 600;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .program-cta:hover {
@@ -492,6 +566,29 @@
     </style>
 </head>
 <body>
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="signup">Sign Up</div>
+            </div>
+            
+            <div class="auth-form active" id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button class="auth-submit" onclick="login()">Login</button>
+            </div>
+            
+            <div class="auth-form" id="signupForm">
+                <input type="text" id="signupName" placeholder="Full Name">
+                <input type="email" id="signupEmail" placeholder="Email">
+                <input type="password" id="signupPassword" placeholder="Password">
+                <button class="auth-submit" onclick="signup()">Create Account</button>
+            </div>
+        </div>
+    </div>
+
     <header>
         <nav>
             <div class="logo">
@@ -508,307 +605,94 @@
                 <li><a href="academy.html" class="active">Academy</a></li>
                 <li><a href="services.html">Services</a></li>
                 <li><a href="about.html">About</a></li>
-                
-<section class="enrollment-section">
-  <button id="show-enroll-form">Enrol Now</button> <!-- Button that triggers the form -->
-
-  <!-- Hidden Auth & Enrollment Forms (appear when clicked) -->
-  <div id="auth-container" style="display: none;">
-    <!-- Login/Signup Form -->
-    <div id="login-form">
-      <h3>Create Account or Login</h3>
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button onclick="login()">Login</button>
-      <button onclick="signup()">Sign Up</button>
-    </div>
-
-    <!-- Program Selection (after login) -->
-    <div id="enroll-form" style="display: none;">
-      <select id="program">
-        <option value="web-dev">Web Development</option>
-        <option value="data-science">Data Science</option>
-      </select>
-      <button onclick="enroll()">Complete Enrollment</button>
-    </div>
-  </div>
-
-  <!-- Dashboard Link (visible after enrollment) -->
-  <div id="dashboard-link" style="display: none;">
-    <a href="/dashboard.html">Go to Dashboard →</a>
-  </div>
-</section>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
-            <a href="contact.html" class="cta-button">Enroll Now</a>
+            <button class="cta-button" id="authButton">Enroll Now</button>
         </nav>
     </header>
 
     <section class="academy-hero">
         <h1>Transform Your Career with Industry-Driven Programs</h1>
         <p>Gain in-demand digital skills through our hands-on training programs designed for the African tech ecosystem</p>
-        <a href="#programs" class="cta-button">Explore Programs</a>
+        <button class="cta-button" id="heroEnrollButton">Explore Programs</button>
     </section>
 
     <section class="programs-section" id="programs">
         <h2 class="section-title">Our Training Programs</h2>
         <p class="section-subtitle">Choose from our range of beginner to advanced level courses to kickstart or advance your tech career</p>
     
-        
         <div class="programs-grid">
-    <!-- C Essentials I -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1566837945700-30057527ade0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="C Programming">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Beginner</span>
-            <h3 class="program-title">C Essentials I (Cisco)</h3>
-            <p class="program-description">Build foundational programming skills with C, covering variables, operators, control flow, and basic data structures. Perfect for aspiring software developers.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 6 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
+            <!-- Web Development-->
+            <div class="program-card">
+                <div class="program-image">
+                    <img src="images/web-development.jpg" alt="Web Development">
+                </div>
+                <div class="program-content">
+                    <span class="program-level">Beginner</span>
+                    <h3 class="program-title">WEB DEVELOPMENT</h3>
+                    <p class="program-description">Build foundational programming skills with C, covering variables, operators, control flow, and basic data structures. Perfect for aspiring software developers.</p>
+                    <button class="program-cta" data-course="web-development">Enroll Now</button>
+                </div>
             </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
 
-    <!-- C Essentials II -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Advanced C Programming">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Intermediate</span>
-            <h3 class="program-title">C Essentials II (Cisco)</h3>
-            <p class="program-description">Advance your C skills with pointers, memory management, file operations, and complex data structures. Essential for system programming.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 8 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
+            <!--DATA ANALYSIS-->
+            <div class="program-card">
+                <div class="program-image">
+                    <img src="data-analysis.jpeg" alt="Data Analysis">
+                </div>
+                <div class="program-content">
+                    <h3 class="program-title">Data Analysis</h3>
+                    <p class="program-description">Advance your C skills with pointers, memory management, file operations, and complex data structures. Essential for system programming.</p>
+                    <button class="program-cta" data-course="data-analysis">Enroll Now</button>
+                </div>
             </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
 
-    <!-- JavaScript Essentials I -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="JavaScript Programming">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Beginner</span>
-            <h3 class="program-title">JavaScript Essentials I (Cisco)</h3>
-            <p class="program-description">Learn web development fundamentals with JavaScript, covering syntax, DOM manipulation, and basic event handling for interactive websites.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 5 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
+            <!--CYBERSECURITY-->
+            <div class="program-card">
+                <div class="program-image">
+                    <img src="images/cyber.jpeg" alt="JavaScript Programming">
+                </div>
+                <div class="program-content">
+                    <span class="program-level">Beginner</span>
+                    <h3 class="program-title">Cybersecurity</h3>
+                    <p class="program-description">Learn web development fundamentals with JavaScript, covering syntax, DOM manipulation, and basic event handling for interactive websites.</p>
+                    <div class="program-details">
+                        <span class="program-duration"><i class="far fa-clock"></i> 5 Weeks</span>
+                        <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
+                    </div>
+                    <button class="program-cta" data-course="cybersecurity">Enroll Now</button>
+                </div>
             </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
 
-    <!-- JavaScript Essentials II -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Advanced JavaScript">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Intermediate</span>
-            <h3 class="program-title">JavaScript Essentials II (Cisco)</h3>
-            <p class="program-description">Master advanced JavaScript concepts including ES6+, asynchronous programming, APIs, and modern frameworks for full-stack development.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 7 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
+            <!-- APP DEVELOPMENT -->
+            <div class="program-card">
+                <div class="program-image">
+                    <img src="images/app-development.jpeg" alt="Advanced JavaScript">
+                </div>
+                <div class="program-content">
+                    <span class="program-level">Intermediate</span>
+                    <h3 class="program-title">App Development</h3>
+                    <p class="program-description">Master advanced JavaScript concepts including ES6+, asynchronous programming, APIs, and modern frameworks for full-stack development.</p>
+                    <button class="program-cta" data-course="app-development">Enroll Now</button>
+                </div>
             </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
-
-    <!-- Python Essentials I -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80" alt="Python Programming">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Beginner</span>
-            <h3 class="program-title">Python Essentials I (Cisco)</h3>
-            <p class="program-description">Start your Python journey with fundamentals like variables, loops, functions, and basic data structures for automation and problem-solving.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 6 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
+            
+            <!-- Computer Fundamentals -->
+            <div class="program-card">
+                <div class="program-image">
+                    <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="Computer Basics">
+                </div>
+                <div class="program-content">
+                    <span class="program-level">Beginner</span>
+                    <h3 class="program-title">Computer Fundamentals</h3>
+                    <p class="program-description">Essential computing skills covering hardware, software, operating systems, and basic troubleshooting for technology beginners.</p>
+                    <div class="program-details">
+                        <span class="program-duration"><i class="far fa-clock"></i> 4 Weeks</span>
+                        <span class="program-mode"><i class="fas fa-laptop"></i> In-person</span>
+                    </div>
+                    <button class="program-cta" data-course="computer-fundamentals">Enroll Now</button>
+                </div>
             </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
-
-    <!-- Python Essentials II -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Advanced Python">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Intermediate</span>
-            <h3 class="program-title">Python Essentials II (Cisco)</h3>
-            <p class="program-description">Dive deeper into Python with OOP concepts, file handling, modules, and working with libraries for data analysis and web development.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 8 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
-            </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
-
-    <!-- HTML Essentials -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="HTML Coding">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Beginner</span>
-            <h3 class="program-title">HTML Essentials (Cisco)</h3>
-            <p class="program-description">Master the building blocks of web pages with HTML5, covering semantic markup, forms, multimedia, and accessibility best practices.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 4 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
-            </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
-
-    <!-- CSS Essentials -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1523437113738-bbd3cc89fb19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="CSS Styling">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Beginner</span>
-            <h3 class="program-title">CSS Essentials (Cisco)</h3>
-            <p class="program-description">Transform web pages with CSS3, learning selectors, layouts, responsive design, animations, and modern styling techniques.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 5 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
-            </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-          </div>
-    </div>
-
-    <!-- Introduction to Cybersecurity -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Cybersecurity">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Beginner</span>
-            <h3 class="program-title">Introduction to Cybersecurity (Cisco)</h3>
-            <p class="program-description">Explore cybersecurity fundamentals including threats, vulnerabilities, attacks, and defense strategies in our digital world.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 6 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
-            </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
-
-    <!-- Cybersecurity Essentials -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Advanced Cybersecurity">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Intermediate</span>
-            <h3 class="program-title">Cybersecurity Essentials (Cisco)</h3>
-            <p class="program-description">Dive deeper into security principles, cryptography, network defense, and ethical hacking techniques.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 10 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
-            </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
-
-    <!-- Computer Fundamentals -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="Computer Basics">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Beginner</span>
-            <h3 class="program-title">Computer Fundamentals</h3>
-            <p class="program-description">Essential computing skills covering hardware, software, operating systems, and basic troubleshooting for technology beginners.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 4 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> In-person</span>
-            </div>
-            <a href="#" class="program-cta">Enroll Now</a>
-        </div>
-    </div>
-
-<!-- Microsoft Excel Essentials I -->
-<div class="program-card">
-    <div class="program-image">
-        <img src="images/excel.jpg" alt="Excel Interface">
-    </div>
-    <div class="program-content">
-        <span class="program-level">Beginner</span>
-        <h3 class="program-title">Microsoft Excel Essentials I</h3>
-        <p class="program-description">Master the Excel interface, core formulas (SUM, AVERAGE, IF), formatting techniques, and basic data visualization. Perfect for professionals looking to boost productivity.</p>
-        <div class="program-details">
-            <span class="program-duration"><i class="far fa-clock"></i> 5 Weeks</span>
-            <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>                                                                                                                              </div>
-        <a href="#" class="program-cta" data-course="Excel Essentials I">Enroll Now</a>
-    </div>
-</div>
-
-<!-- Microsoft Excel Essentials II -->
-<div class="program-card">
-    <div class="program-image">
-        <img src="images/advanced-excel.jpg" alt="Excel Dashboard">
-    </div>
-    <div class="program-content">
-        <span class="program-level">Intermediate</span>
-        <h3 class="program-title">Microsoft Excel Essentials II</h3>
-        <p class="program-description">Advanced data analysis with VLOOKUP, pivot tables, conditional logic, and dashboard creation. Learn to automate workflows and present insights professionally.</p>
-        <div class="program-details">
-            <span class="program-duration"><i class="far fa-clock"></i> 6 Weeks</span>
-            <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
-        </div>
-        <a href="#" class="program-cta" data-course="Excel Essentials II">Enroll Now</a>
-    </div>
-</div>
-
-    <!-- PowerBI -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="images/powerBI.png" alt="Data Visualization">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Intermediate</span>
-            <h3 class="program-title">PowerBI</h3>
-            <p class="program-description">Transform raw data into compelling visual stories with Microsoft's Power BI platform for business intelligence and analytics.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 7 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
-            </div>
-            <a href="#" class="program-cta" data-course="PowerBI">Enroll Now</a>
-        </div>
-    </div>
-
-    <!-- Scratch -->
-    <div class="program-card">
-        <div class="program-image">
-            <img src="images/sratch.png" alt="Programming for Kids">
-        </div>
-        <div class="program-content">
-            <span class="program-level">Beginner</span>
-            <h3 class="program-title">Scratch</h3>
-            <p class="program-description">Introduce young learners to programming concepts through block-based coding, creating interactive stories, games and animations.</p>
-            <div class="program-details">
-                <span class="program-duration"><i class="far fa-clock"></i> 4 Weeks</span>
-                <span class="program-mode"><i class="fas fa-laptop"></i> In-person</span>
-            </div>
-            <a href="#" class="program-cta" data-course="Scratch">Enroll Now</a>
-        </div>
-    </div>
-</div> 
         </div>
     </section>
 
@@ -891,6 +775,31 @@
     </footer>
 
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_gMaLMek6wMhZRp7zm9vhewjI1xbkg18",
+            authDomain: "digskills-academy.firebaseapp.com",
+            projectId: "digskills-academy",
+            storageBucket: "digskills-academy.appspot.com",
+            messagingSenderId: "468547526976",
+            appId: "1:468547526976:web:e73c59923ae5c4da84daa5",
+            measurementId: "G-8BRN5MXBLW"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const authModal = document.getElementById('authModal');
+        const authButton = document.getElementById('authButton');
+        const heroEnrollButton = document.getElementById('heroEnrollButton');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const enrollButtons = document.querySelectorAll('.program-cta');
+
         // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
@@ -916,118 +825,128 @@
                 // In a real implementation, you would filter programs here
             });
         });
-        document.querySelectorAll('.program-cta').forEach(button => {
-  button.addEventListener('click', (e) => {
-    e.preventDefault();
-    const courseName = e.target.getAttribute('data-course');
-    
-    if (netlifyIdentity.currentUser()) {
-      // User is logged in - proceed to enrollment
-      enrollUser(courseName);
-    } else {
-      // User needs to login/signup first
-      document.getElementById('course-name').value = courseName;
-      netlifyIdentity.open('signup');
-      netlifyIdentity.on('login', () => {
-        enrollUser(courseName);
-      });
-    }
-  });
-});
 
-async function enrollUser(courseName) {
-  // Save to user's dashboard
-  const user = netlifyIdentity.currentUser();
-  const response = await fetch('/.netlify/functions/enroll', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${user.token.access_token}`
-    },
-    body: JSON.stringify({
-      userId: user.id,
-      course: courseName,
-      enrolledAt: new Date().toISOString()
-    })
-  });
-  
-  if (response.ok) {
-    window.location.href = '/dashboard/';
-  }
+        // Auth Modal Toggle
+        authButton.addEventListener('click', toggleAuthModal);
+        heroEnrollButton.addEventListener('click', toggleAuthModal);
+
+        function toggleAuthModal() {
+            authModal.style.display = authModal.style.display === 'flex' ? 'none' : 'flex';
         }
-    </script>
-    <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 
-<script>
-         <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+        // Auth Tab Switching
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                authTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                if (tab.dataset.tab === 'login') {
+                    loginForm.classList.add('active');
+                    signupForm.classList.remove('active');
+                } else {
+                    loginForm.classList.remove('active');
+                    signupForm.classList.add('active');
+                }
+            });
+        });
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyC_gMaLMek6wMhZRp7zm9vhewjI1xbkg18",
-    authDomain: "digskills-academy.firebaseapp.com",
-    projectId: "digskills-academy",
-    storageBucket: "digskills-academy.firebasestorage.app",
-    messagingSenderId: "468547526976",
-    appId: "1:468547526976:web:e73c59923ae5c4da84daa5",
-    measurementId: "G-8BRN5MXBLW"
-  };
+        // Close modal when clicking outside
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.style.display = 'none';
+            }
+        });
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+        // Login Function
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    alert('Logged in successfully!');
+                    authModal.style.display = 'none';
+                    updateAuthUI();
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
 
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_BUCKET.appspot.com",
-    messagingSenderId: "1234567890",
-    appId: "1:1234567890:web:abcdef123456"
-  };
+        // Signup Function
+        function signup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Save additional user data to Firestore
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        name: name,
+                        email: email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    alert('Account created successfully!');
+                    authModal.style.display = 'none';
+                    updateAuthUI();
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
 
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  
-  const firebaseConfig = { ... }; // Your config from Firebase Console
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+        // Enrollment Functionality
+        enrollButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const courseId = this.getAttribute('data-course');
+                
+                if (auth.currentUser) {
+                    // User is logged in - enroll them
+                    enrollUser(auth.currentUser.uid, courseId);
+                } else {
+                    // User needs to login/signup first
+                    alert('Please create an account or login first');
+                    toggleAuthModal();
+                }
+            });
+        });
 
-  // Show/hide forms when "Enrol" button is clicked
-  document.getElementById("show-enroll-form").addEventListener("click", () => {
-    document.getElementById("auth-container").style.display = "block";
-  });
+        function enrollUser(userId, courseId) {
+            db.collection('enrollments').add({
+                userId: userId,
+                courseId: courseId,
+                enrolledAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'pending'
+            })
+            .then(() => {
+                alert('Successfully enrolled in the course!');
+                window.location.href = 'dashboard.html';
+            })
+            .catch(error => {
+                alert('Error enrolling: ' + error.message);
+            });
+        }
 
-  // Auth State Listener (handles login/logout UI)
-  auth.onAuthStateChanged(user => {
-    const loginForm = document.getElementById("login-form");
-    const enrollForm = document.getElementById("enroll-form");
-    const dashboardLink = document.getElementById("dashboard-link");
+        // Update UI based on auth state
+        function updateAuthUI() {
+            if (auth.currentUser) {
+                authButton.textContent = 'My Dashboard';
+                authButton.onclick = () => {
+                    window.location.href = 'dashboard.html';
+                };
+            } else {
+                authButton.textContent = 'Enroll Now';
+                authButton.onclick = toggleAuthModal;
+            }
+        }
 
-    if (user) {
-      loginForm.style.display = "none";
-      enrollForm.style.display = "block";
-    } else {
-      loginForm.style.display = "block";
-      enrollForm.style.display = "none";
-    }
-  });
-
-  // Login/Signup/Enroll Functions (same as Step 3)
-  function login() { ... }
-  function signup() { ... }
-  function enroll() { ... }
+        // Check auth state on page load
+        auth.onAuthStateChanged(user => {
+            updateAuthUI();
+        });
     </script>
 </body>
 </html>
