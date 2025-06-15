@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigSkills Academy | Cisco-Accredited Digital Training</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <head>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    </head>
     <style>
         :root {
             --primary: #2563eb;
@@ -508,7 +514,36 @@
                 <li><a href="academy.html" class="active">Academy</a></li>
                 <li><a href="services.html">Services</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <!-- Inside academy.html -->
+<section class="enrollment-section">
+  <button id="show-enroll-form">Enrol Now</button> <!-- Button that triggers the form -->
+
+  <!-- Hidden Auth & Enrollment Forms (appear when clicked) -->
+  <div id="auth-container" style="display: none;">
+    <!-- Login/Signup Form -->
+    <div id="login-form">
+      <h3>Create Account or Login</h3>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button onclick="login()">Login</button>
+      <button onclick="signup()">Sign Up</button>
+    </div>
+
+    <!-- Program Selection (after login) -->
+    <div id="enroll-form" style="display: none;">
+      <select id="program">
+        <option value="web-dev">Web Development</option>
+        <option value="data-science">Data Science</option>
+      </select>
+      <button onclick="enroll()">Complete Enrollment</button>
+    </div>
+  </div>
+
+  <!-- Dashboard Link (visible after enrollment) -->
+  <div id="dashboard-link" style="display: none;">
+    <a href="/dashboard.html">Go to Dashboard →</a>
+  </div>
+</section>
             </ul>
             <a href="contact.html" class="cta-button">Enroll Now</a>
         </nav>
@@ -948,5 +983,37 @@ async function enrollUser(courseName) {
   const auth = firebase.auth();
   const db = firebase.firestore();
 </script>
+    <script>
+  // Firebase Initialization (paste your config here)
+  const firebaseConfig = { ... }; // Your config from Firebase Console
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // Show/hide forms when "Enrol" button is clicked
+  document.getElementById("show-enroll-form").addEventListener("click", () => {
+    document.getElementById("auth-container").style.display = "block";
+  });
+
+  // Auth State Listener (handles login/logout UI)
+  auth.onAuthStateChanged(user => {
+    const loginForm = document.getElementById("login-form");
+    const enrollForm = document.getElementById("enroll-form");
+    const dashboardLink = document.getElementById("dashboard-link");
+
+    if (user) {
+      loginForm.style.display = "none";
+      enrollForm.style.display = "block";
+    } else {
+      loginForm.style.display = "block";
+      enrollForm.style.display = "none";
+    }
+  });
+
+  // Login/Signup/Enroll Functions (same as Step 3)
+  function login() { ... }
+  function signup() { ... }
+  function enroll() { ... }
+    </script>
 </body>
 </html>
