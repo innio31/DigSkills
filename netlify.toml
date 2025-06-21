@@ -1,2 +1,2 @@
 [build]
-  functions = { '*': { external_node_modules = ['pg'] } }
+  functions = { '*': { external_node_modules = ['pg'] }
