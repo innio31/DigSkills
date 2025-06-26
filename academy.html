@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigSkills Academy | Cisco-Accredited Digital Training</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-    
     <style>
         :root {
             --primary: #2563eb;
@@ -34,7 +28,7 @@
             overflow-x: hidden;
         }
         
-        /* Header - Reused from Homepage */
+        /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -43,7 +37,6 @@
             width: 100%;
             z-index: 100;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
         }
         
         nav {
@@ -53,15 +46,14 @@
         }
         
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
             display: flex;
             align-items: center;
+            gap: 8px;
         }
         
-        .logo i {
-            margin-right: 10px;
-            color: var(--accent);
+        .logo-icon {
+            width: 32px;
+            height: auto;
         }
         
         .mobile-menu-btn {
@@ -87,84 +79,30 @@
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
+            position: relative;
         }
         
-        .cta-button {
-            background-color: var(--accent);
-            color: var(--dark);
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .nav-links a.active {
+            color: var(--accent);
         }
-
-        /* Auth Modal */
-        .auth-modal {
-            display: none;
-            position: fixed;
-            top: 0;
+        
+        .nav-links a.active:after {
+            width: 100%;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            bottom: -5px;
             left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover:after {
             width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .auth-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-        }
-        
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 1.5rem;
-        }
-        
-        .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 0.8rem;
-            cursor: pointer;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
-        .auth-tab.active {
-            border-bottom: 2px solid var(--primary);
-            font-weight: 600;
-        }
-        
-        .auth-form {
-            display: none;
-        }
-        
-        .auth-form.active {
-            display: block;
-        }
-        
-        .auth-form input {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 5px;
-        }
-        
-        .auth-submit {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.8rem;
-            width: 100%;
-            border-radius: 5px;
-            font-weight: 600;
-            cursor: pointer;
         }
         
         /* Academy Hero Section */
@@ -190,6 +128,25 @@
             opacity: 0.9;
         }
         
+        .cta-button {
+            background-color: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .cta-button:hover {
+            background-color: #fbbf24;
+            transform: translateY(-3px);
+        }
+        
         /* Programs Section */
         .programs-section {
             padding: 4rem 5%;
@@ -207,29 +164,6 @@
             color: #64748b;
             max-width: 700px;
             margin: 0 auto 3rem;
-        }
-        
-        .program-categories {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .category-btn {
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .category-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
         }
         
         .programs-grid {
@@ -329,6 +263,8 @@
             font-weight: 600;
             transition: all 0.3s ease;
             cursor: pointer;
+            border: none;
+            width: 100%;
         }
         
         .program-cta:hover {
@@ -515,6 +451,57 @@
             font-size: 0.8rem;
         }
         
+        /* Enrollment Modal */
+        .enroll-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            position: relative;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--dark);
+            z-index: 1001;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent);
+        }
+        
+        .modal-iframe-container {
+            flex: 1;
+            margin-top: 20px;
+        }
+        
+        .modal-iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 5px;
+        }
+        
         /* Responsive Styles */
         @media (max-width: 768px) {
             .mobile-menu-btn {
@@ -548,11 +535,6 @@
                 font-size: 2rem;
             }
             
-            .program-categories {
-                flex-direction: column;
-                align-items: center;
-            }
-            
             .cta-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -562,96 +544,36 @@
                 width: 100%;
                 max-width: 300px;
             }
+            
+            .modal-content {
+                height: 90vh;
+                margin: 2% auto;
+                padding: 15px;
+            }
         }
-        /* Logo Styles */
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.logo-icon {
-    width: 32px;
-    height: auto;
-}
-
-/* Navigation Link Styles */
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.nav-links a.active {
-    color: var(--accent);
-}
-
-.nav-links a.active:after {
-    width: 100%;
-}
-
-.nav-links a:after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    background: var(--accent);
-    bottom: -5px;
-    left: 0;
-    transition: width 0.3s ease;
-}
-
-.nav-links a:hover:after {
-    width: 100%;
-}
     </style>
 </head>
 <body>
-    <!-- Auth Modal -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-container">
-            <div class="auth-tabs">
-                <div class="auth-tab active" data-tab="login">Login</div>
-                <div class="auth-tab" data-tab="signup">Sign Up</div>
-            </div>
-            
-            <div class="auth-form active" id="loginForm">
-                <input type="email" id="loginEmail" placeholder="Email">
-                <input type="password" id="loginPassword" placeholder="Password">
-                <button class="auth-submit" onclick="login()">Login</button>
-            </div>
-            
-            <div class="auth-form" id="signupForm">
-                <input type="text" id="signupName" placeholder="Full Name">
-                <input type="email" id="signupEmail" placeholder="Email">
-                <input type="password" id="signupPassword" placeholder="Password">
-                <button class="auth-submit" onclick="signup()">Create Account</button>
-            </div>
-        </div>
-    </div>
-
     <header id="header">
-    <nav>
-        <div class="logo">
-            <img src="images/logo.png" alt="DigSkills Logo" class="logo-icon" />
-            <span>DigSkills</span>
-        </div>
-        
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="academy.html" class="active">Academy</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
-</header>
+        <nav>
+            <div class="logo">
+                <img src="images/logo.png" alt="DigSkills Logo" class="logo-icon" />
+                <span>DigSkills</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="academy.html" class="active">Academy</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <section class="academy-hero">
         <h1>Transform Your Career with Industry-Driven Programs</h1>
@@ -668,125 +590,81 @@
             <div class="program-card">
                 <div class="program-image">
                     <img src="images/web-development.jpg" alt="Web Development">
+                    <span class="program-badge">Popular</span>
                 </div>
                 <div class="program-content">
                     <span class="program-level">Beginner</span>
-                    <h3 class="program-title">WEB DEVELOPMENT</h3>
-                    <p class="program-description">Build foundational programming skills with C, covering variables, operators, control flow, and basic data structures. Perfect for aspiring software developers.</p>
-<div class="enroll-modal" id="enrollModal">
-  <div class="modal-content">
-    <span class="close-modal">&times;</span>
-    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header" 
-            width="100%" 
-            height="600" 
-            frameborder="0" 
-            marginheight="0" 
-            marginwidth="0">
-      Loading...
-    </iframe>
-  </div>
-</div>
-
-<style>
-.enroll-modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.8);
-}
-
-.modal-content {
-  background: white;
-  margin: 5% auto;
-  padding: 20px;
-  width: 90%;
-  max-width: 700px;
-  border-radius: 8px;
-  position: relative;
-}
-
-.close-modal {
-  position: absolute;
-  right: 20px;
-  top: 10px;
-  font-size: 28px;
-  cursor: pointer;
-}
-</style>
-
-<script>
-// Get all enroll buttons
-const enrollButtons = document.querySelectorAll('.program-cta');
-const modal = document.getElementById('enrollModal');
-const closeBtn = document.querySelector('.close-modal');
-
-// Open modal when any enroll button is clicked
-enrollButtons.forEach(button => {
-  button.addEventListener('click', function(e) {
-    e.preventDefault();
-    modal.style.display = 'block';
-    // Update iframe src with the button's href
-    document.querySelector('.modal-content iframe').src = this.href;
-  });
-});
-
-// Close modal when X is clicked
-closeBtn.addEventListener('click', () => {
-  modal.style.display = 'none';
-});
-
-// Close when clicking outside modal
-window.addEventListener('click', (e) => {
-  if (e.target === modal) {
-    modal.style.display = 'none';
-  }
-});
-</script>                </div>
-            </div>
-
-            <!--DATA ANALYSIS-->
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="data-analysis.jpeg" alt="Data Analysis">
-                </div>
-                <div class="program-content">
-                    <h3 class="program-title">Data Analysis</h3>
-                    <p class="program-description">Advance your C skills with pointers, memory management, file operations, and complex data structures. Essential for system programming.</p>
-                    <button class="program-cta" data-course="data-analysis">Enroll Now</button>
-                </div>
-            </div>
-
-            <!--CYBERSECURITY-->
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="images/cyber.jpeg" alt="JavaScript Programming">
-                </div>
-                <div class="program-content">
-                    <span class="program-level">Beginner</span>
-                    <h3 class="program-title">Cybersecurity</h3>
-                    <p class="program-description">Learn web development fundamentals with JavaScript, covering syntax, DOM manipulation, and basic event handling for interactive websites.</p>
+                    <h3 class="program-title">Web Development</h3>
+                    <p class="program-description">Master HTML, CSS, JavaScript and modern frameworks to build responsive websites and web applications.</p>
                     <div class="program-details">
-                        <span class="program-duration"><i class="far fa-clock"></i> 5 Weeks</span>
+                        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
+                        <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
+                    </div>
+                    <button class="program-cta" 
+                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header">
+                        Enroll Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Data Analysis -->
+            <div class="program-card">
+                <div class="program-image">
+                    <img src="images/data-analysis.jpeg" alt="Data Analysis">
+                </div>
+                <div class="program-content">
+                    <span class="program-level">Intermediate</span>
+                    <h3 class="program-title">Data Analysis</h3>
+                    <p class="program-description">Learn Python, SQL, and data visualization tools to extract insights from complex datasets.</p>
+                    <div class="program-details">
+                        <span class="program-duration"><i class="far fa-clock"></i> 10 Weeks</span>
                         <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
                     </div>
-                    <button class="program-cta" data-course="cybersecurity">Enroll Now</button>
+                    <button class="program-cta" 
+                            data-form="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true&entry.123456=Data+Analysis">
+                        Enroll Now
+                    </button>
                 </div>
             </div>
 
-            <!-- APP DEVELOPMENT -->
+            <!-- Cybersecurity -->
             <div class="program-card">
                 <div class="program-image">
-                    <img src="images/app-development.jpeg" alt="Advanced JavaScript">
+                    <img src="images/cyber.jpeg" alt="Cybersecurity">
+                    <span class="program-badge">New</span>
+                </div>
+                <div class="program-content">
+                    <span class="program-level">Advanced</span>
+                    <h3 class="program-title">Cybersecurity</h3>
+                    <p class="program-description">Develop skills in ethical hacking, network security, and threat detection to protect digital assets.</p>
+                    <div class="program-details">
+                        <span class="program-duration"><i class="far fa-clock"></i> 16 Weeks</span>
+                        <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
+                    </div>
+                    <button class="program-cta" 
+                            data-form="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true&entry.123456=Cybersecurity">
+                        Enroll Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- App Development -->
+            <div class="program-card">
+                <div class="program-image">
+                    <img src="images/app-development.jpeg" alt="App Development">
                 </div>
                 <div class="program-content">
                     <span class="program-level">Intermediate</span>
                     <h3 class="program-title">App Development</h3>
-                    <p class="program-description">Master advanced JavaScript concepts including ES6+, asynchronous programming, APIs, and modern frameworks for full-stack development.</p>
-                    <button class="program-cta" data-course="app-development">Enroll Now</button>
+                    <p class="program-description">Build cross-platform mobile applications using Flutter and React Native frameworks.</p>
+                    <div class="program-details">
+                        <span class="program-duration"><i class="far fa-clock"></i> 14 Weeks</span>
+                        <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
+                    </div>
+                    <button class="program-cta" 
+                            data-form="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true&entry.123456=App+Development">
+                        Enroll Now
+                    </button>
                 </div>
             </div>
             
@@ -798,12 +676,35 @@ window.addEventListener('click', (e) => {
                 <div class="program-content">
                     <span class="program-level">Beginner</span>
                     <h3 class="program-title">Computer Fundamentals</h3>
-                    <p class="program-description">Essential computing skills covering hardware, software, operating systems, and basic troubleshooting for technology beginners.</p>
+                    <p class="program-description">Essential computing skills covering hardware, software, operating systems, and basic troubleshooting.</p>
                     <div class="program-details">
                         <span class="program-duration"><i class="far fa-clock"></i> 4 Weeks</span>
                         <span class="program-mode"><i class="fas fa-laptop"></i> In-person</span>
                     </div>
-                    <button class="program-cta" data-course="computer-fundamentals">Enroll Now</button>
+                    <button class="program-cta" 
+                            data-form="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true&entry.123456=Computer+Fundamentals">
+                        Enroll Now
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Digital Marketing -->
+            <div class="program-card">
+                <div class="program-image">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Digital Marketing">
+                </div>
+                <div class="program-content">
+                    <span class="program-level">Beginner</span>
+                    <h3 class="program-title">Digital Marketing</h3>
+                    <p class="program-description">Master SEO, social media marketing, content strategy, and analytics to grow businesses online.</p>
+                    <div class="program-details">
+                        <span class="program-duration"><i class="far fa-clock"></i> 8 Weeks</span>
+                        <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
+                    </div>
+                    <button class="program-cta" 
+                            data-form="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true&entry.123456=Digital+Marketing">
+                        Enroll Now
+                    </button>
                 </div>
             </div>
         </div>
@@ -855,10 +756,10 @@ window.addEventListener('click', (e) => {
             <div class="footer-column">
                 <h3>Programs</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Networking</a></li>
-                    <li><a href="#">Cybersecurity</a></li>
-                    <li><a href="#">Cloud Computing</a></li>
-                    <li><a href="#">Digital Literacy</a></li>
+                    <li><a href="#programs">Web Development</a></li>
+                    <li><a href="#programs">Data Analysis</a></li>
+                    <li><a href="#programs">Cybersecurity</a></li>
+                    <li><a href="#programs">App Development</a></li>
                 </ul>
             </div>
             
@@ -887,48 +788,63 @@ window.addEventListener('click', (e) => {
         </div>
     </footer>
 
+    <!-- Enrollment Modal -->
+    <div class="enroll-modal" id="enrollModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-iframe-container">
+                <iframe id="enrollIframe" src="" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyC_gMaLMek6wMhZRp7zm9vhewjI1xbkg18",
-            authDomain: "digskills-academy.firebaseapp.com",
-            projectId: "digskills-academy",
-            storageBucket: "digskills-academy.appspot.com",
-            messagingSenderId: "468547526976",
-            appId: "1:468547526976:web:e73c59923ae5c4da84daa5",
-            measurementId: "G-8BRN5MXBLW"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // DOM Elements
-        const authModal = document.getElementById('authModal');
-        const authButton = document.getElementById('authButton');
-        const heroEnrollButton = document.getElementById('heroEnrollButton');
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const authTabs = document.querySelectorAll('.auth-tab');
-        const enrollButtons = document.querySelectorAll('.program-cta');
-
-       // Mobile Menu Toggle
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const navLinks = document.getElementById('navLinks');
-
-mobileMenuBtn.addEventListener('click', function() {
-    navLinks.classList.toggle('active');
-});
-
-// Close mobile menu when clicking a link
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', function() {
-        navLinks.classList.remove('active');
-    });
-});
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
         
-        // Simple program category filter
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Enrollment Modal Functionality
+        const enrollModal = document.getElementById('enrollModal');
+        const enrollIframe = document.getElementById('enrollIframe');
+        const closeModal = document.querySelector('.close-modal');
+        const enrollButtons = document.querySelectorAll('.program-cta, #heroEnrollButton');
+
+        // Open modal with form
+        enrollButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const formUrl = this.getAttribute('data-form') || 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true';
+                enrollIframe.src = formUrl;
+                enrollModal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+        });
+
+        // Close modal
+        closeModal.addEventListener('click', () => {
+            enrollModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close when clicking outside modal
+        window.addEventListener('click', (e) => {
+            if (e.target === enrollModal) {
+                enrollModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Simple program category filter (example functionality)
         const categoryBtns = document.querySelectorAll('.category-btn');
         
         categoryBtns.forEach(btn => {
@@ -938,7 +854,6 @@ document.querySelectorAll('.nav-links a').forEach(link => {
                 // In a real implementation, you would filter programs here
             });
         });
- 
     </script>
 </body>
 </html>
