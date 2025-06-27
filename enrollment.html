@@ -667,6 +667,7 @@ document.getElementById('refresh-captcha').addEventListener('click', function() 
 
 // Form submission with CAPTCHA validation
 document.getElementById('enrollmentForm').addEventListener('submit', function(e) {
+    // Only prevent default if CAPTCHA fails
     const enteredCaptcha = document.getElementById('captcha').value;
     
     if (enteredCaptcha !== currentCaptcha) {
@@ -676,6 +677,7 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
         document.getElementById('captcha-text').textContent = currentCaptcha;
         document.getElementById('captcha').value = '';
     }
+    // Otherwise, let the form submit naturally to send_email.php
 });
     </script>
 </body>
