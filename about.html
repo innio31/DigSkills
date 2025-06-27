@@ -3,9 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DigSkills Academy | Cisco-Accredited Digital Training</title>
+    <title>About DigSkills | Digital Education & Technology Solutions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+                 /* About-Specific Styles */
+        .about-hero {
+            background: linear-gradient(rgba(37, 99, 235, 0.9), rgba(30, 64, 175, 0.9)), 
+                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            padding: 8rem 5% 4rem;
+            color: white;
+            text-align: center;
+        }
+        
+        .mission-section {
+            padding: 5rem 5%;
+            background: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-card {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .team-section {
+            background: #f1f5ff;
+            padding: 5rem 5%;
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .value-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .about-hero {
+                padding: 6rem 5% 3rem;
+            }
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+        
         :root {
             --primary: #2563eb;
             --secondary: #1e40af;
@@ -451,57 +515,7 @@
             font-size: 0.8rem;
         }
         
-        /* Enrollment Modal */
-        .enroll-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-        }
-        
-        .modal-content {
-            background: white;
-            margin: 5% auto;
-            padding: 20px;
-            width: 90%;
-            max-width: 800px;
-            border-radius: 10px;
-            position: relative;
-            height: 80vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .close-modal {
-            position: absolute;
-            right: 20px;
-            top: 10px;
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--dark);
-            z-index: 1001;
-        }
-        
-        .close-modal:hover {
-            color: var(--accent);
-        }
-        
-        .modal-iframe-container {
-            flex: 1;
-            margin-top: 20px;
-        }
-        
-        .modal-iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 5px;
-        }
-        
+                
         /* Responsive Styles */
         @media (max-width: 768px) {
             .mobile-menu-btn {
@@ -551,236 +565,112 @@
                 padding: 15px;
             }
         }
-        <style>
-.program-card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-}
+  .mission-vision {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .mission-card, .vision-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mission-card {
+            border-top: 4px solid var(--primary);
+        }
+        
+        .vision-card {
+            border-top: 4px solid var(--accent);
+        }
+        
+        .mission-card h3, .vision-card h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mission-card h3 i {
+            color: var(--primary);
+        }
+        
+        .vision-card h3 i {
+            color: var(--accent);
+        }
+        
+        /* Team Section Styles */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .team-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--accent);
+        }
+        
+        .team-card-content {
+            padding: 1.5rem;
+        }
+        
+        .team-title {
+            color: var(--primary);
+            font-weight: 600;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .team-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
 
-.program-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
-}
-
-.program-image {
-  height: 200px;
-  position: relative;
-  overflow: hidden;
-}
-
-.program-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.program-card:hover .program-image img {
-  transform: scale(1.05);
-}
-
-.program-badge {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: var(--accent);
-  color: var(--dark);
-  padding: 0.3rem 0.8rem;
-  border-radius: 50px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.program-content {
-  padding: 1.5rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.program-level {
-  display: inline-block;
-  padding: 0.3rem 0.8rem;
-  background: var(--light);
-  color: var(--primary);
-  border-radius: 50px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-  align-self: flex-start;
-}
-
-.program-title {
-  font-size: 1.25rem;
-  margin-bottom: 0.8rem;
-  color: var(--dark);
-}
-
-.program-description {
-  color: #64748b;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-  font-size: 0.9rem;
-  flex: 1;
-}
-
-.program-details {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  font-size: 0.8rem;
-  color: #64748b;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.program-details i {
-  margin-right: 0.3rem;
-  color: var(--primary);
-}
-
-.program-cta {
-  display: block;
-  text-align: center;
-  padding: 0.8rem;
-  background: var(--primary);
-  color: white;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.program-cta:hover {
-  background: var(--secondary);
-  transform: translateY(-2px);
-}
-
-/* Category-specific colors */
-.program-card[data-category="secondary"] .program-level {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.program-card[data-category="undergrad"] .program-level {
-  background: #f0fdf4;
-  color: #166534;
-}
-
-.program-card[data-category="online"] .program-level {
-  background: #eff6ff;
-  color: #4338ca;
-}
-
-.program-card[data-category="professional"] .program-level {
-  background: #fef2f2;
-  color: #991b1b;
-}
-/* ==================== */
-/* BRAND COLOR SCHEME */
-/* ==================== */
-:root {
-  --primary: #2563eb; /* DigSkills blue */
-  --secondary: #1e40af; /* Dark blue */
-  --accent: #f59e0b; /* DigSkills gold */
-  --light: #f8fafc;
-  --dark: #1e293b;
-  --success: #10b981;
-  
-  /* Category colors */
-  --secondary-school: #3b82f6;
-  --undergrad: #10b981;
-  --online: #8b5cf6;
-  --professional: #ef4444;
-}
-
-/* ==================== */
-/* FILTERING SYSTEM */
-/* ==================== */
-.filter-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  justify-content: center;
-  margin: 2rem auto 3rem;
-  max-width: 800px;
-}
-
-.filter-btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: 50px;
-  background: white;
-  border: 1px solid #e2e8f0;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-.filter-btn:hover {
-  background: #f1f5f9;
-}
-
-.filter-btn.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-
-/* ==================== */
-/* PROGRAM CARDS WITH CATEGORY COLORS */
-/* ==================== */
-.program-card {
-  /* ... (previous card styles remain the same) ... */
-}
-
-/* Category-specific styling */
-.program-card[data-category="secondary"] .program-level,
-.program-card[data-category="secondary"] .program-cta:hover {
-  background: var(--secondary-school);
-}
-
-.program-card[data-category="undergrad"] .program-level,
-.program-card[data-category="undergrad"] .program-cta:hover {
-  background: var(--undergrad);
-}
-
-.program-card[data-category="online"] .program-level,
-.program-card[data-category="online"] .program-cta:hover {
-  background: var(--online);
-}
-
-.program-card[data-category="professional"] .program-level,
-.program-card[data-category="professional"] .program-cta:hover {
-  background: var(--professional);
-}
-
-/* Badge colors */
-.program-card[data-category="secondary"] .program-badge {
-  background: var(--secondary-school);
-}
-
-.program-card[data-category="undergrad"] .program-badge {
-  background: var(--undergrad);
-}
-
-.program-card[data-category="online"] .program-badge {
-  background: var(--online);
-}
-
-.program-card[data-category="professional"] .program-badge {
-  background: var(--professional);
-}
     </style>
 </head>
 <body>
+    <!-- Consistent Header -->
     <header id="header">
         <nav>
             <div class="logo">
@@ -794,145 +684,176 @@
             
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="academy.html" class="active">Academy</a></li>
+                <li><a href="about.html" class="active">About</a></li>
                 <li><a href="services.html">Services</a></li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="academy.html">Academy</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="academy-hero">
-        <h1>Transform Your Career with Industry-Driven Programs</h1>
-        <p>Gain in-demand digital skills through our hands-on training programs designed for the African tech ecosystem</p>
-        <button class="cta-button" id="heroEnrollButton">Explore Programs</button>
+    <!-- About Hero Section -->
+    <section class="about-hero">
+        <h1>Empowering Africa's Digital Future</h1>
+        <p>Since 2020, we've been bridging the digital skills gap through practical education and innovative technology solutions</p>
     </section>
 
-    <section class="programs-section" id="programs">
-        <h2 class="section-title">Our Training Programs</h2>
-        <p class="section-subtitle">Choose from our range of beginner to advanced level courses to kickstart or advance your tech career</p>
-    
-        <!-- Programs Grid Container -->
-        <div class="programs-grid">
-            <!-- ==================== -->
-<!-- PROGRAM FILTERING SYSTEM -->
-<!-- ==================== -->
-<div class="filter-controls">
-  <button class="filter-btn active" data-category="all">All Programs</button>
-  <button class="filter-btn" data-category="secondary">Secondary Schools</button>
-  <button class="filter-btn" data-category="undergrad">Undergraduates</button>
-  <button class="filter-btn" data-category="online">Distance Learning</button>
-  <button class="filter-btn" data-category="professional">Professional</button>
-</div>
-
-<!-- Programs Grid Container -->
-<div class="programs-grid">
-
-  <!-- Secondary Schools Programs -->
-  <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <!-- Sample image from Unsplash (replace with your actual images) -->
-      <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80" alt="Students learning computers">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Digital Literacy Bootcamp</h3>
-      <p class="program-description">Essential 21st-century skills covering computer basics, internet safety, and productivity tools.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta">Enroll School</button>
-    </div>
-  </div>
-
-  <!-- Undergraduate Programs -->
-  <div class="program-card" data-category="undergrad">
-    <div class="program-image">
-      <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Coding class">
-      <span class="program-badge">Career Track</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Intermediate</span>
-      <h3 class="program-title">Full-Stack Development</h3>
-      <p class="program-description">Master JavaScript, Python, and frameworks to build web applications from scratch.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta">Apply Now</button>
-    </div>
-  </div>
-
-  <!-- Distance Learning Programs -->
-  <div class="program-card" data-category="online">
-    <div class="program-image">
-      <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80" alt="Online learning">
-      <span class="program-badge">Flexible</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Digital Marketing</h3>
-      <p class="program-description">Master SEO, social media, and analytics to grow businesses online.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
-        <span class="program-duration"><i class="far fa-clock"></i> Self-Paced</span>
-      </div>
-      <button class="program-cta">Start Learning</button>
-    </div>
-  </div>
-
-  <!-- Professional Programs -->
-  <div class="program-card" data-category="professional">
-    <div class="program-image">
-      <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80" alt="Professional training">
-      <span class="program-badge">Executive</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Advanced</span>
-      <h3 class="program-title">Tech for Managers</h3>
-      <p class="program-description">Leadership in digital transformation, Agile methodologies, and tech project management.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-calendar-weekend"></i> Saturdays Only</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 10 Weeks</span>
-      </div>
-      <button class="program-cta">Register Now</button>
-    </div>
-  </div>
-
-</div>
-  
-
-    <section class="testimonials-section">
-        <h2 class="section-title">Success Stories</h2>
-        <p class="section-subtitle">Hear from our alumni who transformed their careers</p>
+    <!-- Mission Section -->
+    <section class="mission-section">
+        <div class="section-title">
+            <h2>Our Story</h2>
+            <div class="section-divider"></div>
+        </div>
         
-        <div class="testimonial-card">
-            <p class="testimonial-text">After completing the Cybersecurity program at DigSkills, I landed a job as a Security Analyst within 2 months. The hands-on labs and career coaching made all the difference in my job search.</p>
+        <div class="section-content">
+            <p>Founded by Emmanuel Ademuyiwa, DigSkills began with a simple vision: to democratize access to world-class digital education across Africa. What started as a small training initiative has grown into a comprehensive digital solutions provider serving:</p>
             
-            <div class="testimonial-author">
-                <div class="author-avatar">AO</div>
-                <div class="author-info">
-                    <h4>Amina Okafor</h4>
-                    <p>Security Analyst, FinTech Company</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Secondary Schools</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1,200+</div>
+                    <div class="stat-label">Students Trained</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Industry Partners</div>
+                </div>
+            </div>
+            
+            <p>We combine technical expertise with pedagogical innovation to deliver programs that prepare learners for the jobs of tomorrow.</p>
+        </div>
+    </section>
+
+    <!-- Approach Section -->
+    <section class="team-section">
+        <div class="section-title">
+            <h2>Our Unique Approach</h2>
+            <div class="section-divider"></div>
+        </div>
+        
+        <div class="values-grid">
+            <div class="value-card">
+                <h3><i class="fas fa-laptop-code" style="color: var(--accent);"></i> Learn by Doing</h3>
+                <p>70% of our curriculum is hands-on projects, ensuring students gain practical experience from day one.</p>
+            </div>
+            
+            <div class="value-card">
+                <h3><i class="fas fa-users" style="color: var(--accent);"></i> Four-Tier Model</h3>
+                <p>From secondary schools to professionals, we meet learners where they are with tailored programs.</p>
+            </div>
+            
+            <div class="value-card">
+                <h3><i class="fas fa-handshake" style="color: var(--accent);"></i> Industry Alignment</h3>
+                <p>Our advisory board includes tech leaders from Google, Cisco, and Nigerian enterprises.</p>
+            </div>
+        </div>
+    </section>
+
+     <!-- Mission & Vision Section -->
+    <section class="mission-section">
+        <div class="section-title">
+            <h2>Our Core</h2>
+            <div class="section-divider"></div>
+        </div>
+        
+        <div class="mission-vision">
+            <div class="mission-card">
+                <h3><i class="fas fa-bullseye"></i> Our Mission</h3>
+                <p>To empower individuals and businesses with cutting-edge digital skills and innovative solutions, bridging the gap between potential and opportunity in an evolving digital world.</p>
+            </div>
+            
+            <div class="vision-card">
+                <h3><i class="fas fa-eye"></i> Our Vision</h3>
+                <p>To be Africa’s leading catalyst for digital transformation, creating a future where every individual and organization thrives through accessible, world-class training and technology.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="section-title">
+            <h2>Meet Our Team</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">Passionate educators and industry practitioners</p>
+        </div>
+        
+        <div class="team-grid">
+            <!-- Team Member 1 -->
+            <div class="team-card">
+                <img src="images/CEO.jpeg" alt="Emmanuel Ademuyiwa">
+                <div class="team-card-content">
+                    <h3>Emmanuel Ademuyiwa</h3>
+                    <p class="team-title">Founder & Lead Trainer</p>
+                    <p>Business Technology & Data Analytics expert with 8+ years experience bridging education and industry needs.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/samade.ifeoluwa1"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://www.linkedin.com/in/emmanuel-ademuyiwa?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Member 2 -->
+            <div class="team-card">
+                <img src="images/team-aminat.jpg" alt="Aminat Ogunlesi">
+                <div class="team-card-content">
+                    <h3>Aminat Ogunlesi</h3>
+                    <p class="team-title">Director of Studies</p>
+                    <p>Curriculum development specialist with a focus on adult learning methodologies and competency-based education.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Member 3 -->
+            <div class="team-card">
+                <img src="images/team-kunle.jpg" alt="Kunle Adebayo">
+                <div class="team-card-content">
+                    <h3>Kunle Adebayo</h3>
+                    <p class="team-title">Director of Operations</p>
+                    <p>Former Cisco Network Academy instructor specializing in infrastructure and cybersecurity training programs.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Team Member 3 -->
+            <div class="team-card">
+                <img src="images/team-kunle.jpg" alt="Kunle Adebayo">
+                <div class="team-card-content">
+                    <h3>Kunle Adebayo</h3>
+                    <p class="team-title">Director of Finance and Administration</p>
+                    <p>Former Cisco Network Academy instructor specializing in infrastructure and cybersecurity training programs.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
+
+    <!-- CTA Section -->
     <section class="cta-section">
-        <div class="cta-content">
-            <h2>Ready to Launch Your Tech Career?</h2>
-            <p>Our admissions team is ready to guide you in choosing the right program for your goals. Schedule a consultation today.</p>
-            
-            <div class="cta-buttons">
-                <a href="contact.html" class="cta-button">Speak to an Advisor</a>
-                <button class="outline-button">Download Brochure</button>
-            </div>
+        <h2>Ready to Join Our Mission?</h2>
+        <p>Whether you're a student, institution, or corporate partner, we have opportunities for collaboration.</p>
+        <div class="cta-buttons">
+            <a href="contact.html" class="cta-button">Partner With Us</a>
+            <a href="academy.html" class="outline-button">Explore Programs</a>
         </div>
     </section>
 
+    <!-- Consistent Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-column">
@@ -942,7 +863,7 @@
                 <div class="social-links">
                     <a href="https://www.facebook.com/share/16exnb9VsU/"><i class="fab fa-facebook-f"></i></a>
                     <a href="https://x.com/DigSkills?t=-sO0HSAREApy6Igw39JbVA&s=09"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.linkedin.com/company/digskills/"><i class="fab fa-linkedin-in"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
@@ -972,7 +893,7 @@
                 <ul class="footer-links">
                     <li><a href="tel:+2349035448295">+234 903 544 8295</a></li>
                     <li><a href="mailto:dig2skills@gmail.com">dig2skills@gmail.com</a></li>
-                    <li>Lagos, Nigeria</li>
+                    <li>Ota, Nigeria</li>
                 </ul>
             </div>
         </div>
@@ -980,20 +901,11 @@
         <div class="footer-bottom">
             <p>&copy; 2025 DigSkills. All rights reserved. | <a href="#" style="color: #94a3b8;">Privacy Policy</a> | <a href="#" style="color: #94a3b8;">Terms of Service</a></p>
         </div>
+    
     </footer>
 
-    <!-- Enrollment Modal -->
-    <div class="enroll-modal" id="enrollModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="modal-iframe-container">
-                <iframe id="enrollIframe" src="" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Mobile Menu Toggle
+      // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
         
@@ -1007,74 +919,6 @@
                 navLinks.classList.remove('active');
             });
         });
-
-        // Enrollment Modal Functionality
-        const enrollModal = document.getElementById('enrollModal');
-        const enrollIframe = document.getElementById('enrollIframe');
-        const closeModal = document.querySelector('.close-modal');
-        const enrollButtons = document.querySelectorAll('.program-cta, #heroEnrollButton');
-
-        // Open modal with form
-        enrollButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const formUrl = this.getAttribute('data-form') || 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true';
-                enrollIframe.src = formUrl;
-                enrollModal.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
-            });
-        });
-
-        // Close modal
-        closeModal.addEventListener('click', () => {
-            enrollModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-
-        // Close when clicking outside modal
-        window.addEventListener('click', (e) => {
-            if (e.target === enrollModal) {
-                enrollModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Simple program category filter (example functionality)
-        const categoryBtns = document.querySelectorAll('.category-btn');
-        
-        categoryBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                categoryBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                // In a real implementation, you would filter programs here
-            });
-        });
-        // ==================== //
-// FILTERING FUNCTIONALITY
-// ==================== //
-document.addEventListener('DOMContentLoaded', function() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const programCards = document.querySelectorAll('.program-card');
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      // Remove active class from all buttons
-      filterBtns.forEach(b => b.classList.remove('active'));
-      // Add active class to clicked button
-      this.classList.add('active');
-      
-      const category = this.dataset.category;
-      
-      // Filter programs
-      programCards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  });
-});
     </script>
 </body>
 </html>
