@@ -551,6 +551,233 @@
                 padding: 15px;
             }
         }
+        <style>
+.program-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.program-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+.program-image {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.program-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.program-card:hover .program-image img {
+  transform: scale(1.05);
+}
+
+.program-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--accent);
+  color: var(--dark);
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.program-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.program-level {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  background: var(--light);
+  color: var(--primary);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  align-self: flex-start;
+}
+
+.program-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.8rem;
+  color: var(--dark);
+}
+
+.program-description {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.program-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.program-details i {
+  margin-right: 0.3rem;
+  color: var(--primary);
+}
+
+.program-cta {
+  display: block;
+  text-align: center;
+  padding: 0.8rem;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.program-cta:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+}
+
+/* Category-specific colors */
+.program-card[data-category="secondary"] .program-level {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.program-card[data-category="undergrad"] .program-level {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.program-card[data-category="online"] .program-level {
+  background: #eff6ff;
+  color: #4338ca;
+}
+
+.program-card[data-category="professional"] .program-level {
+  background: #fef2f2;
+  color: #991b1b;
+}
+/* ==================== */
+/* BRAND COLOR SCHEME */
+/* ==================== */
+:root {
+  --primary: #2563eb; /* DigSkills blue */
+  --secondary: #1e40af; /* Dark blue */
+  --accent: #f59e0b; /* DigSkills gold */
+  --light: #f8fafc;
+  --dark: #1e293b;
+  --success: #10b981;
+  
+  /* Category colors */
+  --secondary-school: #3b82f6;
+  --undergrad: #10b981;
+  --online: #8b5cf6;
+  --professional: #ef4444;
+}
+
+/* ==================== */
+/* FILTERING SYSTEM */
+/* ==================== */
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin: 2rem auto 3rem;
+  max-width: 800px;
+}
+
+.filter-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.filter-btn:hover {
+  background: #f1f5f9;
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* ==================== */
+/* PROGRAM CARDS WITH CATEGORY COLORS */
+/* ==================== */
+.program-card {
+  /* ... (previous card styles remain the same) ... */
+}
+
+/* Category-specific styling */
+.program-card[data-category="secondary"] .program-level,
+.program-card[data-category="secondary"] .program-cta:hover {
+  background: var(--secondary-school);
+}
+
+.program-card[data-category="undergrad"] .program-level,
+.program-card[data-category="undergrad"] .program-cta:hover {
+  background: var(--undergrad);
+}
+
+.program-card[data-category="online"] .program-level,
+.program-card[data-category="online"] .program-cta:hover {
+  background: var(--online);
+}
+
+.program-card[data-category="professional"] .program-level,
+.program-card[data-category="professional"] .program-cta:hover {
+  background: var(--professional);
+}
+
+/* Badge colors */
+.program-card[data-category="secondary"] .program-badge {
+  background: var(--secondary-school);
+}
+
+.program-card[data-category="undergrad"] .program-badge {
+  background: var(--undergrad);
+}
+
+.program-card[data-category="online"] .program-badge {
+  background: var(--online);
+}
+
+.program-card[data-category="professional"] .program-badge {
+  background: var(--professional);
+}
     </style>
 </head>
 <body>
@@ -585,130 +812,97 @@
         <h2 class="section-title">Our Training Programs</h2>
         <p class="section-subtitle">Choose from our range of beginner to advanced level courses to kickstart or advance your tech career</p>
     
+        <!-- Programs Grid Container -->
         <div class="programs-grid">
-            <!-- Web Development-->
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="images/web-development.jpg" alt="Web Development">
-                    <span class="program-badge">Popular</span>
-                </div>
-                <div class="program-content">
-                    <span class="program-level">Beginner</span>
-                    <h3 class="program-title">Web Development</h3>
-                    <p class="program-description">Master HTML, CSS, JavaScript and modern frameworks to build responsive websites and web applications.</p>
-                    <div class="program-details">
-                        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-                        <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
-                    </div>
-                    <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-                </div>
-            </div>
+            <!-- ==================== -->
+<!-- PROGRAM FILTERING SYSTEM -->
+<!-- ==================== -->
+<div class="filter-controls">
+  <button class="filter-btn active" data-category="all">All Programs</button>
+  <button class="filter-btn" data-category="secondary">Secondary Schools</button>
+  <button class="filter-btn" data-category="undergrad">Undergraduates</button>
+  <button class="filter-btn" data-category="online">Distance Learning</button>
+  <button class="filter-btn" data-category="professional">Professional</button>
+</div>
 
-            <!-- Data Analysis -->
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="images/data-analysis.jpeg" alt="Data Analysis">
-                </div>
-                <div class="program-content">
-                    <span class="program-level">Intermediate</span>
-                    <h3 class="program-title">Data Analysis</h3>
-                    <p class="program-description">Learn Python, SQL, and data visualization tools to extract insights from complex datasets.</p>
-                    <div class="program-details">
-                        <span class="program-duration"><i class="far fa-clock"></i> 10 Weeks</span>
-                        <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
-                    </div>
-                    <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header">
-                        Enroll Now
-                    </button>
-                </div>
-            </div>
+<!-- Programs Grid Container -->
+<div class="programs-grid">
 
-            <!-- Cybersecurity -->
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="images/cyber.jpeg" alt="Cybersecurity">
-                    <span class="program-badge">New</span>
-                </div>
-                <div class="program-content">
-                    <span class="program-level">Advanced</span>
-                    <h3 class="program-title">Cybersecurity</h3>
-                    <p class="program-description">Develop skills in ethical hacking, network security, and threat detection to protect digital assets.</p>
-                    <div class="program-details">
-                        <span class="program-duration"><i class="far fa-clock"></i> 16 Weeks</span>
-                        <span class="program-mode"><i class="fas fa-laptop"></i> Hybrid</span>
-                    </div>
-                    <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header">
-                        Enroll Now
-                    </button>
-                </div>
-            </div>
+  <!-- Secondary Schools Programs -->
+  <div class="program-card" data-category="secondary">
+    <div class="program-image">
+      <!-- Sample image from Unsplash (replace with your actual images) -->
+      <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80" alt="Students learning computers">
+      <span class="program-badge">School Program</span>
+    </div>
+    <div class="program-content">
+      <span class="program-level">Beginner</span>
+      <h3 class="program-title">Digital Literacy Bootcamp</h3>
+      <p class="program-description">Essential 21st-century skills covering computer basics, internet safety, and productivity tools.</p>
+      <div class="program-details">
+        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
+        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
+      </div>
+      <button class="program-cta">Enroll School</button>
+    </div>
+  </div>
 
-            <!-- App Development -->
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="images/app-development.jpeg" alt="App Development">
-                </div>
-                <div class="program-content">
-                    <span class="program-level">Intermediate</span>
-                    <h3 class="program-title">App Development</h3>
-                    <p class="program-description">Build cross-platform mobile applications using Flutter and React Native frameworks.</p>
-                    <div class="program-details">
-                        <span class="program-duration"><i class="far fa-clock"></i> 14 Weeks</span>
-                        <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
-                    </div>
-                    <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header">
-                        Enroll Now
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Computer Fundamentals -->
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="Computer Basics">
-                </div>
-                <div class="program-content">
-                    <span class="program-level">Beginner</span>
-                    <h3 class="program-title">Computer Fundamentals</h3>
-                    <p class="program-description">Essential computing skills covering hardware, software, operating systems, and basic troubleshooting.</p>
-                    <div class="program-details">
-                        <span class="program-duration"><i class="far fa-clock"></i> 4 Weeks</span>
-                        <span class="program-mode"><i class="fas fa-laptop"></i> In-person</span>
-                    </div>
-                    <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header">
-                        Enroll Now
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Digital Marketing -->
-            <div class="program-card">
-                <div class="program-image">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Digital Marketing">
-                </div>
-                <div class="program-content">
-                    <span class="program-level">Beginner</span>
-                    <h3 class="program-title">Digital Marketing</h3>
-                    <p class="program-description">Master SEO, social media marketing, content strategy, and analytics to grow businesses online.</p>
-                    <div class="program-details">
-                        <span class="program-duration"><i class="far fa-clock"></i> 8 Weeks</span>
-                        <span class="program-mode"><i class="fas fa-laptop"></i> Online</span>
-                    </div>
-                    <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header">
-                        Enroll Now
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- Undergraduate Programs -->
+  <div class="program-card" data-category="undergrad">
+    <div class="program-image">
+      <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Coding class">
+      <span class="program-badge">Career Track</span>
+    </div>
+    <div class="program-content">
+      <span class="program-level">Intermediate</span>
+      <h3 class="program-title">Full-Stack Development</h3>
+      <p class="program-description">Master JavaScript, Python, and frameworks to build web applications from scratch.</p>
+      <div class="program-details">
+        <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
+        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
+      </div>
+      <button class="program-cta">Apply Now</button>
+    </div>
+  </div>
+
+  <!-- Distance Learning Programs -->
+  <div class="program-card" data-category="online">
+    <div class="program-image">
+      <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80" alt="Online learning">
+      <span class="program-badge">Flexible</span>
+    </div>
+    <div class="program-content">
+      <span class="program-level">Beginner</span>
+      <h3 class="program-title">Digital Marketing</h3>
+      <p class="program-description">Master SEO, social media, and analytics to grow businesses online.</p>
+      <div class="program-details">
+        <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
+        <span class="program-duration"><i class="far fa-clock"></i> Self-Paced</span>
+      </div>
+      <button class="program-cta">Start Learning</button>
+    </div>
+  </div>
+
+  <!-- Professional Programs -->
+  <div class="program-card" data-category="professional">
+    <div class="program-image">
+      <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80" alt="Professional training">
+      <span class="program-badge">Executive</span>
+    </div>
+    <div class="program-content">
+      <span class="program-level">Advanced</span>
+      <h3 class="program-title">Tech for Managers</h3>
+      <p class="program-description">Leadership in digital transformation, Agile methodologies, and tech project management.</p>
+      <div class="program-details">
+        <span class="program-mode"><i class="fas fa-calendar-weekend"></i> Saturdays Only</span>
+        <span class="program-duration"><i class="far fa-clock"></i> 10 Weeks</span>
+      </div>
+      <button class="program-cta">Register Now</button>
+    </div>
+  </div>
+
+</div>
+  
 
     <section class="testimonials-section">
         <h2 class="section-title">Success Stories</h2>
@@ -854,6 +1048,33 @@
                 // In a real implementation, you would filter programs here
             });
         });
+        // ==================== //
+// FILTERING FUNCTIONALITY
+// ==================== //
+document.addEventListener('DOMContentLoaded', function() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const programCards = document.querySelectorAll('.program-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Remove active class from all buttons
+      filterBtns.forEach(b => b.classList.remove('active'));
+      // Add active class to clicked button
+      this.classList.add('active');
+      
+      const category = this.dataset.category;
+      
+      // Filter programs
+      programCards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
     </script>
 </body>
 </html>
