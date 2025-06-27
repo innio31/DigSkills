@@ -637,13 +637,18 @@
             });
         });
 
-        // Form submission
         document.getElementById('enrollmentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Here you would typically send data to server
-            alert('Form submission would be processed here!');
-            // In production: use fetch() to send data to your backend
-        });
+    // Only validate CAPTCHA (Netlify will handle submission)
+    const enteredCaptcha = document.getElementById('captcha').value;
+    if (enteredCaptcha !== currentCaptcha) {
+        e.preventDefault();
+        alert('CAPTCHA verification failed. Please try again.');
+        currentCaptcha = generateCaptcha();
+        document.getElementById('captcha-text').textContent = currentCaptcha;
+        document.getElementById('captcha').value = '';
+    }
+    // Otherwise, Netlify will submit the form
+});
         // CAPTCHA Generation
 function generateCaptcha() {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
