@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigSkills Enrollment Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+        }
+        
+        .enrollment-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .form-header img {
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+        
+        .form-header h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .btn {
+            background-color: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: #fbbf24;
+            transform: translateY(-2px);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .required:after {
+            content: " *";
+            color: red;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .enrollment-container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+        }
+        .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+        background-color: white;
+        margin: 5% auto;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 600px;
+        position: relative;
+    }
+    
+    .close {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    
+    .hidden {
+        display: none;
+    }
+    
+    .show {
+        display: block;
+    }
+</style>
+
+<!-- Add this JavaScript for the school registration functionality -->
+<script>
+    // School registration modal
+    const schoolModal = document.getElementById('schoolModal');
+    const openSchoolModalBtn = document.createElement('button');
+    const closeSchoolModalBtn = document.querySelector('.close');
+    
+    // Add "Register New School" button after school select
+    openSchoolModalBtn.textContent = 'Register New School';
+    openSchoolModalBtn.className = 'btn';
+    openSchoolModalBtn.type = 'button';
+    openSchoolModalBtn.style.marginTop = '10px';
+    schoolContainer.appendChild(openSchoolModalBtn);
+    
+    // Open modal
+    openSchoolModalBtn.addEventListener('click', function() {
+        schoolModal.classList.add('show');
+        populateStates('schoolState');
+    });
+    
+    // Close modal
+    closeSchoolModalBtn.addEventListener('click', function() {
+        schoolModal.classList.remove('show');
+    });
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === schoolModal) {
+            schoolModal.classList.remove('show');
+        }
+    });
+    
+    // Handle school registration form submission
+    document.getElementById('schoolRegistrationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch('register_school.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('School registered successfully!');
+                
+                // Add the new school to the select options
+                const option = document.createElement('option');
+                option.value = data.schoolName;
+                option.textContent = data.schoolName;
+                schoolSelect.appendChild(option);
+                
+                // Select the new school
+                schoolSelect.value = data.schoolName;
+                
+                // Close the modal
+                schoolModal.classList.remove('show');
+                this.reset();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    });
+    </style>
+</head>
+<body>
+    <div class="enrollment-container">
+        <div class="form-header">
+            <img src="images/logo.png" alt="DigSkills Logo">
+            <h1>Program Enrollment Form</h1>
+            <p>Fill out this form to register for DigSkills programs</p>
+        </div>
+        
+        <form id="enrollmentForm" action="process_enrollment.php" method="POST">
+            <!-- Contact Details Section -->
+            <fieldset>
+                <legend>Contact Information</legend>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName" class="required">First Name</label>
+                        <input type="text" id="firstName" name="firstName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="required">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="required">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone" class="required">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="country" class="required">Country</label>
+                    <select id="country" name="country" class="form-control" required>
+                        <option value="">Select Country</option>
+                        <option value="Nigeria" selected>Nigeria</option>
+                        <option value="Ghana">Ghana</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="state" class="required">State</label>
+                        <select id="state" name="state" class="form-control" required>
+                            <option value="">Select State</option>
+                            <!-- States will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lga" class="required">Local Government</label>
+                        <select id="lga" name="lga" class="form-control" required>
+                            <option value="">Select LGA</option>
+                            <!-- LGAs will be populated based on state selection -->
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Full Address</label>
+                    <textarea id="address" name="address" class="form-control" rows="3"></textarea>
+                </div>
+            </fieldset>
+            
+            <!-- Program Details Section -->
+            <fieldset>
+                <legend>Program Information</legend>
+                
+                <div class="form-group">
+                    <label for="programCategory" class="required">Program Category</label>
+                    <select id="programCategory" name="programCategory" class="form-control" required>
+                        <option value="">Select Category</option>
+                        <option value="secondary">Secondary Schools Program</option>
+                        <option value="undergrad">Undergraduates/School Leavers</option>
+                        <option value="online">Distance Learning</option>
+                        <option value="professional">Professional Programs</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="program" class="required">Program</label>
+                    <select id="program" name="program" class="form-control" required disabled>
+                        <option value="">Select a category first</option>
+                    </select>
+                </div>
+                
+                <div id="schoolContainer" class="form-group hidden">
+                    <label for="school" class="required">School</label>
+                    <select id="school" name="school" class="form-control" required>
+                        <option value="">Select Your School</option>
+                        <!-- Schools will be populated based on selection -->
+                    </select>
+                    <p class="help-text">If your school isn't listed, please contact us to register your school first.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="howHeard">How did you hear about us?</label>
+                    <select id="howHeard" name="howHeard" class="form-control">
+                        <option value="">Select Option</option>
+                        <option value="social">Social Media</option>
+                        <option value="friend">Friend/Family</option>
+                        <option value="school">School</option>
+                        <option value="search">Search Engine</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="comments">Additional Comments</label>
+                    <textarea id="comments" name="comments" class="form-control" rows="3"></textarea>
+                </div>
+            </fieldset>
+            
+            <div class="form-group">
+                <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                <label for="agreeTerms">I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a></label>
+            </div>
+            
+            <button type="submit" class="btn btn-block">Submit Enrollment</button>
+        </form>
+    </div>
+    <div id="schoolModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Register a New School</h2>
+            <form id="schoolRegistrationForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="schoolName" class="required">School Name</label>
+                    <input type="text" id="schoolName" name="schoolName" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="schoolType" class="required">School Type</label>
+                    <select id="schoolType" name="schoolType" class="form-control" required>
+                        <option value="">Select Type</option>
+                        <option value="public">Public School</option>
+                        <option value="private">Private School</option>
+                        <option value="international">International School</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="schoolState" class="required">State</label>
+                        <select id="schoolState" name="schoolState" class="form-control" required>
+                            <option value="">Select State</option>
+                            <!-- States will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="schoolLga" class="required">LGA</label>
+                        <select id="schoolLga" name="schoolLga" class="form-control" required>
+                            <option value="">Select LGA</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="schoolAddress" class="required">School Address</label>
+                    <textarea id="schoolAddress" name="schoolAddress" class="form-control" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="schoolContact">Contact Person</label>
+                    <input type="text" id="schoolContact" name="schoolContact" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="schoolEmail">Contact Email</label>
+                    <input type="email" id="schoolEmail" name="schoolEmail" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="schoolPhone">Contact Phone</label>
+                    <input type="tel" id="schoolPhone" name="schoolPhone" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="schoolLogo">School Logo (Optional)</label>
+                    <input type="file" id="schoolLogo" name="schoolLogo" class="form-control" accept="image/*">
+                </div>
+                
+                <button type="submit" class="btn">Register School</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Nigerian States and LGAs Data
+        const nigeriaData = {
+            "Lagos": ["Agege", "Ajeromi-Ifelodun", "Alimosho", "Amuwo-Odofin", "Apapa", "Badagry", "Epe", "Eti-Osa", "Ibeju-Lekki", "Ifako-Ijaiye", "Ikeja", "Ikorodu", "Kosofe", "Lagos Island", "Lagos Mainland", "Mushin", "Ojo", "Oshodi-Isolo", "Shomolu", "Surulere"],
+            "Ogun": ["Abeokuta North", "Abeokuta South", "Ado-Odo/Ota", "Egbado North", "Egbado South", "Ewekoro", "Ifo", "Ijebu East", "Ijebu North", "Ijebu North East", "Ijebu Ode", "Ikenne", "Imeko Afon", "Ipokia", "Obafemi Owode", "Odeda", "Odogbolu", "Ogun Waterside", "Remo North", "Shagamu"],
+            // Add more states as needed
+            "Oyo": ["Afijio", "Akinyele", "Atiba", "Atisbo", "Egbeda", "Ibadan North", "Ibadan North-East", "Ibadan North-West", "Ibadan South-East", "Ibadan South-West", "Ibarapa Central", "Ibarapa East", "Ibarapa North", "Ido", "Irepo", "Iseyin", "Itesiwaju", "Iwajowa", "Kajola", "Lagelu", "Ogbomosho North", "Ogbomosho South", "Ogo Oluwa", "Olorunsogo", "Oluyole", "Ona Ara", "Orelope", "Ori Ire", "Oyo East", "Oyo West", "Saki East", "Saki West", "Surulere"]
+        };
+
+        // Programs by Category
+        const programsByCategory = {
+            "secondary": [
+                "Digital Literacy Bootcamp",
+                "Coding Foundations",
+                "STEM Projects"
+            ],
+            "undergrad": [
+                "Full-Stack Development",
+                "Data Analysis",
+                "Cybersecurity Fundamentals"
+            ],
+            "online": [
+                "Digital Marketing",
+                "Cloud Computing",
+                "UI/UX Design"
+            ],
+            "professional": [
+                "Tech for Managers",
+                "Data-Driven Decision Making",
+                "Cybersecurity for Executives"
+            ]
+        };
+
+        // Registered Schools
+        const registeredSchools = [
+            "Lagos High School",
+            "Ogun State College",
+            "Ibadan Grammar School",
+            "Abuja Model Secondary",
+            "Port Harcourt Academy"
+        ];
+
+        // DOM Elements
+        const countrySelect = document.getElementById('country');
+        const stateSelect = document.getElementById('state');
+        const lgaSelect = document.getElementById('lga');
+        const programCategorySelect = document.getElementById('programCategory');
+        const programSelect = document.getElementById('program');
+        const schoolContainer = document.getElementById('schoolContainer');
+        const schoolSelect = document.getElementById('school');
+
+        // Populate Nigerian States
+        function populateStates() {
+            stateSelect.innerHTML = '<option value="">Select State</option>';
+            Object.keys(nigeriaData).forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            });
+        }
+
+        // Populate LGAs based on state
+        stateSelect.addEventListener('change', function() {
+            const selectedState = this.value;
+            lgaSelect.innerHTML = '<option value="">Select LGA</option>';
+            
+            if (selectedState && nigeriaData[selectedState]) {
+                nigeriaData[selectedState].forEach(lga => {
+                    const option = document.createElement('option');
+                    option.value = lga;
+                    option.textContent = lga;
+                    lgaSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Populate programs based on category
+        programCategorySelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            programSelect.innerHTML = '<option value="">Select Program</option>';
+            programSelect.disabled = !selectedCategory;
+            
+            if (selectedCategory && programsByCategory[selectedCategory]) {
+                programsByCategory[selectedCategory].forEach(program => {
+                    const option = document.createElement('option');
+                    option.value = program;
+                    option.textContent = program;
+                    programSelect.appendChild(option);
+                });
+                
+                // Show/hide school selection based on category
+                if (selectedCategory === 'secondary') {
+                    schoolContainer.classList.remove('hidden');
+                    schoolSelect.required = true;
+                    
+                    // Populate schools
+                    schoolSelect.innerHTML = '<option value="">Select School</option>';
+                    registeredSchools.forEach(school => {
+                        const option = document.createElement('option');
+                        option.value = school;
+                        option.textContent = school;
+                        schoolSelect.appendChild(option);
+                    });
+                } else {
+                    schoolContainer.classList.add('hidden');
+                    schoolSelect.required = false;
+                }
+            }
+        });
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            // For Nigeria by default
+            if (countrySelect.value === 'Nigeria') {
+                populateStates();
+            }
+            
+            // Handle country change
+            countrySelect.addEventListener('change', function() {
+                if (this.value === 'Nigeria') {
+                    populateStates();
+                } else {
+                    stateSelect.innerHTML = '<option value="">Select State/Region</option>';
+                    lgaSelect.innerHTML = '<option value="">Select District</option>';
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('enrollmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Here you would typically send data to server
+            alert('Form submission would be processed here!');
+            // In production: use fetch() to send data to your backend
+        });
+    </script>
+
+</body>
+</html>
