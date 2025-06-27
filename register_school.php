@@ -92,4 +92,5 @@ function sanitizeInput($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
+require_once 'db_config.php';
 ?>
