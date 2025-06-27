@@ -1,8 +1,14 @@
 <?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['form_type']) && $_POST['form_type'] === 'enrollment') {
-    // Validate CAPTCHA (if you're using the simple one from above)
-    session_start();
+    
+    // Simple log to file to verify data is received
+    file_put_contents('form_log.txt', print_r($_POST, true), FILE_APPEND);
+   
     
     // Collect form data
     $firstName = htmlspecialchars($_POST['firstName']);
