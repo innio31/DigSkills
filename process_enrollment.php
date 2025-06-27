@@ -123,4 +123,5 @@ function sendConfirmationEmail($to, $name) {
     
     mail($to, $subject, $message, $headers);
 }
+require_once 'db_config.php';
 ?>
