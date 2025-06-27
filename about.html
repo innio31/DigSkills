@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About DigSkills | Cisco-Accredited Digital Education</title>
+    <title>DigSkills Academy | Cisco-Accredited Digital Training</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Reused styles from homepage */
         :root {
             --primary: #2563eb;
             --secondary: #1e40af;
@@ -29,6 +28,7 @@
             overflow-x: hidden;
         }
         
+        /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -37,13 +37,6 @@
             width: 100%;
             z-index: 100;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            padding: 0.5rem 5%;
-            background: rgba(37, 99, 235, 0.95);
-            backdrop-filter: blur(10px);
         }
         
         nav {
@@ -53,15 +46,23 @@
         }
         
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
             display: flex;
             align-items: center;
+            gap: 8px;
         }
         
-        .logo i {
-            margin-right: 10px;
-            color: var(--accent);
+        .logo-icon {
+            width: 32px;
+            height: auto;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
         
         .nav-links {
@@ -70,7 +71,7 @@
         }
         
         .nav-links li {
-            margin-left: 2rem;
+            margin-left: 1.5rem;
         }
         
         .nav-links a {
@@ -81,8 +82,12 @@
             position: relative;
         }
         
-        .nav-links a:hover {
+        .nav-links a.active {
             color: var(--accent);
+        }
+        
+        .nav-links a.active:after {
+            width: 100%;
         }
         
         .nav-links a:after {
@@ -100,293 +105,274 @@
             width: 100%;
         }
         
+        /* Academy Hero Section */
+        .academy-hero {
+            background: linear-gradient(rgba(37, 99, 235, 0.9), rgba(30, 64, 175, 0.9)), 
+                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 8rem 5% 4rem;
+            text-align: center;
+        }
+        
+        .academy-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .academy-hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
         .cta-button {
             background-color: var(--accent);
             color: var(--dark);
             border: none;
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem 1.8rem;
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            font-size: 1rem;
+            display: inline-block;
+            text-decoration: none;
         }
         
         .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
             background-color: #fbbf24;
+            transform: translateY(-3px);
         }
         
-        /* About Page Specific Styles */
-        .about-hero {
-            height: 80vh;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            display: flex;
-            align-items: center;
-            padding: 0 5%;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .about-hero-content {
-            max-width: 800px;
-            z-index: 2;
-            margin-top: 80px;
-
-        }
-        
-        .about-hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-        }
-        
-        .about-hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            max-width: 600px;
-        }
-        
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            margin-bottom: 2rem;
-            color: rgba(255,255,255,0.8);
-        }
-        
-        .breadcrumb a {
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .breadcrumb a:hover {
-            color: var(--accent);
-        }
-        
-        .breadcrumb i {
-            margin: 0 10px;
-            font-size: 0.8rem;
-        }
-        
-        .about-section {
-            padding: 5rem 5%;
+        /* Programs Section */
+        .programs-section {
+            padding: 4rem 5%;
         }
         
         .section-title {
-            font-size: 2.5rem;
+            font-size: 2rem;
+            text-align: center;
             margin-bottom: 1rem;
             color: var(--dark);
-            text-align: center;
         }
         
         .section-subtitle {
-            font-size: 1.2rem;
-            color: #6c757d;
+            text-align: center;
+            color: #64748b;
             max-width: 700px;
             margin: 0 auto 3rem;
-            text-align: center;
         }
         
-        .about-content {
+        .programs-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-            margin-bottom: 5rem;
-        }
-        
-        .about-text h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .about-text p {
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
-            color: #4b5563;
-        }
-        
-        .about-image {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-        
-        .about-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        
-        .mission-values {
-            background-color: #f1f5ff;
-            padding: 5rem 5%;
-            margin: 5rem 0;
-        }
-        
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
         }
         
-        .value-card {
-            background-color: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .value-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-        
-        .value-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-        
-        .value-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-        
-        .value-description {
-            color: #6c757d;
-            line-height: 1.6;
-        }
-        
-        .cisco-partnership {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-            background-color: white;
-            border-radius: 15px;
-            padding: 3rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin: 5rem 0;
-        }
-        
-        .cisco-logo {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .cisco-logo img {
-            max-width: 300px;
-            width: 100%;
-        }
-        
-        .partnership-text h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .partnership-text p {
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
-            color: #4b5563;
-        }
-        
-        .team-section {
-            padding: 5rem 5%;
-            text-align: center;
-        }
-        
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .team-member {
-            background-color: white;
-            border-radius: 15px;
+        .program-card {
+            background: white;
+            border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
         }
         
-        .team-member:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         
-        .member-image {
-            height: 250px;
-            background-color: #e5e7eb;
+        .program-image {
+            height: 180px;
+            background-color: #e2e8f0;
             position: relative;
             overflow: hidden;
         }
         
-        .member-image img {
+        .program-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
         
-        .member-info {
+        .program-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        
+        .program-content {
             padding: 1.5rem;
         }
         
-        .member-name {
+        .program-level {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: var(--light);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+        
+        .program-title {
             font-size: 1.3rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             color: var(--dark);
         }
         
-        .member-position {
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .member-bio {
-            color: #6c757d;
-            font-size: 0.9rem;
+        .program-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
             line-height: 1.6;
+            font-size: 0.95rem;
         }
         
-        .social-links {
+        .program-details {
             display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
         }
         
-        .social-links a {
+        .program-duration, .program-mode {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+        }
+        
+        .program-cta {
+            display: block;
+            text-align: center;
+            padding: 0.8rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+        
+        .program-cta:hover {
+            background: var(--secondary);
+        }
+        
+        /* Testimonials Section */
+        .testimonials-section {
+            background: #f1f5ff;
+            padding: 4rem 5%;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            color: #475569;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            position: relative;
+        }
+        
+        .testimonial-text:before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--accent);
+            opacity: 0.2;
+            position: absolute;
+            top: -20px;
+            left: -15px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 35px;
-            height: 35px;
-            background-color: #f1f5ff;
-            border-radius: 50%;
-            color: var(--primary);
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .author-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .author-info p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 5%;
+            text-align: center;
+        }
+        
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .outline-button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid white;
+            color: white;
+            background: transparent;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         
-        .social-links a:hover {
-            background-color: var(--primary);
-            color: white;
+        .outline-button:hover {
+            background: white;
+            color: var(--primary);
         }
         
+        /* Footer */
         footer {
-            background-color: var(--dark);
+            background: var(--dark);
             color: white;
             padding: 3rem 5%;
         }
@@ -399,17 +385,17 @@
         }
         
         .footer-column h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
             position: relative;
         }
         
         .footer-column h3:after {
             content: '';
             position: absolute;
-            width: 40px;
+            width: 30px;
             height: 3px;
-            background-color: var(--accent);
+            background: var(--accent);
             bottom: -8px;
             left: 0;
         }
@@ -423,9 +409,10 @@
         }
         
         .footer-links a {
-            color: #adb5bd;
+            color: #94a3b8;
             text-decoration: none;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
         
         .footer-links a:hover {
@@ -433,26 +420,26 @@
             padding-left: 5px;
         }
         
-        .footer-social-links {
+        .social-links {
             display: flex;
             gap: 1rem;
             margin-top: 1.5rem;
         }
         
-        .footer-social-links a {
+        .social-links a {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255,255,255,0.1);
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
             border-radius: 50%;
             color: white;
             transition: all 0.3s ease;
         }
         
-        .footer-social-links a:hover {
-            background-color: var(--accent);
+        .social-links a:hover {
+            background: var(--accent);
             transform: translateY(-3px);
         }
         
@@ -460,125 +447,336 @@
             text-align: center;
             padding-top: 2rem;
             border-top: 1px solid rgba(255,255,255,0.1);
-            color: #adb5bd;
-            font-size: 0.9rem;
+            color: #94a3b8;
+            font-size: 0.8rem;
         }
         
+        /* Enrollment Modal */
+        .enroll-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            position: relative;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--dark);
+            z-index: 1001;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent);
+        }
+        
+        .modal-iframe-container {
+            flex: 1;
+            margin-top: 20px;
+        }
+        
+        .modal-iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 5px;
+        }
+        
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .cisco-partnership {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .about-hero h1 {
-                font-size: 2.5rem;
+            .mobile-menu-btn {
+                display: block;
             }
             
             .nav-links {
                 display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                flex-direction: column;
+                padding: 1rem 5%;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0.8rem 0;
+            }
+            
+            .academy-hero {
+                padding: 6rem 5% 3rem;
+            }
+            
+            .academy-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .outline-button {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .modal-content {
+                height: 90vh;
+                margin: 2% auto;
+                padding: 15px;
             }
         }
-        
-        /* Footer Social Media */
-.footer-social {
-    text-align: center;
-    margin-bottom: 2rem;
+        <style>
+.program-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.footer-social h3 {
-    color: white;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
+.program-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
 }
 
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
+.program-image {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
 }
 
-.social-icons a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(255,255,255,0.1);
-    border-radius: 50%;
-    color: white;
-    transition: all 0.3s ease;
+.program-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
-.social-icons a:hover {
-    background-color: var(--accent);
-    transform: translateY(-3px);
+.program-card:hover .program-image img {
+  transform: scale(1.05);
 }
 
-/* Floating Social Widget */
-.floating-social {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    z-index: 99;
+.program-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--accent);
+  color: var(--dark);
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-.floating-social a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    color: white;
-    font-size: 1.2rem;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
+.program-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.floating-social a:hover {
-    transform: translateY(-5px);
+.program-level {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  background: var(--light);
+  color: var(--primary);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  align-self: flex-start;
 }
 
-.floating-social .whatsapp {
-    background-color: #25D366;
+.program-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.8rem;
+  color: var(--dark);
 }
 
-.floating-social .facebook {
-    background-color: #1877F2;
+.program-description {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  flex: 1;
 }
 
-.floating-social .linkedin {
-    background-color: #0077B5;
+.program-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-@media (max-width: 768px) {
-    .floating-social {
-        bottom: 20px;
-        right: 20px;
-    }
-    
-    .floating-social a {
-        width: 45px;
-        height: 45px;
-        font-size: 1rem;
-    }
-}
-        .logo {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Space between logo and name */
+.program-details i {
+  margin-right: 0.3rem;
+  color: var(--primary);
 }
 
-.logo-icon {
-    width: 32px;
-    height: auto;
+.program-cta {
+  display: block;
+  text-align: center;
+  padding: 0.8rem;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.program-cta:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+}
+
+/* Category-specific colors */
+.program-card[data-category="secondary"] .program-level {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.program-card[data-category="undergrad"] .program-level {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.program-card[data-category="online"] .program-level {
+  background: #eff6ff;
+  color: #4338ca;
+}
+
+.program-card[data-category="professional"] .program-level {
+  background: #fef2f2;
+  color: #991b1b;
+}
+/* ==================== */
+/* BRAND COLOR SCHEME */
+/* ==================== */
+:root {
+  --primary: #2563eb; /* DigSkills blue */
+  --secondary: #1e40af; /* Dark blue */
+  --accent: #f59e0b; /* DigSkills gold */
+  --light: #f8fafc;
+  --dark: #1e293b;
+  --success: #10b981;
+  
+  /* Category colors */
+  --secondary-school: #3b82f6;
+  --undergrad: #10b981;
+  --online: #8b5cf6;
+  --professional: #ef4444;
+}
+
+/* ==================== */
+/* FILTERING SYSTEM */
+/* ==================== */
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin: 2rem auto 3rem;
+  max-width: 800px;
+}
+
+.filter-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.filter-btn:hover {
+  background: #f1f5f9;
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* ==================== */
+/* PROGRAM CARDS WITH CATEGORY COLORS */
+/* ==================== */
+.program-card {
+  /* ... (previous card styles remain the same) ... */
+}
+
+/* Category-specific styling */
+.program-card[data-category="secondary"] .program-level,
+.program-card[data-category="secondary"] .program-cta:hover {
+  background: var(--secondary-school);
+}
+
+.program-card[data-category="undergrad"] .program-level,
+.program-card[data-category="undergrad"] .program-cta:hover {
+  background: var(--undergrad);
+}
+
+.program-card[data-category="online"] .program-level,
+.program-card[data-category="online"] .program-cta:hover {
+  background: var(--online);
+}
+
+.program-card[data-category="professional"] .program-level,
+.program-card[data-category="professional"] .program-cta:hover {
+  background: var(--professional);
+}
+
+/* Badge colors */
+.program-card[data-category="secondary"] .program-badge {
+  background: var(--secondary-school);
+}
+
+.program-card[data-category="undergrad"] .program-badge {
+  background: var(--undergrad);
+}
+
+.program-card[data-category="online"] .program-badge {
+  background: var(--online);
+}
+
+.program-card[data-category="professional"] .program-badge {
+  background: var(--professional);
 }
     </style>
 </head>
@@ -589,164 +787,148 @@
                 <img src="images/logo.png" alt="DigSkills Logo" class="logo-icon" />
                 <span>DigSkills</span>
             </div>
-            <ul class="nav-links">
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="academy.html" class="active">Academy</a></li>
                 <li><a href="services.html">Services</a></li>
-                <li><a href="academy.html">Academy</a></li>
+                <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
-            <button class="cta-button">Get Started</button>
         </nav>
     </header>
 
-    <section class="about-hero">
-        <div class="about-hero-content">
-            <div class="breadcrumb">
-                <a href="index.html">Home</a>
-                <i class="fas fa-chevron-right"></i>
-                <span>About Us</span>
-            </div>
-            <h1>Empowering Digital Transformation Through Education</h1>
-            <p>As an official Cisco Networking Academy partner, DigSkills bridges the gap between technology and education to build Africa's digital workforce.</p>
-             <a href="services.html"><button class="cta-button">Explore Our Programs</button></a>
-        </div>
+    <section class="academy-hero">
+        <h1>Transform Your Career with Industry-Driven Programs</h1>
+        <p>Gain in-demand digital skills through our hands-on training programs designed for the African tech ecosystem</p>
+        <button class="cta-button" id="heroEnrollButton">Explore Programs</button>
     </section>
 
-    <section class="about-section">
-        <div class="about-content">
-            <div class="about-text">
-                <h2>Our Story</h2>
-                <p>Founded in 2018, DigSkills began as a small initiative to address the growing digital skills gap in Nigeria. What started as weekend coding workshops has now grown into a premier digital education hub with Cisco Networking Academy accreditation.</p>
-                <p>We recognized that traditional education systems weren't keeping pace with technological advancements, leaving both individuals and institutions struggling to adapt. Our mission became clear: to provide accessible, industry-relevant digital education that empowers people and transforms organizations.</p>
-                <p>Today, we've trained over 8,000 students and partnered with 200+ institutions across West Africa, helping them navigate their digital transformation journeys.</p>
-            </div>
-            <div class="about-image">
-                <img src="images/logo.png" alt="DigSkills Team">
-            </div>
-        </div>
+    <section class="programs-section" id="programs">
+        <h2 class="section-title">Our Training Programs</h2>
+        <p class="section-subtitle">Choose from our range of beginner to advanced level courses to kickstart or advance your tech career</p>
+    
+        <!-- Programs Grid Container -->
+        <div class="programs-grid">
+            <!-- ==================== -->
+<!-- PROGRAM FILTERING SYSTEM -->
+<!-- ==================== -->
+<div class="filter-controls">
+  <button class="filter-btn active" data-category="all">All Programs</button>
+  <button class="filter-btn" data-category="secondary">Secondary Schools</button>
+  <button class="filter-btn" data-category="undergrad">Undergraduates</button>
+  <button class="filter-btn" data-category="online">Distance Learning</button>
+  <button class="filter-btn" data-category="professional">Professional</button>
+</div>
 
-        <div class="about-content" style="flex-direction: row-reverse;">
-            <div class="about-text">
-                <h2>Our Approach</h2>
-                <p>At DigSkills, we believe in learning by doing. Our programs combine theoretical knowledge with hands-on, project-based learning using real-world scenarios.</p>
-                <p>We've developed a unique "Skills Stack" methodology that layers technical skills with essential workplace competencies like problem-solving, collaboration, and adaptability.</p>
-                <p>Our Cisco-certified instructors bring years of industry experience, ensuring our curriculum remains relevant to current market demands. We continuously update our programs based on feedback from our employer network and technological advancements.</p>
-                <button class="cta-button" style="margin-top: 1.5rem;">Meet Our Team</button>
-            </div>
-            <div class="about-image">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="DigSkills Classroom">
-            </div>
-        </div>
-    </section>
+<!-- Programs Grid Container -->
+<div class="programs-grid">
 
-    <section class="mission-values">
-        <h2 class="section-title">Our Mission & Values</h2>
-        <p class="section-subtitle">The principles that guide everything we do at DigSkills</p>
+  <!-- Secondary Schools Programs -->
+  <div class="program-card" data-category="secondary">
+    <div class="program-image">
+      <!-- Sample image from Unsplash (replace with your actual images) -->
+      <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80" alt="Students learning computers">
+      <span class="program-badge">School Program</span>
+    </div>
+    <div class="program-content">
+      <span class="program-level">Beginner</span>
+      <h3 class="program-title">Digital Literacy Bootcamp</h3>
+      <p class="program-description">Essential 21st-century skills covering computer basics, internet safety, and productivity tools.</p>
+      <div class="program-details">
+        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
+        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
+      </div>
+      <button class="program-cta">Enroll School</button>
+    </div>
+  </div>
+
+  <!-- Undergraduate Programs -->
+  <div class="program-card" data-category="undergrad">
+    <div class="program-image">
+      <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Coding class">
+      <span class="program-badge">Career Track</span>
+    </div>
+    <div class="program-content">
+      <span class="program-level">Intermediate</span>
+      <h3 class="program-title">Full-Stack Development</h3>
+      <p class="program-description">Master JavaScript, Python, and frameworks to build web applications from scratch.</p>
+      <div class="program-details">
+        <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
+        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
+      </div>
+      <button class="program-cta">Apply Now</button>
+    </div>
+  </div>
+
+  <!-- Distance Learning Programs -->
+  <div class="program-card" data-category="online">
+    <div class="program-image">
+      <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80" alt="Online learning">
+      <span class="program-badge">Flexible</span>
+    </div>
+    <div class="program-content">
+      <span class="program-level">Beginner</span>
+      <h3 class="program-title">Digital Marketing</h3>
+      <p class="program-description">Master SEO, social media, and analytics to grow businesses online.</p>
+      <div class="program-details">
+        <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
+        <span class="program-duration"><i class="far fa-clock"></i> Self-Paced</span>
+      </div>
+      <button class="program-cta">Start Learning</button>
+    </div>
+  </div>
+
+  <!-- Professional Programs -->
+  <div class="program-card" data-category="professional">
+    <div class="program-image">
+      <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80" alt="Professional training">
+      <span class="program-badge">Executive</span>
+    </div>
+    <div class="program-content">
+      <span class="program-level">Advanced</span>
+      <h3 class="program-title">Tech for Managers</h3>
+      <p class="program-description">Leadership in digital transformation, Agile methodologies, and tech project management.</p>
+      <div class="program-details">
+        <span class="program-mode"><i class="fas fa-calendar-weekend"></i> Saturdays Only</span>
+        <span class="program-duration"><i class="far fa-clock"></i> 10 Weeks</span>
+      </div>
+      <button class="program-cta">Register Now</button>
+    </div>
+  </div>
+
+</div>
+  
+
+    <section class="testimonials-section">
+        <h2 class="section-title">Success Stories</h2>
+        <p class="section-subtitle">Hear from our alumni who transformed their careers</p>
         
-        <div class="values-grid">
-            <div class="value-card">
-                <div class="value-icon">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <h3 class="value-title">Accessible Education</h3>
-                <p class="value-description">We break down barriers to tech education through flexible learning options, scholarships, and community partnerships.</p>
-            </div>
+        <div class="testimonial-card">
+            <p class="testimonial-text">After completing the Cybersecurity program at DigSkills, I landed a job as a Security Analyst within 2 months. The hands-on labs and career coaching made all the difference in my job search.</p>
             
-            <div class="value-card">
-                <div class="value-icon">
-                    <i class="fas fa-network-wired"></i>
+            <div class="testimonial-author">
+                <div class="author-avatar">AO</div>
+                <div class="author-info">
+                    <h4>Amina Okafor</h4>
+                    <p>Security Analyst, FinTech Company</p>
                 </div>
-                <h3 class="value-title">Industry Alignment</h3>
-                <p class="value-description">Our Cisco-accredited programs are designed with direct input from employers to ensure job-ready skills.</p>
-            </div>
-            
-            <div class="value-card">
-                <div class="value-icon">
-                    <i class="fas fa-hands-helping"></i>
-                </div>
-                <h3 class="value-title">Community Impact</h3>
-                <p class="value-description">We measure success not just by certifications earned, but by lives transformed and communities strengthened.</p>
-            </div>
-            
-            <div class="value-card">
-                <div class="value-icon">
-                    <i class="fas fa-lightbulb"></i>
-                </div>
-                <h3 class="value-title">Innovation</h3>
-                <p class="value-description">We continuously evolve our methods and curriculum to stay at the forefront of digital education.</p>
             </div>
         </div>
     </section>
 
-    <section class="about-section">
-        <div class="cisco-partnership">
-            <div class="cisco-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Cisco_logo_blue_2016.svg/1200px-Cisco_logo_blue_2016.svg.png" alt="Cisco Networking Academy">
-            </div>
-            <div class="partnership-text">
-                <h2>Our Cisco Networking Academy Partnership</h2>
-                <p>As an official Cisco Networking Academy partner since 2020, we deliver world-class networking and cybersecurity education using Cisco's globally recognized curriculum.</p>
-                <p>This partnership allows us to offer:</p>
-                <ul style="margin-bottom: 1.5rem; padding-left: 1.5rem; color: #4b5563; line-height: 1.8;">
-                    <li>Industry-standard course materials and virtual labs</li>
-                    <li>Preparation for globally recognized Cisco certifications</li>
-                    <li>Access to Cisco's global learning community</li>
-                    <li>Regular instructor training and updates</li>
-                </ul>
-                <p>Our students benefit from the same curriculum used to train networking professionals worldwide, with localized support from our experienced instructors.</p>
-                <button class="cta-button" style="margin-top: 1rem;">Explore Cisco Programs</button>
-            </div>
-        </div>
-    </section>
-
-    <section class="team-section">
-        <h2 class="section-title">Meet Our Leadership</h2>
-        <p class="section-subtitle">The passionate team driving DigSkills' mission forward</p>
-        
-        <div class="team-grid">
-            <div class="team-member">
-                <div class="member-image">
-                    <img src="images/CEO.jpg" alt="Founder">
-                </div>
-                <div class="member-info">
-                    <h3 class="member-name">Emmanuel Ademuyiwa</h3>
-                    <p class="member-position">Founder & CEO</p>
-                    <p class="member-bio">A highly motivated professional in Information Technology, skiled in web development and data analysis. Adept at leveraging technical expertise and business acumen to deliver efficient digital solutions. Cisco Certified Instructor.</p>
-                    <div class="social-links">
-                        <a href="https://www.linkedin.com/in/emmanuel-ademuyiwa"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://wa.me/+2349035448295"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-            </div>
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Launch Your Tech Career?</h2>
+            <p>Our admissions team is ready to guide you in choosing the right program for your goals. Schedule a consultation today.</p>
             
-            <div class="team-member">
-                <div class="member-image">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Academic Director">
-                </div>
-                <div class="member-info">
-                    <h3 class="member-name">Ngozi Okonkwo</h3>
-                    <p class="member-position">Academic Director</p>
-                    <p class="member-bio">Education specialist with a passion for curriculum development. Leads our Cisco Academy program implementation.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="team-member">
-                <div class="member-image">
-                    <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Head of Operations">
-                </div>
-                <div class="member-info">
-                    <h3 class="member-name">Emeka Okafor</h3>
-                    <p class="member-position">Head of Operations</p>
-                    <p class="member-bio">Oversees our Lagos and Abuja training centers. Former IT manager with extensive networking experience.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
+            <div class="cta-buttons">
+                <a href="contact.html" class="cta-button">Speak to an Advisor</a>
+                <button class="outline-button">Download Brochure</button>
             </div>
         </div>
     </section>
@@ -755,55 +937,63 @@
         <div class="footer-content">
             <div class="footer-column">
                 <h3>DigSkills</h3>
-                <p>Empowering institutions and individuals through digital transformation and education.</p>
+                <p>Empowering Africa's digital workforce through industry-aligned training programs.</p>
+                
+                <div class="social-links">
+                    <a href="https://www.facebook.com/share/16exnb9VsU/"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/DigSkills?t=-sO0HSAREApy6Igw39JbVA&s=09"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
             </div>
             
             <div class="footer-column">
-                <h3>Quick Links</h3>
+                <h3>Programs</h3>
                 <ul class="footer-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#academy">Academy</a></li>
+                    <li><a href="#programs">Web Development</a></li>
+                    <li><a href="#programs">Data Analysis</a></li>
+                    <li><a href="#programs">Cybersecurity</a></li>
+                    <li><a href="#programs">App Development</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Company</h3>
+                <ul class="footer-links">
                     <li><a href="about.html">About Us</a></li>
+                    <li><a href="#">Our Partners</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
                 </ul>
             </div>
             
             <div class="footer-column">
                 <h3>Contact</h3>
                 <ul class="footer-links">
-                    <li><a href="mailto: dig2skills@gmail.com">dig2skills@gmail.com</a></li>
                     <li><a href="tel:+2349035448295">+234 903 544 8295</a></li>
-                    <li>Ota, Nigeria</li>
+                    <li><a href="mailto:dig2skills@gmail.com">dig2skills@gmail.com</a></li>
+                    <li>Lagos, Nigeria</li>
                 </ul>
             </div>
         </div>
-        <div class="footer-social">
-    <h3>Connect With Us</h3>
-    <div class="social-icons">
-        <a href="https://www.facebook.com/share/16exnb9VsU/" target="_blank" aria-label="Facebook">
-            <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="https://x.com/DigSkills?t=-sO0HSAREApy6Igw39JbVA&s=09" target="_blank" aria-label="Twitter">
-            <i class="fab fa-twitter"></i>
-        </a>
-        <a href="https://linkedin.com/company/yourcompany" target="_blank" aria-label="LinkedIn">
-            <i class="fab fa-linkedin-in"></i>
-        </a>
-        <a href="https://instagram.com/yourhandle" target="_blank" aria-label="Instagram">
-            <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://youtube.com/yourchannel" target="_blank" aria-label="YouTube">
-            <i class="fab fa-youtube"></i>
-        </a>
-    </div>
-</div>
+        
         <div class="footer-bottom">
-            <p>&copy; 2025 DigSkills. All rights reserved.</p>
+            <p>&copy; 2025 DigSkills. All rights reserved. | <a href="#" style="color: #94a3b8;">Privacy Policy</a> | <a href="#" style="color: #94a3b8;">Terms of Service</a></p>
         </div>
     </footer>
 
+    <!-- Enrollment Modal -->
+    <div class="enroll-modal" id="enrollModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-iframe-container">
+                <iframe id="enrollIframe" src="" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Mobile menu toggle
+        // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
         
@@ -817,38 +1007,74 @@
                 navLinks.classList.remove('active');
             });
         });
-        
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-        
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+
+        // Enrollment Modal Functionality
+        const enrollModal = document.getElementById('enrollModal');
+        const enrollIframe = document.getElementById('enrollIframe');
+        const closeModal = document.querySelector('.close-modal');
+        const enrollButtons = document.querySelectorAll('.program-cta, #heroEnrollButton');
+
+        // Open modal with form
+        enrollButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const formUrl = this.getAttribute('data-form') || 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true';
+                enrollIframe.src = formUrl;
+                enrollModal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
             });
         });
+
+        // Close modal
+        closeModal.addEventListener('click', () => {
+            enrollModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close when clicking outside modal
+        window.addEventListener('click', (e) => {
+            if (e.target === enrollModal) {
+                enrollModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Simple program category filter (example functionality)
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // In a real implementation, you would filter programs here
+            });
+        });
+        // ==================== //
+// FILTERING FUNCTIONALITY
+// ==================== //
+document.addEventListener('DOMContentLoaded', function() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const programCards = document.querySelectorAll('.program-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Remove active class from all buttons
+      filterBtns.forEach(b => b.classList.remove('active'));
+      // Add active class to clicked button
+      this.classList.add('active');
+      
+      const category = this.dataset.category;
+      
+      // Filter programs
+      programCards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
     </script>
-    <div class="floating-social">
-    <a href="https://wa.me/+2349051586024" class="whatsapp" target="_blank" aria-label="WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-    <a href="https://www.facebook.com/share/16exnb9VsU/" class="facebook" target="_blank" aria-label="Facebook">
-        <i class="fab fa-facebook-f"></i>
-    </a>
-    <a href="https://linkedin.com/company/yourcompany" class="linkedin" target="_blank" aria-label="LinkedIn">
-        <i class="fab fa-linkedin-in"></i>
-    </a>
-</div>
 </body>
 </html>
