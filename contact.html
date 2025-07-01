@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact DigSkills | Digital Solutions & Training</title>
+    <title>Contact Us | DigSkills - Digital Solutions & Skills Training</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#008080">
+    
     <style>
         :root {
             --primary: #2563eb;
@@ -12,6 +15,7 @@
             --accent: #f59e0b;
             --light: #f8fafc;
             --dark: #1e293b;
+            --success: #10b981;
         }
         
         * {
@@ -24,9 +28,10 @@
         body {
             background-color: var(--light);
             color: var(--dark);
+            overflow-x: hidden;
         }
         
-        /* Header Styles (Reuse from Homepage) */
+        /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -35,378 +40,561 @@
             width: 100%;
             z-index: 100;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
         
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
+        header.scrolled {
+            padding: 0.5rem 5%;
+            background: var(--primary);
+        }
+        
+        /* Navigation Styles */
+        nav {
             display: flex;
+            justify-content: space-between;
             align-items: center;
         }
-        
-        .logo i {
-            margin-right: 10px;
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a.active {
             color: var(--accent);
         }
-        
-        /* Contact Page Specific Styles */
-        .contact-hero {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 6rem 5% 3rem;
-            text-align: center;
+
+        .nav-links a.active:after {
+            width: 100%;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background-color: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background-color: #fbbf24;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                flex-direction: column;
+                padding: 1rem 5%;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0.8rem 0;
+            }
+            
+            .cta-button {
+                margin-left: 0;
+                margin-top: 1rem;
+                width: 100%;
+                text-align: center;
+            }
         }
         
+        /* Hero Section */
+        .contact-hero {
+            height: 60vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .contact-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 5%;
+        }
+
         .contact-hero h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
         }
-        
+
         .contact-hero p {
             font-size: 1.1rem;
             opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto;
+            margin-bottom: 2rem;
         }
-        
-        .contact-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+
+        /* Contact Section */
+        .contact-section {
             padding: 5rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
         }
-        
+
         .contact-info {
+            flex: 1;
+            min-width: 300px;
             background-color: white;
             border-radius: 15px;
             padding: 2rem;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            height: fit-content;
         }
-        
-        .contact-info h2 {
-            color: var(--primary);
+
+        .contact-form-container {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 2rem;
             margin-bottom: 1.5rem;
-            font-size: 1.8rem;
+            color: var(--dark);
         }
-        
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
         .info-item {
             display: flex;
+            align-items: flex-start;
             margin-bottom: 1.5rem;
         }
-        
+
         .info-icon {
-            width: 50px;
-            height: 50px;
-            background-color: #f1f5ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 1.2rem;
             color: var(--primary);
-            font-size: 1.2rem;
             margin-right: 1rem;
-            flex-shrink: 0;
+            margin-top: 3px;
         }
-        
+
         .info-content h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 0.3rem;
+            color: var(--dark);
         }
-        
+
         .info-content p, .info-content a {
             color: #6c757d;
             text-decoration: none;
-            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
-        
+
         .info-content a:hover {
             color: var(--primary);
         }
-        
+
         .social-links {
             display: flex;
             gap: 1rem;
             margin-top: 2rem;
         }
-        
+
         .social-links a {
             display: flex;
             align-items: center;
             justify-content: center;
             width: 40px;
             height: 40px;
-            background-color: #f1f5ff;
+            background-color: rgba(37, 99, 235, 0.1);
             border-radius: 50%;
             color: var(--primary);
             transition: all 0.3s ease;
         }
-        
+
         .social-links a:hover {
             background-color: var(--primary);
             color: white;
-            transform: translateY(-3px);
         }
-        
-        .contact-form {
-            background-color: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .contact-form h2 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-        
-        .form-group {
+
+        /* Contact Form */
+        .contact-form .form-group {
             margin-bottom: 1.5rem;
         }
-        
-        .form-group label {
+
+        .contact-form label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
+            color: var(--dark);
         }
-        
-        .form-control {
+
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
             width: 100%;
-            padding: 0.8rem 1rem;
+            padding: 0.8rem;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
         }
-        
-        .form-control:focus {
+
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
             border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
-        
-        textarea.form-control {
+
+        .contact-form textarea {
             min-height: 150px;
             resize: vertical;
         }
-        
+
         .submit-btn {
-            background-color: var(--accent);
-            color: var(--dark);
+            background-color: var(--primary);
+            color: white;
             border: none;
             padding: 0.8rem 1.5rem;
-            border-radius: 50px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
-            font-size: 1rem;
         }
-        
+
         .submit-btn:hover {
-            background-color: #fbbf24;
-            transform: translateY(-3px);
+            background-color: var(--secondary);
+            transform: translateY(-2px);
         }
-        
+
+        /* Map Section */
+        .map-section {
+            padding: 0 5% 5rem;
+        }
+
         .map-container {
-            grid-column: 1 / -1;
             height: 400px;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        
+
         .map-container iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
-        
-        /* Footer Styles (Reuse from Homepage) */
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 5rem 5%;
+            background-color: #f8fafc;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .faq-question:hover {
+            background-color: #f8fafc;
+        }
+
+        .faq-answer {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 1.2rem 1.2rem;
+            max-height: 500px;
+        }
+
+        .faq-toggle {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        /* Logo Styles */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: auto;
+        }
+
+        /* Footer Styles */
         footer {
             background-color: var(--dark);
             color: white;
             padding: 3rem 5%;
-            text-align: center;
         }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
-            flex-wrap: wrap;
         }
-        
+
+        .footer-column h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background-color: var(--accent);
+            bottom: -8px;
+            left: 0;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.6rem;
+        }
+
         .footer-links a {
             color: #adb5bd;
             text-decoration: none;
             transition: all 0.3s ease;
-        }
-        
-        .footer-links a:hover {
-            color: white;
-        }
-        
-        .copyright {
-            color: #adb5bd;
             font-size: 0.9rem;
         }
-        
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.8rem;
+        }
+
+        /* Floating Social Widget */
+        .floating-social {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 99;
+        }
+
+        .floating-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .floating-social a:hover {
+            transform: translateY(-5px);
+        }
+
+        .floating-social .whatsapp {
+            background-color: #25D366;
+        }
+
+        .floating-social .facebook {
+            background-color: #1877F2;
+        }
+
+        .floating-social .linkedin {
+            background-color: #0077B5;
+        }
+
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            .contact-container {
-                grid-template-columns: 1fr;
-                padding: 3rem 5%;
+            .contact-hero {
+                height: auto;
+                padding: 120px 5% 60px;
             }
             
             .contact-hero h1 {
                 font-size: 2rem;
             }
             
-            .contact-hero p {
+            .contact-section {
+                flex-direction: column;
+            }
+            
+            .map-container {
+                height: 300px;
+            }
+            
+            .floating-social {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .floating-social a {
+                width: 45px;
+                height: 45px;
                 font-size: 1rem;
             }
         }
-        /* Navigation Styles */
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mobile-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-}
-
-.nav-links li {
-    margin-left: 1.5rem;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.nav-links a.active {
-    color: var(--accent);
-}
-
-.nav-links a.active:after {
-    width: 100%;
-}
-
-.nav-links a:after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    background: var(--accent);
-    bottom: -5px;
-    left: 0;
-    transition: width 0.3s ease;
-}
-
-.nav-links a:hover:after {
-    width: 100%;
-}
-
-.cta-button {
-    background-color: var(--accent);
-    color: var(--dark);
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-left: 1.5rem;
-}
-
-.cta-button:hover {
-    background-color: #fbbf24;
-    transform: translateY(-3px);
-}
-
-@media (max-width: 768px) {
-    .mobile-menu-btn {
-        display: block;
-    }
-    
-    .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--primary);
-        flex-direction: column;
-        padding: 1rem 5%;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    }
-    
-    .nav-links.active {
-        display: flex;
-    }
-    
-    .nav-links li {
-        margin: 0.8rem 0;
-    }
-    
-    .cta-button {
-        margin-left: 0;
-        margin-top: 1rem;
-        width: 100%;
-    }
-}
     </style>
 </head>
 <body>
-   <header id="header">
-    <nav>
-        <div class="logo">
-            <i class="fas fa-laptop-code"></i>
-            <span>DigSkills</span>
-        </div>
-        
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="academy.html">Academy</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html" class="active">Contact</a></li>
-        </ul>
-        <button class="cta-button">Get Started</button>
-    </nav>
-</header>
+    <header id="header">
+        <nav>
+            <div class="logo">
+                <img src="images/logo.png" alt="DigSkills Logo" class="logo-icon" />
+                <span>DigSkills</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="academy.html">Academy</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+                <li><a href="contact.html" class="cta-button">Get Started</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <section class="contact-hero">
-        <h1>Get In Touch With Us</h1>
-        <p>Have questions about our programs or services? Reach out to our team—we're here to help you with your digital transformation journey.</p>
+        <div class="contact-hero-content">
+            <h1>Get In Touch With Us</h1>
+            <p>Have questions about our services or training programs? Reach out to our team and we'll get back to you promptly.</p>
+            <a href="#contact-form" class="cta-button">Send a Message</a>
+        </div>
     </section>
 
-    <div class="contact-container">
+    <section class="contact-section">
         <div class="contact-info">
-            <h2>Contact Information</h2>
+            <h2 class="section-title">Contact Information</h2>
+            <p class="section-subtitle">We're here to help and answer any questions you might have about our services or training programs.</p>
             
             <div class="info-item">
                 <div class="info-icon">
@@ -414,7 +602,7 @@ nav {
                 </div>
                 <div class="info-content">
                     <h3>Our Location</h3>
-                    <p>5, Ade-Akinlade, Iyesi, Ota<br>Ogun, Nigeria</p>
+                    <p>123 Digital Avenue, Ota, Ogun State, Nigeria</p>
                 </div>
             </div>
             
@@ -424,9 +612,7 @@ nav {
                 </div>
                 <div class="info-content">
                     <h3>Email Us</h3>
-                    <p>
-                        <a href="mailto:dig2skills@gmail.com">dig2skills@gmail.com</a><br>
-                    </p>
+                    <a href="mailto:dig2skills@gmail.com">dig2skills@gmail.com</a>
                 </div>
             </div>
             
@@ -436,10 +622,7 @@ nav {
                 </div>
                 <div class="info-content">
                     <h3>Call Us</h3>
-                    <p>
-                        <a href="tel:+2349035448295">+234 903 544 8295</a><br>
-                        <a href="tel:+2349051586024">+234 905 158 6024</a>
-                    </p>
+                    <a href="tel:+2349035448295">+234 903 544 8295</a>
                 </div>
             </div>
             
@@ -449,266 +632,260 @@ nav {
                 </div>
                 <div class="info-content">
                     <h3>Working Hours</h3>
-                    <p>
-                        Monday - Friday: 8:00 AM - 5:00 PM<br>
-                        Saturday: 10:00 AM - 3:00 PM
-                    </p>
+                    <p>Monday - Friday: 9:00 AM - 5:00 PM<br>Saturday: 10:00 AM - 2:00 PM</p>
                 </div>
             </div>
             
-            <h3 style="margin-top: 2rem;">Follow Us</h3>
             <div class="social-links">
-                <a href="https://www.facebook.com/share/16exnb9VsU/" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://x.com/DigSkills?t=-sO0HSAREApy6Igw39JbVA&s=09" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="https://linkedin.com/company/digskills" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://instagram.com/digskills" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/share/16exnb9VsU/" target="_blank" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://x.com/DigSkills?t=-sO0HSAREApy6Igw39JbVA&s=09" target="_blank" aria-label="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://linkedin.com/company/dig-skills" target="_blank" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://instagram.com/yourhandle" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
             </div>
         </div>
         
-        <div class="contact-form">
-            <h2>Send Us a Message</h2>
-            <form action="https://formsubmit.co/dig2skills@gmail.com" method="POST">
-    <input type="hidden" name="_subject" value="New Contact Form Submission">
-    <input type="hidden" name="_next" value="https://digskills.netlify.app/thank-you.html">
-    <input type="hidden" name="_captcha" value="false">
-    
-    <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" class="form-control" placeholder="Your name" required>
-    </div>
-    
-    <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" class="form-control" placeholder="Your email" required>
-    </div>
-    
-    <div class="form-group">
-        <label for="phone">Phone Number (Optional)</label>
-        <input type="tel" id="phone" name="phone" class="form-control" placeholder="Your phone number">
-    </div>
-    
-    <div class="form-group">
-        <label for="subject">Subject</label>
-        <select id="subject" name="subject" class="form-control" required>
-            <option value="" disabled selected>Select a subject</option>
-            <option value="training">Training Programs</option>
-            <option value="corporate">Corporate Solutions</option>
-            <option value="partnership">Partnership Inquiry</option>
-            <option value="other">Other</option>
-        </select>
-    </div>
-    
-    <div class="form-group">
-        <label for="message">Your Message</label>
-        <textarea id="message" name="message" class="form-control" placeholder="How can we help you?" required></textarea>
-    </div>
-    
-    <button type="submit" class="submit-btn">Send Message</button>
-    </form>
+        <div class="contact-form-container" id="contact-form">
+            <h2 class="section-title">Send Us a Message</h2>
+            <p class="section-subtitle">Fill out the form below and our team will get back to you within 24 hours.</p>
+            
+            <form class="contact-form" id="digskillsContactForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject" required>
+                        <option value="" disabled selected>Select a subject</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="services">Digital Solutions</option>
+                        <option value="training">Training Programs</option>
+                        <option value="partnership">Partnership</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="map-section">
+        <h2 class="section-title">Our Location</h2>
+        <p class="section-subtitle">Visit our office or connect with us virtually</p>
         
         <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.585444464403!2d3.379295415393318!3d6.450972595338273!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae68280c1%3A0xdc9e87a367c3d9cb!2sYaba%20College%20of%20Technology!5e0!3m2!1sen!2sng!4v1620000000000!5m2!1sen!2sng" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.9356669999997!2d3.234567!3d6.678901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwNDAnNDQuMSJOIDPCsDE0JzA0LjUiRQ!5e0!3m2!1sen!2sng!4v1234567890123!5m2!1sen!2sng" allowfullscreen="" loading="lazy"></iframe>
         </div>
-    </div>
+    </section>
 
-  <footer>
+    <section class="faq-section">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Find quick answers to common questions about our services and training programs</p>
+        
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What types of digital solutions do you offer?</span>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We offer a comprehensive range of digital solutions including data analytics and visualization, custom software development, system integration, digital transformation consulting, and more. Our services are tailored to meet the specific needs of educational institutions, businesses, and government organizations.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How can I enroll in your training programs?</span>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You can enroll in our training programs by visiting our Academy page and selecting your preferred course. You can also contact our admissions team via phone or email for personalized guidance on choosing the right program for your career goals.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do you offer corporate training for organizations?</span>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, we provide customized corporate training programs designed to upskill your workforce in digital technologies. Our programs can be tailored to your organization's specific needs and delivered on-site or virtually.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is your typical response time for inquiries?</span>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We strive to respond to all inquiries within 24 hours during our business hours. For urgent matters, we recommend calling our support line for immediate assistance.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do you offer ongoing support after implementation?</span>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely. All our digital solutions come with comprehensive support packages. We offer maintenance, updates, and troubleshooting to ensure your systems continue to perform optimally.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <footer>
         <div class="footer-content">
-
             <div class="footer-column">
-
                 <h3>DigSkills</h3>
-
                 <p>Empowering institutions and individuals through digital transformation and education.</p>
-
             </div>
-
             
-
             <div class="footer-column">
-
                 <h3>Quick Links</h3>
-
                 <ul class="footer-links">
-
                     <li><a href="index.html">Home</a></li>
-
                     <li><a href="services.html">Services</a></li>
-
                     <li><a href="academy.html">Academy</a></li>
-
                     <li><a href="about.html">About Us</a></li>
-
+                    <li><a href="contact.html">Contact</a></li>
                 </ul>
-
             </div>
-
             
-
             <div class="footer-column">
-
-                <h3>Contact</h3>
-
+                <h3>Services</h3>
                 <ul class="footer-links">
-
-                    <li><a href="mailto:dig2skills@gmail.com">dig2skills@gmail.com</a></li>
-
-                    <li><a href="tel:+2349035448295">+234 903 544 8295</a></li>
-
-                    <li>Ota, Nigeria</li>
-
+                    <li><a href="services.html#data">Data Solutions</a></li>
+                    <li><a href="services.html#development">Custom Development</a></li>
+                    <li><a href="services.html#integration">System Integration</a></li>
+                    <li><a href="academy.html">Digital Training</a></li>
                 </ul>
-
             </div>
-
-        </div>
-
-        
-
-        <div class="footer-social">
-
-            <h3>Connect With Us</h3>
-
-            <div class="social-icons">
-
-                <a href="https://www.facebook.com/share/16exnb9VsU/" target="_blank" aria-label="Facebook">
-
-                    <i class="fab fa-facebook-f"></i>
-
-                </a>
-
-                <a href="https://x.com/DigSkills?t=-sO0HSAREApy6Igw39JbVA&s=09" target="_blank" aria-label="Twitter">
-
-                    <i class="fab fa-twitter"></i>
-
-                </a>
-
-                <a href="https://linkedin.com/company/yourcompany" target="_blank" aria-label="LinkedIn">
-
-                    <i class="fab fa-linkedin-in"></i>
-
-                </a>
-
-                <a href="https://instagram.com/yourhandle" target="_blank" aria-label="Instagram">
-
-                    <i class="fab fa-instagram"></i>
-
-                </a>
-
+            
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:dig2skills@gmail.com">dig2skills@gmail.com</a></li>
+                    <li><a href="tel:+2349035448295">+234 903 544 8295</a></li>
+                    <li>Ota, Nigeria</li>
+                </ul>
             </div>
-
         </div>
-
         
-
         <div class="footer-bottom">
-
             <p>&copy; 2025 DigSkills. All rights reserved.</p>
-
         </div>
-
     </footer>
 
-
-
     <div class="floating-social">
-
-        <a href="https://wa.me/+2349035448295" class="whatsapp" target="_blank" aria-label="WhatsApp">
-
+        <a href="https://wa.me/+2349051586024" class="whatsapp" target="_blank" aria-label="WhatsApp">
             <i class="fab fa-whatsapp"></i>
-
         </a>
-
         <a href="https://www.facebook.com/share/16exnb9VsU/" class="facebook" target="_blank" aria-label="Facebook">
-
             <i class="fab fa-facebook-f"></i>
-
         </a>
-
-        <a href="https://linkedin.com/company/yourcompany" class="linkedin" target="_blank" aria-label="LinkedIn">
-
+        <a href="https://linkedin.com/company/digskills" class="linkedin" target="_blank" aria-label="LinkedIn">
             <i class="fab fa-linkedin-in"></i>
-
         </a>
-
     </div>
 
-
-
     <script>
-
         // Mobile menu toggle
-
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-
-        const navLinks = document.querySelector('.nav-links');
-
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
         
-
         mobileMenuBtn.addEventListener('click', function() {
-
             navLinks.classList.toggle('active');
-
         });
-
         
-
         // Close mobile menu when clicking a link
-
         document.querySelectorAll('.nav-links a').forEach(link => {
-
             link.addEventListener('click', function() {
-
                 navLinks.classList.remove('active');
-
             });
-
         });
-
         
-
         // Header scroll effect
-
         window.addEventListener('scroll', function() {
-
-            const header = document.querySelector('header');
-
+            const header = document.getElementById('header');
             if (window.scrollY > 50) {
-
                 header.classList.add('scrolled');
-
             } else {
-
                 header.classList.remove('scrolled');
-
             }
-
         });
-
         
-
-        // Smooth scrolling for navigation links
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-
-            anchor.addEventListener('click', function(e) {
-
-                e.preventDefault();
-
+        // FAQ functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentNode;
+                item.classList.toggle('active');
                 
-
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-
-                    behavior: 'smooth'
-
+                // Close other open FAQs
+                document.querySelectorAll('.faq-item').forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
                 });
-
             });
-
         });
-
+        
+        // Form submission
+        const contactForm = document.getElementById('digskillsContactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Here you would typically send the form data to your server
+                // For demonstration, we'll just show an alert
+                alert('Thank you for your message! We will get back to you soon.');
+                contactForm.reset();
+            });
+        }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
-
 </body>
-
 </html>
