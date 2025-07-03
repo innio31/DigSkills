@@ -150,6 +150,8 @@
         /* Programs Section */
         .programs-section {
             padding: 4rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
         }
         
         .section-title {
@@ -166,10 +168,18 @@
             margin: 0 auto 3rem;
         }
         
+        .section-subtitles {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
         .programs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
+            margin-bottom: 2rem;
         }
         
         .program-card {
@@ -551,233 +561,356 @@
                 padding: 15px;
             }
         }
-        <style>
-.program-card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-}
-
-.program-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
-}
-
-.program-image {
-  height: 200px;
-  position: relative;
-  overflow: hidden;
-}
-
-.program-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.program-card:hover .program-image img {
-  transform: scale(1.05);
-}
-
-.program-badge {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: var(--accent);
-  color: var(--dark);
-  padding: 0.3rem 0.8rem;
-  border-radius: 50px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.program-content {
-  padding: 1.5rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.program-level {
-  display: inline-block;
-  padding: 0.3rem 0.8rem;
-  background: var(--light);
-  color: var(--primary);
-  border-radius: 50px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-  align-self: flex-start;
-}
-
-.program-title {
-  font-size: 1.25rem;
-  margin-bottom: 0.8rem;
-  color: var(--dark);
-}
-
-.program-description {
-  color: #64748b;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-  font-size: 0.9rem;
-  flex: 1;
-}
-
-.program-details {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  font-size: 0.8rem;
-  color: #64748b;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.program-details i {
-  margin-right: 0.3rem;
-  color: var(--primary);
-}
-
-.program-cta {
-  display: block;
-  text-align: center;
-  padding: 0.8rem;
-  background: var(--primary);
-  color: white;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.program-cta:hover {
-  background: var(--secondary);
-  transform: translateY(-2px);
-}
-
-/* Category-specific colors */
-.program-card[data-category="secondary"] .program-level {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.program-card[data-category="undergrad"] .program-level {
-  background: #f0fdf4;
-  color: #166534;
-}
-
-.program-card[data-category="online"] .program-level {
-  background: #eff6ff;
-  color: #4338ca;
-}
-
-.program-card[data-category="professional"] .program-level {
-  background: #fef2f2;
-  color: #991b1b;
-}
-/* ==================== */
-/* BRAND COLOR SCHEME */
-/* ==================== */
-:root {
-  --primary: #2563eb; /* DigSkills blue */
-  --secondary: #1e40af; /* Dark blue */
-  --accent: #f59e0b; /* DigSkills gold */
-  --light: #f8fafc;
-  --dark: #1e293b;
-  --success: #10b981;
-  
-  /* Category colors */
-  --secondary-school: #3b82f6;
-  --undergrad: #10b981;
-  --online: #8b5cf6;
-  --professional: #ef4444;
-}
-
-/* ==================== */
-/* FILTERING SYSTEM */
-/* ==================== */
-.filter-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  justify-content: center;
-  margin: 2rem auto 3rem;
-  max-width: 800px;
-}
-
-.filter-btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: 50px;
-  background: white;
-  border: 1px solid #e2e8f0;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-.filter-btn:hover {
-  background: #f1f5f9;
-}
-
-.filter-btn.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-
-/* ==================== */
-/* PROGRAM CARDS WITH CATEGORY COLORS */
-/* ==================== */
-.program-card {
-  /* ... (previous card styles remain the same) ... */
-}
-
-/* Category-specific styling */
-.program-card[data-category="secondary"] .program-level,
-.program-card[data-category="secondary"] .program-cta:hover {
-  background: var(--secondary-school);
-}
-
-.program-card[data-category="undergrad"] .program-level,
-.program-card[data-category="undergrad"] .program-cta:hover {
-  background: var(--undergrad);
-}
-
-.program-card[data-category="online"] .program-level,
-.program-card[data-category="online"] .program-cta:hover {
-  background: var(--online);
-}
-
-.program-card[data-category="professional"] .program-level,
-.program-card[data-category="professional"] .program-cta:hover {
-  background: var(--professional);
-}
-
-/* Badge colors */
-.program-card[data-category="secondary"] .program-badge {
-  background: var(--secondary-school);
-}
-
-.program-card[data-category="undergrad"] .program-badge {
-  background: var(--undergrad);
-}
-
-.program-card[data-category="online"] .program-badge {
-  background: var(--online);
-}
-
-.program-card[data-category="professional"] .program-badge {
-  background: var(--professional);
-}
+        
+        /* Enhanced Program Cards */
+        .program-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .program-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        
+        .program-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .program-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .program-card:hover .program-image img {
+            transform: scale(1.05);
+        }
+        
+        .program-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .program-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .program-level {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: var(--light);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            align-self: flex-start;
+        }
+        
+        .program-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+        }
+        
+        .program-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 0.9rem;
+            flex: 1;
+        }
+        
+        .program-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            font-size: 0.8rem;
+            color: #64748b;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .program-details i {
+            margin-right: 0.3rem;
+            color: var(--primary);
+        }
+        
+        .program-cta {
+            display: block;
+            text-align: center;
+            padding: 0.8rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .program-cta:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        .learn-more-btn {
+            background: var(--accent);
+            color: var(--dark);
+        }
+        
+        .learn-more-btn:hover {
+            background: #fbbf24;
+        }
+        .cat-prog-btn {
+            background: var(--accent);
+            color: var(--white);
+        }
+        
+        .cat-prog-btn:hover {
+            background: #fbbf24;
+        }
+       
+        
+        /* Category-specific colors */
+        .program-card[data-category="secondary"] .program-level {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .program-card[data-category="onsite"] .program-level {
+            background: #f0fdf4;
+            color: #166534;
+        }
+        
+        .program-card[data-category="online"] .program-level {
+            background: #eff6ff;
+            color: #4338ca;
+        }
+        
+        /* Brand Color Scheme */
+        :root {
+            --primary: #2563eb; /* DigSkills blue */
+            --secondary: #1e40af; /* Dark blue */
+            --accent: #f59e0b; /* DigSkills gold */
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+            
+            /* Category colors */
+            --secondary-school: #3b82f6;
+            --onsite: #10b981;
+            --online: #8b5cf6;
+        }
+        
+        /* Filtering System */
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            margin: 2rem auto 3rem;
+            max-width: 800px;
+        }
+        
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .filter-btn:hover {
+            background: #f1f5f9;
+        }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Category-specific styling */
+        .program-card[data-category="secondary"] .program-level,
+        .program-card[data-category="secondary"] .program-cta:hover {
+            background: var(--secondary-school);
+        }
+        
+        .program-card[data-category="onsite"] .program-level,
+        .program-card[data-category="onsite"] .program-cta:hover {
+            background: var(--onsite);
+        }
+        
+        .program-card[data-category="online"] .program-level,
+        .program-card[data-category="online"] .program-cta:hover {
+            background: var(--online);
+        }
+        
+        /* Badge colors */
+        .program-card[data-category="secondary"] .program-badge {
+            background: var(--secondary-school);
+        }
+        
+        .program-card[data-category="onsite"] .program-badge {
+            background: var(--onsite);
+        }
+        
+        .program-card[data-category="online"] .program-badge {
+            background: var(--online);
+        }
+        .gradient-border-divider {
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--accent), 
+                var(--primary));
+            margin: 4rem 0;
+            border-radius: 3px;
+        }
+        .icon-divider {
+            text-align: center;
+            margin: 3rem 0;
+            color: var(--accent);
+        }
+        .icon-divider:before,
+        .icon-divider:after {
+            content: "";
+            display: inline-block;
+            width: 30%;
+            height: 1px;
+            background: #e2e8f0;
+            vertical-align: middle;
+            margin: 0 1rem;
+        }
+        
+        /* New fixes for desktop layout */
+        .program-category-title {
+            grid-column: 1 / -1;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 2rem 0 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .programs-section {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .programs-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .program-category {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .program-category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .more-button {
+            display: block;
+            text-align: center;
+            padding: 0.8rem;
+            background: var(--accent);
+            color: var(--dark);
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin: 0 auto 2rem;
+            max-width: 300px;
+        }
+        
+        .more-button:hover {
+            background: #fbbf24;
+            transform: translateY(-2px);
+        }
+         /* Certification Section Styles */
+    .certification-section {
+        padding: 4rem 5%;
+        background-color: #f8fafc;
+        text-align: center;
+    }
+    
+    .certification-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 3rem auto 0;
+    }
+    
+    .certification-card {
+        background: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .certification-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .certification-logo {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .certification-logo img {
+        max-height: 60px;
+        max-width: 180px;
+        object-fit: contain;
+    }
+    
+    .certification-card h3 {
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+    
+    .certification-card p {
+        color: #64748b;
+        line-height: 1.6;
+    }
     </style>
 </head>
 <body>
@@ -808,433 +941,344 @@
         <button class="cta-button" id="heroEnrollButton">Explore Programs</button>
     </section>
 
+    <!-- Certification Partners Section -->
+<section class="certification-section">
+    <div class="gradient-border-divider"></div>
+    <div class="section-header">
+        <h2 class="section-title">Industry-Recognized Certifications</h2>
+        <p class="section-subtitle">Our programs prepare you for certifications from the world's leading technology companies</p>
+    </div>
+    
+    <div class="certification-grid">
+        <div class="certification-card">
+            <div class="certification-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Cisco_logo_blue_2016.svg/1200px-Cisco_logo_blue_2016.svg.png" alt="Cisco">
+            </div>
+            <h3>Cisco Certified</h3>
+            <p>Our networking programs align with Cisco certification paths including CCNA and CCNP, giving you the skills needed for network infrastructure roles.</p>
+        </div>
+        
+        <div class="certification-card">
+            <div class="certification-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/2560px-Microsoft_logo_%282012%29.svg.png" alt="Microsoft">
+            </div>
+            <h3>Microsoft Certified</h3>
+            <p>Prepare for Microsoft certifications in Azure cloud computing, Microsoft 365, and Windows Server administration through our comprehensive courses.</p>
+        </div>
+        
+        <div class="certification-card">
+            <div class="certification-logo">
+                <img src="google.jpeg" alt="Google">
+            </div>
+            <h3>Google Certified</h3>
+            <p>Our programs include preparation for Google Cloud certifications and the Google IT Support Professional Certificate, recognized by employers worldwide.</p>
+        </div>
+    </div>
+</section>
+
     <section class="programs-section" id="programs">
         <h2 class="section-title">Our Training Programs</h2>
         <p class="section-subtitle">Choose from our range of beginner to advanced level courses to kickstart or advance your tech career</p>
-    
-        <!-- Programs Grid Container -->
-        <div class="programs-grid">
-            <!-- ==================== -->
-<!-- PROGRAM FILTERING SYSTEM -->
-<!-- ==================== -->
-<div class="filter-controls">
-  <button class="filter-btn active" data-category="all">All Programs</button>
-  <button class="filter-btn" data-category="secondary">Secondary Schools</button>
-  <button class="filter-btn" data-category="undergrad">Undergraduates</button>
-  <button class="filter-btn" data-category="online">Distance Learning</button>
-  <button class="filter-btn" data-category="professional">Professional</button>
-</div>
-
-<!-- Programs Grid Container -->
-<div class="programs-grid">
-
-  <!-- Secondary Schools Programs -->
-  <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <!-- Sample image from Unsplash (replace with your actual images) -->
-      <img src="images/basic-computer.jpg" alt="Students learning computers">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Basic Computer Operations</h3>
-      <p class="program-description">Master essential computing skills from keyboard proficiency to file management. Students will gain hands-on experience with operating systems, software installation, and peripheral devices, building confidence in daily computer use for academic and personal projects.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-        onclick="window.location.href='enrollment.html'">
-    Enroll Now
-</button>
         
-    </div>
-  </div>
-  
-  <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <!-- Sample image from Unsplash (replace with your actual images) -->
-      <img src="images/internet-safety.png" alt="Students learning computers">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Internet Safety & Digital Citizenship</h3>
-      <p class="program-description">Equip students with critical skills to navigate the online world responsibly. Covers password security, privacy settings, cyberbullying prevention, and ethical digital behavior. Learners will create a personal digital safety plan to protect themselves online.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
-  
-  <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <img src="images/google-ms365.jpg" alt="Students learning computers">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Google Workspace/Microsoft 365 Essentials</h3>
-      <p class="program-description">Transform students into productivity powerhouses! Hands-on training in document creation, collaborative editing, spreadsheet formulas, and professional presentations. Includes real-world simulations like creating school newsletters and budget trackers.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
+        <div class="gradient-border-divider"></div>
+        
+        <!-- Programs Container -->
+        <div class="programs-container">
+            <!-- Secondary Schools Programs -->
+            <div class="program-category">
+                <h3 class="program-category-title">Our School Programs</h3>
+                <div class="program-category-grid">
+                    <div class="program-card" data-category="secondary">
+                        <div class="program-image">
+                            <img src="images/digital-literacy.jpeg" alt="Students learning computers">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Digital Literacy</h3>
+                            <p class="program-description">This program teaches essential computer and internet skills, including basic software use, online safety, email, and productivity tools. Designed for beginners, it helps individuals navigate technology confidently for education, employment, and everyday digital tasks.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="program-card" data-category="secondary">
+                        <div class="program-image">
+                            <img src="images/python.png" alt="Students learning computers">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Python</h3>
+                            <p class="program-description">Master Python fundamentals with hands-on exercises. Learn variables, loops, functions, and basic data structures to build simple applications and automate tasks.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="program-card" data-category="secondary">
+                        <div class="program-image">
+                            <img src="images/web-development.jpg" alt="Students learning computers">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Web Development</h3>
+                            <p class="program-description">Learn to build and design websites using HTML, CSS, and JavaScript. Explore frameworks, responsive design, and backend basics to create interactive and dynamic web applications.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
+                            </div>
+                        </div>
+                    </div>
 
-  <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <!-- Sample image from Unsplash (replace with your actual images) -->
-      <img src="images/scratch.png" alt="Students learning computers">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Scratch/Blockly Programming</h3>
-      <p class="program-description">Introduce computational thinking through drag-and-drop coding. Students will design interactive games and animations while learning core programming concepts like loops, conditionals, and variables - no prior experience required!</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
+                    <div class="program-card" data-category="secondary">
+                        <div class="program-image">
+                            <img src="images/microsoft-google.jpeg" alt="Students learning computers">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Microsoft Suites/Google Workspace</h3>
+                            <p class="program-description">Master essential productivity tools like Word, Excel, PowerPoint (Microsoft) and Docs, Sheets, Slides (Google). Improve efficiency with document creation, data management, and collaboration features.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
+                            </div>
+                        </div>
+                    </div>
 
-   <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <!-- Sample image from Unsplash (replace with your actual images) -->
-      <img src="images/web-development.jpg" alt="Students learning computers">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Web Development (HTML/CSS/JS)</h3>
-      <p class="program-description">Build the internet! Students create their own responsive websites from scratch, learning to structure content with HTML and style with CSS. Final project: A personal portfolio site showcasing their school achievements.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
+                    <div class="program-card" data-category="secondary">
+                        <div class="program-image">
+                            <img src="images/robotics.jpg" alt="Students learning computers">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Robotics</h3>
+                            <p class="program-description">Dive into robotics with hands-on projects using coding, sensors, and motors. Learn programming logic (Blockly, Python, or C++) to design and control robots for real-world applications.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
+                            </div>
+                        </div>
+                    </div>
 
-   <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <img src="images/python.png" alt="Students learning computers">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Python Basics</h3>
-      <p class="program-description">Start with turtle graphics and progress to real-world applications. Covers variables, data types, and simple algorithms through engaging projects like password generators and quiz apps. Perfect foundation for STEM pathways.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
+                    <div class="program-card" data-category="secondary">
+                        <div class="program-image">
+                            <img src="images/scratch.png" alt="Students learning computers">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Scratch</h3>
+                            <p class="program-description">Introduce programming concepts through Scratch’s block-based coding. Create animations, games, and interactive stories while developing problem-solving and computational thinking skills.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <a href="school-program.html" class="more-button">
+                    More on our School Programs...
+                </a>
+            </div>
+            
+            <div class="gradient-border-divider"></div>
+            
+            <!-- Onsite Programs -->
+            <div class="program-category">
+                <h3 class="program-category-title">Our Onsite Programs</h3>
+                <div class="program-category-grid">
+                    <div class="program-card" data-category="onsite">
+                        <div class="program-image">
+                            <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Coding class">
+                            <span class="program-badge">Career Track</span>
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">PC Technician</h3>
+                            <p class="program-description">This program provides hands-on training in installing, maintaining, troubleshooting, and repairing personal computers and hardware components. Students learn operating system configuration, software installation, hardware diagnostics, and basic networking to prepare for roles in IT support and PC maintenance.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
+                            </div>
+                        </div>
+                    </div>
 
-   <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <img src="images/robotics.jpg" alt="Students learning robotics">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Robotics (Arduino Kits)</h3>
-      <p class="program-description">Where engineering meets creativity! Assemble and program basic robots to solve challenges. Students learn circuitry fundamentals, sensor integration, and algorithmic thinking through tactile, team-based projects.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
+                    <div class="program-card" data-category="secondary">
+                        <div class="program-image">
+                            <img src="images/microsoft-google.jpeg" alt="Students learning computers">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Microsoft Suites/Google Workspace</h3>
+                            <p class="program-description">Master essential productivity tools like Word, Excel, PowerPoint (Microsoft) and Docs, Sheets, Slides (Google). Improve efficiency with document creation, data management, and collaboration features.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="program-card" data-category="onsite">
+                        <div class="program-image">
+                            <img src="images/comnetworking.jpeg" alt="Computer Networking">
+                            <span class="program-badge">Career Track</span>
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Network Technician</h3>
+                            <p class="program-description">This program covers the fundamentals of networking, including LAN/WAN setup, router and switch configuration, network security, and troubleshooting. Students gain practical experience with protocols, cabling, and wireless technologies, preparing them for careers in network administration and support.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="program-card" data-category="onsite">
+                        <div class="program-image">
+                            <img src="images/ict.jpeg" alt="IT">
+                            <span class="program-badge">Career Track</span>
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Information Technology</h3>
+                            <p class="program-description">A comprehensive program that introduces core IT concepts, including system administration, cybersecurity, cloud computing, and database management. Students develop skills in software, hardware, and networking to support business IT infrastructure and pursue careers in tech support, IT management, and systems analysis.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="program-card" data-category="onsite">
+                        <div class="program-image">
+                            <img src="images/digital-literacy.jpeg" alt="digital literacy">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Digital Literacy</h3>
+                            <p class="program-description">This program teaches essential computer and internet skills, including basic software use, online safety, email, and productivity tools. Designed for beginners, it helps individuals navigate technology confidently for education, employment, and everyday digital tasks.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
+                            </div>
+                        </div>
+                    </div>
 
-   <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <img src="images/excel.jpg" alt="Students learning robotics">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Data Science with Excel</h3>
-      <p class="program-description">Turn spreadsheets into superpowers! From organizing survey data to creating dynamic charts, students learn to collect, analyze, and visualize real-world datasets like sports statistics and environmental measurements.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
+                    <div class="program-card" data-category="onsite">
+                        <div class="program-image">
+                            <img src="images/graphic.jpeg" alt="Graphic design">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Graphic Design</h3>
+                            <p class="program-description">This program introduces students to the fundamentals of graphic design, covering essential principles such as typography, color theory, layout, and visual communication. Through hands-on projects, learners will gain proficiency in industry-standard software like Adobe Photoshop, Illustrator, and InDesign.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="block-registration.html" class="more-button">
+                    More on our Onsite Programs...
+                </a>
+            </div>
+            
+            <div class="gradient-border-divider"></div>
+            
+            <!-- Online Learning Programs -->
+            <div class="program-category">
+                <h3 class="program-category-title">Our Online Programs</h3>
+                <div class="program-category-grid">
+                    <div class="program-card" data-category="online">
+                        <div class="program-image">
+                            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80" alt="Online learning">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Digital Marketing</h3>
+                            <p class="program-description">This intensive program equips you with end-to-end digital marketing skills to drive business growth. Learn search engine optimization (SEO) techniques and social media strategies.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="program-card" data-category="online">
+                        <div class="program-image">
+                            <img src="images/data-science.jpeg" alt="Online learning">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">AI & Data Science</h3>
+                            <p class="program-description">This program equips students with the skills to analyze, interpret, and leverage data using machine learning, artificial intelligence, and statistical methods. Topics include Python/R programming, neural networks, big data processing, and predictive modeling to solve real-world problems.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="program-card" data-category="online">
+                        <div class="program-image">
+                            <img src="images/cyber.jpeg" alt="Online learning">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Cybersecurity</h3>
+                            <p class="program-description">This program focuses on protecting digital systems from cyber threats. Students learn ethical hacking, cryptography, network security, risk management, and incident response to defend against cyberattacks and secure sensitive data.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="program-card" data-category="online">
+                        <div class="program-image">
+                            <img src="images/comnetworking.jpeg" alt="Online learning">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Networking</h3>
+                            <p class="program-description">This program covers the design, implementation, and management of computer networks. Students explore routing, switching, cloud computing, wireless technologies, and network security to ensure efficient and secure data communication.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="program-card" data-category="online">
+                        <div class="program-image">
+                            <img src="programming.jpeg" alt="Online learning">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Programming</h3>
+                            <p class="program-description">This program teaches software development using languages like Python, Java, C++, and JavaScript. Students learn algorithms, data structures, debugging, and software engineering principles to build applications, automate tasks, and solve computational problems.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
+                            </div>
+                        </div>
+                    </div>
 
-  <div class="program-card" data-category="secondary">
-    <div class="program-image">
-      <img src="images/ai.jpeg" alt="Students learning AI">
-      <span class="program-badge">School Program</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">AI Principles (Conceptual)</h3>
-      <p class="program-description">Demystify artificial intelligence through hands-on exploration of machine learning basics. Students train simple models, discuss AI ethics, and envision future applications through case studies and design thinking activities.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-map-marker-alt"></i> On-site at Schools</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
-
-  <!-- Undergraduate Programs -->
-  <div class="program-card" data-category="undergrad">
-    <div class="program-image">
-      <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Coding class">
-      <span class="program-badge">Career Track</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Intermediate</span>
-      <h3 class="program-title">Full-Stack Development</h3>
-      <p class="program-description">Master in-demand web technologies through our immersive full-stack program. Learn to build dynamic applications with JavaScript (React/Node.js) and Python (Django/Flask). Gain hands-on experience with databases, APIs, and cloud deployment. By graduation, you'll complete 5+ portfolio projects including an e-commerce platform and SaaS application.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-
-    </div>
-  </div>
-
-    <div class="program-card" data-category="undergrad">
-    <div class="program-image">
-      <img src="images/data-analysis.jpeg">
-      <span class="program-badge">Career Track</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Intermediate</span>
-      <h3 class="program-title">Data Analysis (Python, SQL, Power BI)</h3>
-      <p class="program-description">Transform raw data into business insights with our industry-aligned data program. Master Python for data cleaning/analysis (Pandas, NumPy), SQL for database querying, and Power BI for visualization. Work with real-world datasets from Nigerian businesses and global open data sources.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-
-    </div>
-  </div>
-
-    <div class="program-card" data-category="undergrad">
-    <div class="program-image">
-      <img src="images/cyber.jpeg">
-      <span class="program-badge">Career Track</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Intermediate</span>
-      <h3 class="program-title">Cybersecurity Fundamentals</h3>
-      <p class="program-description">Launch your cybersecurity career with hands-on training in ethical hacking and network defense. Learn penetration testing with Kali Linux, secure network configurations, and vulnerability assessment. Includes simulated cyberattack exercises against protected sandbox environments.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-
-    </div>
-  </div>
-
-    <div class="program-card" data-category="undergrad">
-    <div class="program-image">
-      <img src="images/professionalcommunication.jpg">
-      <span class="program-badge">Career Track</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Intermediate</span>
-      <h3 class="program-title">Professional Communication</h3>
-      <p class="program-description">Polish your workplace communication with focused training on business writing, presentation skills, and meeting etiquette. Includes video-recorded mock presentations with personalized feedback.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-
-    </div>
-  </div>
-
-    <div class="program-card" data-category="undergrad">
-    <div class="program-image">
-      <img src="images/linkedin.png">
-      <span class="program-badge">Career Track</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Intermediate</span>
-      <h3 class="program-title">LinkedIn Optimization</h3>
-      <p class="program-description">Transform your LinkedIn profile into a job magnet. Learn recruiter-search strategies, content creation for visibility, and networking techniques that landed our alumni jobs at Flutterwave and Andela.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-
-    </div>
-  </div>
-
-        <div class="program-card" data-category="undergrad">
-    <div class="program-image">
-      <img src="images/freelance.jpg">
-      <span class="program-badge">Career Track</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Intermediate</span>
-      <h3 class="program-title">Freelancing Basics</h3>
-      <p class="program-description">Go from zero to first paid gig in 30 days. Step-by-step training on creating winning Upwork/Fiverr profiles, pricing strategies, and handling international clients. Includes template proposals and contract samples.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-laptop-house"></i> DigSkills Centre</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 12 Weeks</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-
-    </div>
-  </div>
-
-  <!-- Distance Learning Programs -->
-  <div class="program-card" data-category="online">
-    <div class="program-image">
-      <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80" alt="Online learning">
-      <span class="program-badge">Flexible</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Digital Marketing</h3>
-      <p class="program-description">This intensive program equips you with end-to-end digital marketing skills to drive business growth. Learn search engine optimization (SEO) techniques to dominate organic rankings, develop data-backed social media strategies, and master Google Analytics for campaign optimization. Includes hands-on projects with real-world tools like Google Ads, Meta Business Suite, and SEMrush.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
-        <span class="program-duration"><i class="far fa-clock"></i> Self-Paced</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
-
-  <div class="program-card" data-category="online">
-    <div class="program-image">
-      <img src="images/cloudcomputing.png" alt="Online learning">
-      <span class="program-badge">Flexible</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">Cloud Computing Foundations</h3>
-      <p class="program-description">Gain practical experience with leading cloud platforms through immersive labs and real-world scenarios. Learn to deploy virtual machines, configure cloud storage, and implement security best practices. Includes preparation for AWS Cloud Practitioner and Microsoft Azure Fundamentals certifications.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
-        <span class="program-duration"><i class="far fa-clock"></i> Self-Paced</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
-
-   <div class="program-card" data-category="online">
-    <div class="program-image">
-      <img src="images/UX-UI.png" alt="Online learning">
-      <span class="program-badge">Flexible</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Beginner</span>
-      <h3 class="program-title">UI/UX Design Accelerator</h3>
-      <p class="program-description">Master the entire design process from wireframing to high-fidelity prototypes. Learn user research methodologies, information architecture, and interaction design principles. Work with industry-standard tools to create portfolio-worthy case studies for web and mobile applications.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
-        <span class="program-duration"><i class="far fa-clock"></i> Self-Paced</span>
-      </div>
-      <button class="program-cta" 
-                            data-form="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header/viewform?embedded=true&entry.https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=pp_url&entry.1005788510=Web+Development">
-                        Enroll Now
-                    </button>
-    </div>
-  </div>
-
-  <!-- Professional Programs -->
-  <div class="program-card" data-category="professional">
-    <div class="program-image">
-      <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80" alt="Professional training">
-      <span class="program-badge">Executive</span>
-    </div>
-    <div class="program-content">
-      <span class="program-level">Advanced</span>
-      <h3 class="program-title">Tech for Managers</h3>
-      <p class="program-description">Leadership in digital transformation, Agile methodologies, and tech project management.</p>
-      <div class="program-details">
-        <span class="program-mode"><i class="fas fa-calendar-weekend"></i> Saturdays Only</span>
-        <span class="program-duration"><i class="far fa-clock"></i> 10 Weeks</span>
-      </div>
-      <button class="program-cta">Register Now</button>
-    </div>
-  </div>
-
-</div>
-  
+                    <div class="program-card" data-category="online">
+                        <div class="program-image">
+                            <img src="programming.jpeg" alt="Online learning">
+                        </div>
+                        <div class="program-content">
+                            <h3 class="program-title">Professional Communication</h3>
+                            <p class="program-description">This program is designed to enhance essential communication skills for the workplace, covering written, verbal, and digital interactions. Participants will learn effective business writing, persuasive speaking, active listening, and professional etiquette.</p>
+                            <div class="program-details">
+                                <span class="program-mode"><i class="fas fa-globe"></i> 100% Online</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="online-program.html" class="more-button">
+                    More on our Online Programs
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <div class="gradient-border-divider"></div>
 
     <section class="testimonials-section">
-        <h2 class="section-title">Success Stories</h2>
-        <p class="section-subtitle">Hear from our alumni who transformed their careers</p>
+        <h2 class="section-title">What Our Students Say</h2>
+        <p class="section-subtitle">Hear from our graduates about their learning experience at DigSkills Academy</p>
         
         <div class="testimonial-card">
-            <p class="testimonial-text">After completing the Cybersecurity program at DigSkills, I landed a job as a Security Analyst within 2 months. The hands-on labs and career coaching made all the difference in my job search.</p>
-            
+            <p class="testimonial-text">The Web Development course was a game-changer for me! I built my first portfolio site in just 4 weeks. Highly recommend!</p>
             <div class="testimonial-author">
-                <div class="author-avatar">AO</div>
+                <div class="author-avatar">OC</div>
                 <div class="author-info">
-                    <h4>Amina Okafor</h4>
-                    <p>Security Analyst, FinTech Company</p>
+                    <h4>Opeosun Caleb</h4>
+                    <p>Paradise Model School</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card">
+            <p class="testimonial-text">Perfect for professionals! Learned advanced Google Sheets functions that boosted my productivity at work.</p>
+            <div class="testimonial-author">
+                <div class="author-avatar">MO</div>
+                <div class="author-info">
+                    <h4>Mr Femi</h4>
+                    <p>F S Tech</p>
                 </div>
             </div>
         </div>
@@ -1242,12 +1286,12 @@
 
     <section class="cta-section">
         <div class="cta-content">
-            <h2>Ready to Launch Your Tech Career?</h2>
-            <p>Our admissions team is ready to guide you in choosing the right program for your goals. Schedule a consultation today.</p>
+            <h2 class="section-title">Ready to Transform Your Career?</h2>
+            <p class="section-subtitle">Join our next cohort of students and gain the digital skills that employers are looking for</p>
             
             <div class="cta-buttons">
-                <a href="contact.html" class="cta-button">Speak to an Advisor</a>
-                <button class="outline-button">Download Brochure</button>
+                <button class="cta-button" id="bottomEnrollButton">Explore Programs</button>
+                <button class="outline-button" id="contactButton">Contact Admissions</button>
             </div>
         </div>
     </section>
@@ -1261,7 +1305,7 @@
                 <div class="social-links">
                     <a href="https://www.facebook.com/share/16exnb9VsU/"><i class="fab fa-facebook-f"></i></a>
                     <a href="https://x.com/DigSkills?t=-sO0HSAREApy6Igw39JbVA&s=09"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://linkedin.com/company/dig-skills"><i class="fab fa-linkedin-in"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
@@ -1331,7 +1375,7 @@
         const enrollModal = document.getElementById('enrollModal');
         const enrollIframe = document.getElementById('enrollIframe');
         const closeModal = document.querySelector('.close-modal');
-        const enrollButtons = document.querySelectorAll('.program-cta, #heroEnrollButton');
+        const enrollButtons = document.querySelectorAll('.program-cta, #heroEnrollButton, #bottomEnrollButton');
 
         // Open modal with form
         enrollButtons.forEach(button => {
@@ -1356,44 +1400,6 @@
                 document.body.style.overflow = 'auto';
             }
         });
-
-        // Simple program category filter (example functionality)
-        const categoryBtns = document.querySelectorAll('.category-btn');
-        
-        categoryBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                categoryBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                // In a real implementation, you would filter programs here
-            });
-        });
-        // ==================== //
-// FILTERING FUNCTIONALITY
-// ==================== //
-document.addEventListener('DOMContentLoaded', function() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const programCards = document.querySelectorAll('.program-card');
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      // Remove active class from all buttons
-      filterBtns.forEach(b => b.classList.remove('active'));
-      // Add active class to clicked button
-      this.classList.add('active');
-      
-      const category = this.dataset.category;
-      
-      // Filter programs
-      programCards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  });
-});
     </script>
 </body>
 </html>
