@@ -195,46 +195,22 @@
                 margin: 1rem;
             }
         }
-.home-button-container {
-    margin-bottom: 1.5rem;
-    text-align: left;
-}
-
-.home-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background-color: var(--primary);
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.home-button:hover {
-    background-color: var(--secondary);
-    transform: translateY(-2px);
-        }
-        
     </style>
 </head>
 <body>
     <div class="enrollment-container">
-        <!-- Add this HTML at the top of your form container -->
-<div class="home-button-container">
-    <a href="index.html" class="home-button">
-        <i class="fas fa-home"></i> Home
-    </a>
-</div>
         <div class="form-header">
             <img src="images/logo.png" alt="DigSkills Logo">
             <h1>Program Enrollment Form</h1>
             <p>Fill out this form to register for DigSkills programs</p>
         </div>
         
-        <form id="enrollmentForm" name="enrollment" netlify action="/thank-you.html" method="POST">
+        <form id="enrollmentForm" name="enrollment" netlify action="/thank-you.html" method="POST" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="enrollment">
+            <p class="hidden">
+                <label>Don't fill this out if you're human: <input name="bot-field"></label>
+            </p>
+            
             <!-- Contact Details Section -->
             <fieldset>
                 <legend>Contact Information</legend>
@@ -433,59 +409,343 @@
             "Zamfara": ["Anka", "Bakura", "Birnin Magaji/Kiyaw", "Bukkuyum", "Bungudu", "Gummi", "Gusau", "Kaura Namoda", "Maradun", "Maru", "Shinkafi", "Talata Mafara", "Chafe", "Zurmi"]
         };
 
-        // Programs by Category
+        // Programs by Category with email templates
         const programsByCategory = {
             "school": [
-                "Basic Computer Operations",
-                "Internet Safety & Digital Citizenship",
-                "Google Workspace/Microsoft 365 Essentials",
-                "Scratch/Blockly Programming",
-                "HTML Essentials",
-                "CSS Essentials",
-                "JavaScript Essentials",
-                "Python Basics",
-                "Robotics (Arduino Kits)",
-                "Data Science with Excel",
-                "AI Principles (Conceptual)"
+                {name: "Basic Computer Operations", emailTemplate: "basic-computer-email"},
+                {name: "Internet Safety & Digital Citizenship", emailTemplate: "internet-safety-email"},
+                {name: "Google Workspace/Microsoft 365 Essentials", emailTemplate: "office-email"},
+                {name: "Scratch/Blockly Programming", emailTemplate: "scratch-email"},
+                {name: "HTML Essentials", emailTemplate: "html-email"},
+                {name: "CSS Essentials", emailTemplate: "css-email"},
+                {name: "JavaScript Essentials", emailTemplate: "js-email"},
+                {name: "Python Basics", emailTemplate: "python-email"},
+                {name: "Robotics (Arduino Kits)", emailTemplate: "robotics-email"},
+                {name: "Data Science with Excel", emailTemplate: "data-science-email"},
+                {name: "AI Principles (Conceptual)", emailTemplate: "ai-email"}
             ],
             "onsite": [
-                "Full-Stack Development",
-                "Data Analysis (Python, SQL, Power BI)",
-                "Cybersecurity Fundamentals",
-                "Professional Communication",
-                "LinkedIn Optimisation",
-                "Freelance Basics",
-                "Desktop Publishing",
-                "Web Development"
+                {name: "Full-Stack Development", emailTemplate: "fullstack-email"},
+                {name: "Data Analysis (Python, SQL, Power BI)", emailTemplate: "data-analysis-email"},
+                {name: "Cybersecurity Fundamentals", emailTemplate: "cyber-email"},
+                {name: "Professional Communication", emailTemplate: "communication-email"},
+                {name: "LinkedIn Optimisation", emailTemplate: "linkedin-email"},
+                {name: "Freelance Basics", emailTemplate: "freelance-email"},
+                {name: "Desktop Publishing", emailTemplate: "publishing-email"},
+                {name: "Web Development", emailTemplate: "webdev-email"}
             ],
             "online": [
-                "Digital Marketing",
-                "Web Development",
-                "Data Analysis (Python, SQL, Power BI)",
-                "Cybersecurity Essentials",
-                "Data Science with Excel",
-                "Junior Cybersecurity Analyst",
-                "English for IT",
-                "C Essentials",
-                "C Advanced",
-                "C++ Essentials",
-                "Python Essentials"
-            ],
-            "professional": [
-                "Tech for Managers",
-                "Data-Driven Decision Making",
-                "Cybersecurity for Executives",
-                "Data Analysis (Python, SQL, Power BI)",
+                {name: "Microsoft 365/Google Workspace", emailTemplate: "office-email"},
+                {name: "Web Development Basics", emailTemplate: "webdev-email"},
+                {name: "Data Analysis (Excel & Power BI)", emailTemplate: "data-analysis-email"},
+                {name: "Data Analysis Advanced (SQL & Python)", emailTemplate: "data-advanced-email"},
+                {name: "Cybersecurity Essentials", emailTemplate: "cyber-email"},
+                {name: "Data Science with Excel", emailTemplate: "data-science-email"},
+                {name: "Junior Cybersecurity Analyst", emailTemplate: "cyber-junior-email"},
+                {name: "English for IT", emailTemplate: "english-it-email"},
+                {name: "C Essentials", emailTemplate: "c-email"},
+                {name: "C Advanced", emailTemplate: "c-advanced-email"},
+                {name: "C++ Essentials", emailTemplate: "cpp-email"},
+                {name: "Python Essentials", emailTemplate: "python-email"}
             ]
+        };
+
+        // Email templates for each program
+        const emailTemplates = {
+            const emailTemplates = {
+    "office-email": {
+        subject: "Welcome to Microsoft 365/Google Workspace",
+        body: `Dear {firstName},
+
+Thank you for your interest in our Microsoft 365/Google Workspace course! We're excited to support you in mastering these essential productivity tools. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "webdev-email": {
+        subject: "Welcome to Web Development Basics",
+        body: `Dear {firstName},
+
+Thank you for your interest in our Web Development Basics course! We're excited to guide you through the fundamentals of building websites. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "data-analysis-email": {
+        subject: "Welcome to Data Analysis (Excel & Power BI)",
+        body: `Dear {firstName},
+
+Thank you for your interest in our Data Analysis (Excel & Power BI) course! We're excited to help you develop valuable data skills. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "data-advanced-email": {
+        subject: "Welcome to Data Analysis Advanced (SQL & Python)",
+        body: `Dear {firstName},
+
+Thank you for your interest in our Data Analysis Advanced (SQL & Python) course! We're excited to help you take your data skills to the next level. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Have basic knowledge of data analysis concepts.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "cyber-email": {
+        subject: "Welcome to Cybersecurity Essentials",
+        body: `Dear {firstName},
+
+Thank you for your interest in our Cybersecurity Essentials course! We're excited to help you build foundational security knowledge. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "data-science-email": {
+        subject: "Welcome to Data Science with Excel",
+        body: `Dear {firstName},
+
+Thank you for your interest in our Data Science with Excel course! We're excited to introduce you to data science concepts. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Have basic Excel knowledge.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "cyber-junior-email": {
+        subject: "Welcome to Junior Cybersecurity Analyst",
+        body: `Dear {firstName},
+
+Thank you for your interest in our Junior Cybersecurity Analyst course! We're excited to help you start your cybersecurity career. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Have basic cybersecurity knowledge.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "english-it-email": {
+        subject: "Welcome to English for IT",
+        body: `Dear {firstName},
+
+Thank you for your interest in our English for IT course! We're excited to help you improve your technical English skills. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Have basic English knowledge.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "c-email": {
+        subject: "Welcome to C Essentials",
+        body: `Dear {firstName},
+
+Thank you for your interest in our C Essentials course! We're excited to introduce you to this foundational programming language. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "c-advanced-email": {
+        subject: "Welcome to C Advanced",
+        body: `Dear {firstName},
+
+Thank you for your interest in our C Advanced course! We're excited to help you deepen your C programming skills. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Have completed C Essentials or equivalent knowledge.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "cpp-email": {
+        subject: "Welcome to C++ Essentials",
+        body: `Dear {firstName},
+
+Thank you for your interest in our C++ Essentials course! We're excited to introduce you to this powerful programming language. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Have basic programming knowledge (preferably in C).
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    },
+    "python-email": {
+        subject: "Welcome to Python Essentials",
+        body: `Dear {firstName},
+
+Thank you for your interest in our Python Essentials course! We're excited to introduce you to this versatile programming language. Below are key details to help you prepare:
+
+Key Details
+Duration: 1 Block (10 weeks of rigorous learning).
+Schedule: July 28 – October 5, 2025.
+Time Commitment: At least 7 hours per week (to keep up with lessons, assignments, and projects).
+
+Requirements for Enrollment
+Before proceeding, ensure you:
+- Can dedicate 7+ hours weekly to learning and assignments.
+- Are ready to take a prior knowledge test (link provided below). This helps us tailor the experience to your skill level.
+
+⚠️ Please only take the test if you can meet the time and commitment requirements above.
+
+We're here to support your growth, but success in this course depends on your availability and dedication. If you're ready, we can't wait to see you in class!
+
+Best regards,
+DigSkills Team`
+    }
+};
+           
         };
 
         // Registered Schools
         const registeredSchools = [
             "Paradise Model School",
-            "Great Acheivers Model School",
-            "The Climax Brains, Ota",
-            "The Climax Model School, Ota",
-            "Covenant University Secondary School"
+            "Ogun State College",
+            "Ibadan Grammar School",
+            "Abuja Model Secondary",
+            "Port Harcourt Academy"
         ];
 
         // DOM Elements
@@ -577,8 +837,9 @@
             if (selectedCategory && programsByCategory[selectedCategory]) {
                 programsByCategory[selectedCategory].forEach(program => {
                     const option = document.createElement('option');
-                    option.value = program;
-                    option.textContent = program;
+                    option.value = program.name;
+                    option.textContent = program.name;
+                    option.dataset.template = program.emailTemplate;
                     programSelect.appendChild(option);
                 });
                 
@@ -602,8 +863,45 @@
             }
         });
 
+        // Send email using Netlify Functions (to be implemented on your Netlify site)
+        async function sendEmail(to, subject, body) {
+            try {
+                const response = await fetch('/.netlify/functions/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        to: to,
+                        subject: subject,
+                        body: body
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Email sending failed');
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Error sending email:', error);
+                return {success: false, error: error.message};
+            }
+        }
+
+        // Get the appropriate email template for the selected program
+        function getEmailTemplate(programName, programOption) {
+            const templateKey = programOption ? programOption.dataset.template : 'default';
+            const template = emailTemplates[templateKey] || emailTemplates['default-email'];
+            
+            return {
+                subject: template.subject.replace('{program}', programName),
+                body: template.body.replace('{program}', programName)
+            };
+        }
+
         // Form submission handler
-        enrollmentForm.addEventListener('submit', function(e) {
+        enrollmentForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Validate CAPTCHA
@@ -620,6 +918,14 @@
             const applicationCode = generateApplicationCode();
             generatedCode.textContent = applicationCode;
             
+            // Get form data
+            const formData = new FormData(enrollmentForm);
+            const formObject = Object.fromEntries(formData.entries());
+            
+            // Get selected program details
+            const selectedProgram = programSelect.value;
+            const selectedProgramOption = programSelect.options[programSelect.selectedIndex];
+            
             // Update WhatsApp link with the code
             whatsappLink.href = `https://wa.me/2349051586024?text=Hello%20DigSkills,%20I%20just%20applied%20with%20code%20${applicationCode}`;
             
@@ -630,8 +936,41 @@
             // Scroll to success message
             successMessage.scrollIntoView({ behavior: 'smooth' });
             
+            // Prepare email content
+            const emailTemplate = getEmailTemplate(selectedProgram, selectedProgramOption);
+            
+            // Replace placeholders in email body
+            let emailBody = emailTemplate.body;
+            for (const [key, value] of Object.entries(formObject)) {
+                emailBody = emailBody.replace(new RegExp(`{${key}}`, 'g'), value);
+            }
+            
+            // Add application code to email body
+            emailBody += `\n\nYour Application Code: ${applicationCode}`;
+            
+            // Send email to admin (dig2skills@gmail.com)
+            const adminEmailResult = await sendEmail(
+                'dig2skills@gmail.com',
+                `New Enrollment: ${selectedProgram} - ${applicationCode}`,
+                `New enrollment details:\n\n${JSON.stringify(formObject, null, 2)}\n\nApplication Code: ${applicationCode}`
+            );
+            
+            // Send confirmation email to user
+            const userEmailResult = await sendEmail(
+                formObject.email,
+                emailTemplate.subject,
+                emailBody
+            );
+            
+            if (!userEmailResult.success) {
+                console.error('Failed to send confirmation email to user:', userEmailResult.error);
+            }
+            
+            if (!adminEmailResult.success) {
+                console.error('Failed to send notification email to admin:', adminEmailResult.error);
+            }
+            
             // Submit the form data to Netlify (background process)
-            const formData = new FormData(enrollmentForm);
             formData.append('applicationCode', applicationCode);
             
             fetch('/', {
