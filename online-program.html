@@ -555,6 +555,66 @@
     height: 100%;
     border: none;
 }
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: none;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: modalopen 0.3s;
+}
+
+@keyframes modalopen {
+    from {opacity: 0; transform: translateY(-50px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #333;
+}
+
+/* Responsive iframe */
+.form-container {
+    position: relative;
+    overflow: hidden;
+    padding-top: 80vh; /* Taller aspect ratio for forms */
+    height: 0;
+}
+
+.responsive-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
     </style>
 </head>
 <body>
@@ -587,7 +647,7 @@
     <div class="current-block">
         <h2><i class="fas fa-calendar-alt"></i> Current Block: 2025 Block 1</h2>
         <p>We're currently accepting applications for the next block starting soon, click 
-            <a href="online-enrollment.html">here</a> to apply.</p>        
+            <a href="#" id="enrollLink">here</a> to apply.</p>       
         <div class="block-dates">
             <div class="date-item">
                 <strong>Registration Opens</strong>
@@ -658,7 +718,8 @@
                                 <p class="program-description">Master HTML, CSS, JavaScript and modern frameworks like React to build interactive user interfaces.</p>
                                 <span class="program-duration">1 Block</span>
                                 <div class="program-actions">
-                                    <a href="online-enrollment.html" class="apply-btn"> Apply Now</a></p> </a>
+                                    
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header" class="apply-btn"> Apply Now</a></p> </a>
                                     <a href="document/webdevsyll.pdf" class="syllabus-link">
                                         <i class="fas fa-download"></i> Syllabus
                                     </a>
@@ -722,7 +783,7 @@
                                 <p class="program-description">A Junior Cybersecurity Analyst helps protect an organization’s digital assets by monitoring networks, detecting threats, and responding to security incidents.</p>
                                 <span class="program-duration">2 Blocks</span>
                                 <div class="program-actions">
-                                    <a href="online-enrollment.html" class="apply-btn"> Apply Now</a></p> </a>
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header" class="apply-btn"> Apply Now</a></p> </a>
                                     <a href="#" class="syllabus-link">
                                         <i class="fas fa-download"></i> Syllabus
                                     </a>
@@ -739,7 +800,7 @@
                                 <p class="program-description">This program focuses on protecting digital systems from cyber threats. Students learn ethical hacking, cryptography, network security, risk management, and incident response to defend against cyberattacks and secure sensitive data.</p>
                                 <span class="program-duration">1 Block</span>
                                 <div class="program-actions">
-                                    <a href="online-enrollment.html" class="apply-btn"> Apply Now</a></p> </a>
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header" class="apply-btn"> Apply Now</a></p> </a>
                                     <a href="#" class="syllabus-link">
                                         <i class="fas fa-download"></i> Syllabus
                                     </a>
@@ -820,7 +881,7 @@
                                 <p class="program-description">This program equips students with the skills to analyze, interpret, and leverage data using machine learning, artificial intelligence, and statistical methods. Topics include Python/R programming, neural networks, big data processing, and predictive modeling to solve real-world problems.</p>
                                 <span class="program-duration">2 Blocks</span>
                                 <div class="program-actions">
-                                    <a href="online-enrollment.html" class="apply-btn"> Apply Now</a></p> </a>
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header" class="apply-btn"> Apply Now</a></p> </a>
                                     <a href="#" class="syllabus-link">
                                         <i class="fas fa-download"></i> Syllabus
                                     </a>
@@ -949,7 +1010,7 @@
                                 <p class="program-description">This program helps IT professionals and students master technical English for the tech industry. It covers IT-specific vocabulary, documentation writing, effective communication in development teams, and preparing for international certifications. Ideal for non-native speakers looking to excel in global IT roles.</p>
                                 <span class="program-duration">1 Block</span>
                                 <div class="program-actions">
-                                    <a href="online-enrollment.html" class="apply-btn"> Apply Now</a></p> </a>
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header" class="apply-btn"> Apply Now</a></p> </a>
                                     <a href="#" class="syllabus-link">
                                         <i class="fas fa-download"></i> Syllabus
                                     </a>
@@ -975,12 +1036,15 @@
     </div>
   </div>
 
-  <!-- Enrollment Modal -->
-<div class="enroll-modal" id="enrollModal">
+  <!-- The Modal -->
+<div id="enrollModal" class="modal">
     <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <div class="modal-iframe-container">
-            <iframe id="enrollIframe" src="" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+        <span class="close">&times;</span>
+        <div class="form-container">
+            <!-- Replace with your actual Google Form embed code -->
+            <iframe class="responsive-iframe" 
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSdZilepIXi-Q5P8X5wa6oPpzX66NizxNeAzjADuTRfFyVXUYA/viewform?usp=header" 
+                    frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
         </div>
     </div>
 </div>
@@ -1110,6 +1174,42 @@ window.addEventListener('click', (e) => {
         hideEnrollModal();
     }
 });
+
+    // Get the modal and link elements
+    const modal = document.getElementById("enrollModal");
+    const enrollLink = document.getElementById("enrollLink");
+    const span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks the link, open the modal 
+    enrollLink.onclick = function(e) {
+        e.preventDefault(); // Prevent default link behavior
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden"; // Prevent scrolling
+    }
+    
+    // When the user clicks on (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto"; // Re-enable scrolling
+    }
+    
+    // When the user clicks anywhere outside the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; // Re-enable scrolling
+        }
+    }
+    
+    // Close modal when Escape key is pressed
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; // Re-enable scrolling
+        }
+    });
+
     </script>
+    
 </body>
 </html>
