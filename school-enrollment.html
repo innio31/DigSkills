@@ -297,6 +297,49 @@
                 padding-bottom: 2000px; /* Adjust for mobile */
             }
         }
+        /* Google Form Container Styles */
+.google-form-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 1500px; /* Adjust based on your form height */
+    overflow: hidden;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.google-form-container:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.google-form-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.form-intro {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.form-intro .highlight {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .google-form-container {
+        padding-bottom: 2000px; /* Adjust for mobile */
+    }
+}
     </style>
 </head>
 <body>
@@ -347,11 +390,6 @@
                 </div>
                 
                 <div class="service-card">
-                    <h3><i class="fas fa-robot"></i> STEM & Robotics Programs</h3>
-                    <p>Interactive robotics and STEM programs that foster creativity, problem-solving skills, and technological literacy among students.</p>
-                </div>
-                
-                <div class="service-card">
                     <h3><i class="fas fa-certificate"></i> Certification Programs</h3>
                     <p>Students receive recognized certifications upon completion of courses, enhancing their academic and professional profiles.</p>
                 </div>
@@ -363,26 +401,26 @@
             </div>
             
             <div class="registration-form">
-                <h2>Register Your School</h2>
-                <p class="form-intro">
-                    Join <span class="highlight">100+ schools</span> that are already transforming their students' futures with our digital skills programs. 
-                    Complete the form below and we'll contact you within <span class="highlight">24 hours</span> to discuss your school's needs.
-                </p>
-                
-                <!-- Google Form Embed -->
-                <div class="google-form-container">
-                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeXBOH0DRJPHxvsHfN751Sj5-6HDEDBNycjLZMaG3ddoiMyTw/viewform?embedded=true" 
-                            frameborder="0" 
-                            marginheight="0" 
-                            marginwidth="0">
-                        Loading...
-                    </iframe>
-                </div>
-                
-                <div class="form-intro" style="margin-top: 1.5rem;">
-                    <p><i class="fas fa-phone-alt" style="color: var(--accent);"></i> Need immediate assistance? Call us at <strong>+234 123 456 7890</strong></p>
-                </div>
-            </div>
+    <h2>Register Your School</h2>
+    <p class="form-intro">
+        Join <span class="highlight">100+ schools</span> that are already transforming their students' futures with our digital skills programs. 
+        Complete the form below and we'll contact you within <span class="highlight">24 hours</span> to discuss your school's needs.
+    </p>
+    
+    <!-- Google Form Embed -->
+    <div class="google-form-container">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeXBOH0DRJPHxvsHfN751Sj5-6HDEDBNycjLZMaG3ddoiMyTw/viewform?embedded=true" 
+                frameborder="0" 
+                marginheight="0" 
+                marginwidth="0">
+            Loading...
+        </iframe>
+    </div>
+    
+    <div class="form-intro" style="margin-top: 1.5rem;">
+        <p><i class="fas fa-phone-alt" style="color: var(--accent);"></i> Need immediate assistance? Call us at <strong>+234 903 544 8295</strong></p>
+    </div>
+</div>
         </div>
     </div>
 
