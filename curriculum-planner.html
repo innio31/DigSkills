@@ -6038,7 +6038,7 @@
             });
 
             if (selectedCoursesForReport.length === 0) {
-                showMessage("Please select and arrange the curriculum first before downloading a report.", "error");
+                showMessage("Please select at least one course to generate a report.", "error");
                 return;
             }
 
@@ -6087,7 +6087,7 @@
                 doc.text("No curriculum arranged for reporting.", margin, yOffset);
             } else {
                 sortedLevelsForReport.forEach(level => {
-                    checkPageBreak(3 * lineHeight);
+                    checkPageBreak(3 * lineHeight); // Space for level heading
 
                     doc.setFont("helvetica", "bold");
                     doc.setFontSize(18);
@@ -6102,7 +6102,7 @@
                         const courseDetails = course.details;
                         if (!courseDetails) return;
 
-                        checkPageBreak(3 * lineHeight);
+                        checkPageBreak(3 * lineHeight); // Space for course heading
                         doc.setFont("helvetica", "bold");
                         doc.setFontSize(14);
                         doc.setTextColor(0, 0, 0);
@@ -6112,6 +6112,8 @@
                         doc.setFont("helvetica", "normal");
                         doc.setFontSize(10);
                         doc.setTextColor(55, 65, 81);
+
+                        // Description
                         doc.text("Description:", margin + 10, yOffset);
                         yOffset += lineHeight;
                         const descriptionLines = doc.splitTextToSize(courseDetails.description, doc.internal.pageSize.width - 2 * margin - 20);
@@ -6119,9 +6121,9 @@
                         doc.text(descriptionLines, margin + 15, yOffset);
                         yOffset += descriptionLines.length * lineHeight;
 
+                        // Objectives
                         checkPageBreak(courseDetails.objectives.length * lineHeight + 2 * lineHeight);
                         doc.setFont("helvetica", "bold");
-                        doc.setFontSize(10);
                         doc.text("Objectives:", margin + 10, yOffset);
                         yOffset += lineHeight;
                         doc.setFont("helvetica", "normal");
@@ -6132,19 +6134,48 @@
                             yOffset += objLines.length * lineHeight;
                         });
 
-                        checkPageBreak(courseDetails.topics.length * lineHeight + 2 * lineHeight);
+                        // Topics (Weeks) - Detailed
+                        checkPageBreak(2 * lineHeight); // Space for Topics heading
                         doc.setFont("helvetica", "bold");
-                        doc.setFontSize(10);
-                        doc.text("Topics to be treated:", margin + 10, yOffset);
+                        doc.text("Topics (Weekly Breakdown):", margin + 10, yOffset);
                         yOffset += lineHeight;
                         doc.setFont("helvetica", "normal");
                         courseDetails.topics.forEach(topic => {
-                            const topicLines = doc.splitTextToSize(`- ${topic}`, doc.internal.pageSize.width - 2 * margin - 25);
-                            checkPageBreak(topicLines.length * lineHeight);
-                            doc.text(topicLines, margin + 15, yOffset);
-                            yOffset += topicLines.length * lineHeight;
+                            checkPageBreak(3 * lineHeight); // Space for topic title
+                            doc.setFont("helvetica", "bold");
+                            doc.setFontSize(11);
+                            doc.text(`Week ${topic.title.split(':')[0].replace('Week ', '')}: ${topic.title.split(':')[1].trim()} (${topic.hours} hours)`, margin + 15, yOffset);
+                            yOffset += lineHeight;
+                            doc.setFont("helvetica", "normal");
+                            doc.setFontSize(10);
+
+                            // Subtopics
+                            if (topic.subtopics && topic.subtopics.length > 0) {
+                                doc.text("Subtopics:", margin + 20, yOffset);
+                                yOffset += lineHeight;
+                                topic.subtopics.forEach(sub => {
+                                    const subLines = doc.splitTextToSize(`  - ${sub}`, doc.internal.pageSize.width - 2 * margin - 30);
+                                    checkPageBreak(subLines.length * lineHeight);
+                                    doc.text(subLines, margin + 25, yOffset);
+                                    yOffset += subLines.length * lineHeight;
+                                });
+                            }
+
+                            // Activities
+                            if (topic.activities && topic.activities.length > 0) {
+                                doc.text("Activities:", margin + 20, yOffset);
+                                yOffset += lineHeight;
+                                topic.activities.forEach(act => {
+                                    const actLines = doc.splitTextToSize(`  - ${act}`, doc.internal.pageSize.width - 2 * margin - 30);
+                                    checkPageBreak(actLines.length * lineHeight);
+                                    doc.text(actLines, margin + 25, yOffset);
+                                    yOffset += actLines.length * lineHeight;
+                                });
+                            }
+                            yOffset += lineHeight * 0.5; // Small space after each week
                         });
 
+                        // Capstone Project
                         if (courseDetails.capstone) {
                             checkPageBreak(2 * lineHeight);
                             doc.setFont("helvetica", "bold");
@@ -6158,9 +6189,9 @@
                             yOffset += capstoneLines.length * lineHeight;
                         }
 
-                        yOffset += lineHeight;
+                        yOffset += lineHeight; // Space after each course
                     });
-                    yOffset += lineHeight * 2;
+                    yOffset += lineHeight * 2; // More space after each level
                 });
             }
 
