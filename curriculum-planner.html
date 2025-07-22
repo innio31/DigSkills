@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigSkills Curriculum Planner</title>
+    <!-- jsPDF CDN for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Define CSS Variables from your services page */
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* Using 'Inter' as per previous instruction, but could be 'Segoe UI' if strict adherence to services page font is preferred */
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Matched services page shadow */
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); /* Matched services page gradient */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px; /* Matched services page button shape */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adjusted shadow */
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); /* Adjusted shadow */
+        }
+        .btn-secondary {
+            background-color: var(--accent); /* Using accent color for secondary button */
+            color: var(--dark); /* Dark text for accent background */
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px; /* Matched services page button shape */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3); /* Matched services page cta-button shadow */
+            margin-left: 1rem;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4); /* Matched services page cta-button hover shadow */
+        }
+        .checkbox-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background-color: var(--light); /* Using light background */
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.1s ease-in-out;
+        }
+        .checkbox-item:hover {
+            background-color: #e2e8f0; /* Slightly darker light for hover */
+            border-color: var(--primary); /* Primary color border on hover */
+        }
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 0.75rem;
+            accent-color: var(--primary); /* Primary color accent for checkbox */
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        .checkbox-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            margin-right: 0.75rem;
+            object-fit: cover;
+        }
+        .level-section {
+            border: 1px solid var(--primary); /* Primary color border */
+            background-color: #e0e7ff; /* Lighter shade of primary for background */
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .level-section h3 {
+            color: var(--secondary); /* Secondary color for level headings */
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+        .level-section ul {
+            list-style-type: disc;
+            padding-left: 1.25rem;
+        }
+        .level-section li {
+            margin-bottom: 0.4rem;
+            color: var(--dark); /* Dark text for list items */
+        }
+        /* Message box styles */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ef4444; /* Red for error */
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .message-box.show {
+            opacity: 1;
+        }
+        /* Header styling from services page */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 5%;
+            text-align: center; /* Center header content for this page */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px 12px 0 0; /* Rounded top corners */
+            margin-bottom: 2rem;
+        }
+        header h1 {
+            font-size: 2.8rem; /* Matched services hero h1 */
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            color: white; /* Ensure headings are white on gradient background */
+        }
+        header p {
+            font-size: 1.2rem; /* Matched services hero p */
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            color: white; /* Ensure text is white on gradient background */
+        }
+        /* Centralize buttons */
+        .button-group {
+            display: flex;
+            justify-content: center; /* Center the flex items horizontally */
+            margin-top: 1.5rem; /* mt-6 from original */
+        }
+        /* Footer Styles */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 5%;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background-color: var(--accent);
+            bottom: -8px;
+            left: 0;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.8rem;
+        }
+
+        /* Footer Social Media */
+        .footer-social {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .footer-social h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        /* Floating Social Widget */
+        .floating-social {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 99;
+        }
+
+        .floating-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .floating-social a:hover {
+            transform: translateY(-5px);
+        }
+
+        .floating-social .whatsapp {
+            background-color: #25D366;
+        }
+
+        .floating-social .facebook {
+            background-color: #1877F2;
+        }
+
+        .floating-social .linkedin {
+            background-color: #0077B5;
+        }
+
+        /* Logo Styles */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: auto;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                padding: 3rem 5%;
+            }
+            
+            .hero-content {
+                padding: 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stats {
+                margin-top: 0;
+                border-radius: 0;
+                margin-left: 0;
+                margin-right: 0;
+            }
+            
+            .section {
+                padding: 3rem 5%;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .cta-section {
+                margin: 0 0 3rem;
+                border-radius: 0;
+            }
+            
+            .floating-social {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .floating-social a {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container">
+        <header>
+            <h1>DigSkills Curriculum Planner</h1>
+            <p>Select programs and see them organized by learner level.</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Select Desired Programs</h2>
+                <div id="courseSelection" class="checkbox-container">
+                    <!-- Course checkboxes will be dynamically inserted here -->
+                </div>
+                <div class="button-group"> <!-- Changed from mt-6 text-center -->
+                    <button id="arrangeProgramsBtn" class="btn-primary">Arrange Programs</button>
+                    <button id="downloadReportBtn" class="btn-secondary">Download Report</button>
+                </div>
+            </div>
+
+            <div class="card mt-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Organized Curriculum</h2>
+                <div id="organizedCurriculum">
+                    <p class="text-gray-500 text-center">Select programs and click "Arrange Programs" to see the curriculum here.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>DigSkills</h3>
+                    <p>Empowering institutions and individuals through digital transformation and education.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="academy.html">Academy</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="services.html#data">Data Solutions</a></li>
+                        <li><a href="services.html#development">Custom Development</a></li>
+                        <li><a href="services.html#integration">System Integration</a></li>
+                        <li><a href="academy.html">Digital Training</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:dig2skills@gmail.com">dig2skills@gmail.com</a></li>
+                        <li><a href="tel:+2349035448295">+234 903 544 8295</a></li>
+                        <li>Ota, Nigeria</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-social">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/share/16exnb9VsU/" target="_blank" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://x.com/DigSkills?t=-sO0HSAREApy6Igw39JbVA&s=09" target="_blank" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://linkedin.com/company/dig-skills" target="_blank" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://instagram.com/yourhandle" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://youtube.com/yourchannel" target="_blank" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 DigSkills. All rights reserved.</p>
+            </div>
+        </footer>
+    
+        <div class="floating-social">
+            <a href="https://wa.me/+2349051586024" class="whatsapp" target="_blank" aria-label="WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="https://www.facebook.com/share/16exnb9VsU/" class="facebook" target="_blank" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://linkedin.com/company/digskills" class="linkedin" target="_blank" aria-label="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Message Box -->
+    <div id="messageBox" class="message-box"></div>
+
+    <script>
+        // Define the courses and their associated levels, including descriptions, objectives, topics, and capstone projects.
+        const allCourses = [
+            {
+                name: "Using computer and mobile devices",
+                levels: ["Basic", "JSS 1", "JSS 2"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Basic+Comp", // Accent color
+                description: "An introductory course covering the basics of computer and mobile device operation, focusing on fundamental interaction and safe usage.",
+                objectives: ["Identify common computer and mobile device components.", "Navigate basic operating system interfaces.", "Perform simple tasks like file management and application usage.", "Understand the importance of device care and safety."],
+                topics: ["Introduction to Hardware (CPU, Memory, Storage)", "Operating System Basics (Windows, Android, iOS)", "File Management", "Basic Software Applications", "Mobile Device Features and Settings", "Device Maintenance and Troubleshooting"],
+                capstone: "Create a simple photo album or presentation using a mobile device or computer, demonstrating basic file organization."
+            },
+            {
+                name: "Digital safety and security awareness",
+                levels: ["Basic", "JSS 1", "JSS 2"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=Safety", // Primary color
+                description: "This course teaches young learners essential practices for staying safe online and protecting their personal information.",
+                objectives: ["Recognize common online threats (phishing, cyberbullying).", "Understand the importance of strong passwords and privacy settings.", "Identify safe browsing habits.", "Know how to report suspicious online activity."],
+                topics: ["What is the Internet?", "Personal Information Safety", "Strong Passwords", "Recognizing Scams and Phishing", "Cyberbullying Awareness", "Privacy Settings on Social Media", "Safe Online Communication"],
+                capstone: "Design a 'Safe Online' poster or create a short video explaining digital safety tips."
+            },
+            {
+                name: "Digital awareness",
+                levels: ["Basic", "JSS 1", "JSS 2"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=Awareness", // Secondary color
+                description: "A broad introduction to the digital world, its impact on daily life, and the opportunities it presents.",
+                objectives: ["Understand the concept of digital citizenship.", "Identify various digital tools and their uses.", "Recognize the benefits and challenges of technology.", "Explore different careers in the digital space."],
+                topics: ["Evolution of Technology", "Digital Tools for Learning and Fun", "Impact of Technology on Society", "Introduction to Digital Citizenship", "Online Etiquette", "Future of Technology"],
+                capstone: "Research and present on a digital technology that interests them, explaining its uses and impact."
+            },
+            {
+                name: "Create digital content, communicate and collaborate online",
+                levels: ["Basic", "JSS 1", "JSS 2"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Content", // Accent color
+                description: "Develops foundational skills in creating simple digital content and engaging in online communication and collaboration.",
+                objectives: ["Use basic tools to create digital images or text.", "Understand how to send and receive emails.", "Participate in online group activities safely.", "Share digital content responsibly."],
+                topics: ["Introduction to Digital Art/Text Tools", "Email Basics", "Online Communication Tools (e.g., chat, video calls)", "Collaborative Document Editing", "Sharing Digital Files", "Netiquette"],
+                capstone: "Collaborate with peers to create a shared digital story or presentation using online tools."
+            },
+            // New course: Scratch Programming
+            {
+                name: "Scratch Programming",
+                levels: ["Basic", "JSS 1"],
+                imageUrl: "https://placehold.co/60x60/FF6F00/FFFFFF?text=Scratch", // Orange color for Scratch
+                description: "An introductory visual programming language that allows students to create interactive stories, games, and animations. It fosters computational thinking and problem-solving skills in a fun and engaging way.",
+                objectives: ["Understand basic programming concepts (sequences, loops, conditionals).", "Create interactive stories and animations using Scratch blocks.", "Develop simple games with user interaction.", "Debug Scratch projects.", "Share and remix projects online."],
+                topics: ["Introduction to Scratch Interface", "Sprites and Backdrops", "Motion Blocks", "Looks Blocks", "Sound Blocks", "Events and Control Flow (loops, conditionals)", "Sensing and Operators", "Variables and Lists", "Creating Simple Games", "Storytelling with Scratch"],
+                capstone: "Design and program an original interactive game or an animated story in Scratch."
+            },
+            {
+                name: "Computer Hardware Basics",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=Hardware", // Primary color
+                description: "Provides a fundamental understanding of computer hardware components, their functions, and basic assembly/disassembly.",
+                objectives: ["Identify major internal and external computer components.", "Explain the function of each component.", "Perform basic computer assembly and disassembly.", "Understand the importance of proper hardware handling."],
+                topics: ["Motherboard and CPU", "RAM and Storage Devices (HDD, SSD)", "Power Supply Unit (PSU)", "Input/Output Devices (Keyboard, Mouse, Monitor)", "Expansion Cards", "Basic Troubleshooting"],
+                capstone: "Assemble a virtual computer or identify components in a disassembled computer."
+            },
+            {
+                name: "Operating System Basics",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=OS", // Secondary color
+                description: "An essential course covering the core concepts of operating systems, including navigation, file management, and basic system utilities.",
+                objectives: ["Describe the purpose and functions of an operating system.", "Navigate common operating system interfaces (Windows, Linux, macOS).", "Manage files and folders effectively.", "Utilize basic system tools and settings."],
+                topics: ["What is an OS?", "Types of Operating Systems", "User Interfaces (GUI vs. CLI)", "File Systems and Directory Structures", "Managing Applications", "System Settings and Customization", "Basic Command Line Interface (CLI) commands"],
+                capstone: "Set up a personalized user environment on a computer and demonstrate file organization and basic command-line usage."
+            },
+            {
+                name: "Microsoft Word",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=Word", // Primary color
+                description: "Introduces students to the fundamental features of Microsoft Word for creating, editing, and formatting professional documents.",
+                objectives: ["Create and save new documents.", "Apply basic text formatting (bold, italic, font size).", "Insert images and tables.", "Use spell check and grammar tools.", "Print documents."],
+                topics: ["Word Interface", "Text Entry and Editing", "Formatting Text and Paragraphs", "Working with Images and Shapes", "Tables", "Proofreading Tools", "Page Layout"],
+                capstone: "Create a multi-page school report or newsletter using various formatting features."
+            },
+            {
+                name: "Microsoft Excel",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=Excel", // Secondary color
+                description: "Covers the basics of Microsoft Excel, enabling students to organize, calculate, and analyze data using spreadsheets.",
+                objectives: ["Understand spreadsheet concepts (cells, rows, columns).", "Enter and format data.", "Use basic formulas (SUM, AVERAGE).", "Create simple charts.", "Sort and filter data."],
+                topics: ["Excel Interface", "Data Entry and Cell Formatting", "Basic Formulas and Functions", "Creating Charts", "Sorting and Filtering Data", "Worksheet Management"],
+                capstone: "Create a simple budget tracker or a class gradebook using Excel, including basic calculations and a chart."
+            },
+            {
+                name: "Microsoft Powerpoint",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=PPT", // Accent color
+                description: "Teaches students how to create engaging presentations using Microsoft PowerPoint, focusing on design, content, and delivery.",
+                objectives: ["Design and create new presentations.", "Add and format slides.", "Insert text, images, and basic shapes.", "Apply themes and transitions.", "Deliver a simple presentation."],
+                topics: ["PowerPoint Interface", "Slide Layouts and Design", "Adding and Formatting Text", "Inserting Media (Images, Audio, Video)", "Transitions and Animations", "Presentation Delivery Tips"],
+                capstone: "Develop and present a short presentation on a topic of their choice, demonstrating learned PowerPoint skills."
+            },
+            {
+                name: "IT Essentials 8",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=IT+Ess",
+                description: "A comprehensive course covering computer hardware and software, networking, security, and mobile devices, preparing students for entry-level IT careers.",
+                objectives: ["Install, configure, and troubleshoot computer hardware and software.", "Understand basic networking concepts and configurations.", "Implement fundamental security practices.", "Support mobile devices and printers."],
+                topics: ["PC Hardware Components", "Operating Systems (Windows, Linux, macOS)", "Networking Concepts (OSI Model, TCP/IP)", "Network Cabling and Devices", "Security Fundamentals", "Mobile Devices and Laptops", "Printers", "Troubleshooting"],
+                capstone: "Diagnose and resolve common hardware or software issues on a simulated computer system."
+            },
+            {
+                name: "Networking Basics",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=Network",
+                description: "Introduces fundamental networking concepts, including network types, topologies, protocols, and basic network devices.",
+                objectives: ["Define different types of networks (LAN, WAN).", "Understand network topologies (star, bus, mesh).", "Explain basic network protocols (TCP/IP, HTTP).", "Identify common network devices (routers, switches)."],
+                topics: ["Network Components", "Network Topologies", "OSI Model Overview", "TCP/IP Protocol Suite", "IP Addressing (IPv4 basics)", "Ethernet", "Wireless Networking Basics", "Network Devices (Hubs, Switches, Routers)"],
+                capstone: "Design a simple home network diagram, identifying devices and connections."
+            },
+            {
+                name: "Introduction to Cybersecurity",
+                levels: ["JSS 3", "SSS 1"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Cybersec",
+                description: "Provides an overview of the cybersecurity landscape, common threats, and basic defense mechanisms to protect digital assets.",
+                objectives: ["Understand the importance of cybersecurity.", "Identify common cyber threats (malware, phishing).", "Learn basic protective measures (antivirus, firewalls).", "Recognize the role of cybersecurity professionals."],
+                topics: ["What is Cybersecurity?", "Types of Cyber Threats", "Data Confidentiality, Integrity, Availability (CIA)", "Malware", "Phishing and Social Engineering", "Network Security Basics", "Personal Cybersecurity Practices"],
+                capstone: "Conduct a personal cybersecurity audit and suggest improvements for their own digital safety."
+            },
+            {
+                name: "Introduction to IoT and Digital Transformation",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=IoT+DX",
+                description: "Explores the concepts of the Internet of Things (IoT) and how digital transformation is reshaping industries and daily life.",
+                objectives: ["Define IoT and its components.", "Identify examples of IoT devices and applications.", "Understand the basics of data collection in IoT.", "Recognize the impact of digital transformation on various sectors."],
+                topics: ["What is IoT?", "IoT Devices and Sensors", "Connectivity (Wi-Fi, Bluetooth)", "Data Collection and Cloud", "Smart Homes and Cities", "Industry 4.0", "Ethical Considerations in IoT"],
+                capstone: "Propose an IoT solution for a common problem (e.g., smart waste management, energy saving)."
+            },
+            {
+                name: "Discovering entrepreneurship",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=Entrep",
+                description: "Introduces the mindset and basic principles of entrepreneurship, encouraging students to identify opportunities and think innovatively.",
+                objectives: ["Define entrepreneurship and its characteristics.", "Identify business opportunities.", "Understand the importance of problem-solving.", "Develop basic idea generation skills."],
+                topics: ["What is an Entrepreneur?", "Characteristics of Entrepreneurs", "Idea Generation", "Problem-Solving", "Market Needs", "Basic Business Models", "Innovation"],
+                capstone: "Brainstorm and present a new product or service idea to solve a specific problem."
+            },
+            {
+                name: "Cybersecurity Essentials",
+                levels: ["SSS 1"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Cyber+Ess",
+                description: "A deeper dive into cybersecurity principles, threats, vulnerabilities, and defense techniques, building upon introductory concepts.",
+                objectives: ["Explain core security principles (confidentiality, integrity, availability).", "Identify various cyberattack types and their vectors.", "Understand cryptographic concepts.", "Implement basic network security measures.", "Analyze security policies."],
+                topics: ["Security Principles", "Threats, Vulnerabilities, and Risks", "Malware Analysis", "Network Security Devices (Firewalls, IDS/IPS)", "Cryptography Basics", "Access Control", "Security Policies and Procedures"],
+                capstone: "Conduct a basic vulnerability assessment on a simulated network or propose security enhancements for a given scenario."
+            },
+            {
+                name: "Network Defense",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=Net+Def",
+                description: "Focuses on practical techniques and strategies for defending computer networks against cyberattacks.",
+                objectives: ["Configure basic firewall rules.", "Implement intrusion detection and prevention systems.", "Understand secure network design principles.", "Perform network segmentation.", "Respond to common network security incidents."],
+                topics: ["Firewall Configuration", "Intrusion Detection/Prevention Systems (IDS/IPS)", "Virtual Private Networks (VPNs)", "Network Segmentation", "Secure Network Architectures", "Incident Response Basics", "Security Information and Event Management (SIEM) concepts"],
+                capstone: "Set up and test a basic firewall configuration to protect a simulated network segment."
+            },
+            {
+                name: "Endpoint security",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=Endpoint",
+                description: "Covers the methods and tools used to secure individual computing devices (endpoints) such as laptops, desktops, and mobile phones.",
+                objectives: ["Understand endpoint vulnerabilities.", "Implement endpoint protection platforms (EPP).", "Configure host-based firewalls.", "Manage software updates and patches.", "Protect against data loss on endpoints."],
+                topics: ["Endpoint Vulnerabilities", "Antivirus and Anti-malware", "Host-based Firewalls", "Patch Management", "Data Loss Prevention (DLP)", "Endpoint Detection and Response (EDR) concepts", "Mobile Device Security"],
+                capstone: "Develop a security hardening checklist for a typical workstation or mobile device."
+            },
+            {
+                name: "Introduction to Data Science",
+                levels: ["JSS 3", "SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Data+Sci",
+                description: "An introductory course to the field of data science, covering data collection, cleaning, analysis, and basic visualization.",
+                objectives: ["Understand the data science lifecycle.", "Identify different types of data.", "Perform basic data cleaning and preprocessing.", "Conduct exploratory data analysis.", "Create simple data visualizations."],
+                topics: ["What is Data Science?", "Data Collection Methods", "Data Cleaning and Preprocessing", "Exploratory Data Analysis (EDA)", "Basic Statistics for Data Science", "Data Visualization Tools (e.g., spreadsheets, basic plotting libraries)"],
+                capstone: "Analyze a small dataset (e.g., student grades, sales data) and present key findings with visualizations."
+            },
+            {
+                name: "AI Fundamentals with IBM SkillsBuild",
+                levels: ["JSS 3", "SSS 1"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=AI+Fund",
+                description: "Introduces the foundational concepts of Artificial Intelligence (AI) and Machine Learning (ML) using resources from IBM SkillsBuild.",
+                objectives: ["Define AI, Machine Learning, and Deep Learning.", "Understand common AI applications.", "Explore ethical considerations in AI.", "Identify different types of machine learning (supervised, unsupervised)."],
+                topics: ["What is AI?", "History of AI", "Machine Learning Basics", "Deep Learning Overview", "Natural Language Processing (NLP) basics", "Computer Vision basics", "Ethical AI Principles", "AI in the Real World"],
+                capstone: "Research and present on an AI application, discussing its benefits and potential challenges."
+            },
+            {
+                name: "Data Analytics Essentials",
+                levels: ["JSS 3", "SSS 1"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=Data+Anal",
+                description: "Focuses on the practical skills needed to collect, process, and analyze data to extract meaningful insights.",
+                objectives: ["Understand the data analytics process.", "Use tools for data manipulation and analysis.", "Identify trends and patterns in data.", "Communicate data insights effectively.", "Make data-driven decisions."],
+                topics: ["Data Analytics Lifecycle", "Data Sources and Collection", "Data Cleaning and Transformation", "Statistical Analysis Basics", "Data Visualization Techniques", "Reporting and Dashboards", "Tools (e.g., Excel, basic Python libraries)"],
+                capstone: "Analyze a business dataset (e.g., customer feedback, sales trends) and provide recommendations based on findings."
+            },
+            {
+                name: "Advanced Excel",
+                levels: ["JSS 3", "SSS 1"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Adv+Excel",
+                description: "Builds on basic Excel skills, covering advanced functions, data analysis tools, pivot tables, and macros for complex data management.",
+                objectives: ["Master advanced Excel functions (VLOOKUP, INDEX-MATCH, IF-nested).", "Utilize data validation and conditional formatting.", "Create and analyze PivotTables and PivotCharts.", "Record and run simple macros (VBA basics).", "Perform advanced data analysis (What-If Analysis)."],
+                topics: ["Advanced Formulas and Functions", "Data Validation", "Conditional Formatting", "Named Ranges", "PivotTables and PivotCharts", "Data Analysis Tools (Goal Seek, Solver)", "Introduction to Macros (VBA)"],
+                capstone: "Develop a comprehensive financial model or an interactive dashboard using advanced Excel features."
+            },
+            {
+                name: "English for IT",
+                levels: ["JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=English+IT",
+                description: "Develops English language proficiency specifically tailored for the Information Technology industry, focusing on technical vocabulary, communication, and documentation.",
+                objectives: ["Understand and use IT-specific vocabulary.", "Communicate technical concepts clearly in English.", "Write professional IT documentation (reports, emails).", "Participate in IT-related discussions.", "Improve presentation skills for technical topics."],
+                topics: ["IT Terminology and Jargon", "Technical Writing (Documentation, Reports)", "Email Etiquette in IT", "Presenting Technical Information", "Customer Support Communication", "Reading Technical Manuals", "IT Interview Skills"],
+                capstone: "Prepare and deliver a technical presentation in English, followed by a Q&A session."
+            },
+            {
+                name: "Introduction to Modern AI",
+                levels: ["JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=Modern+AI",
+                description: "Explores contemporary Artificial Intelligence concepts, focusing on practical applications and the underlying principles of modern AI systems.",
+                objectives: ["Understand the evolution of AI to its modern state.", "Identify key AI paradigms (e.g., neural networks, deep learning).", "Explore applications in computer vision and natural language processing.", "Discuss the societal impact and future of AI."],
+                topics: ["AI vs. ML vs. Deep Learning", "Neural Network Basics", "Convolutional Neural Networks (CNNs) for Image Recognition", "Recurrent Neural Networks (RNNs) for Sequence Data", "Generative AI Concepts", "Reinforcement Learning Overview", "AI Ethics and Bias", "Future Trends in AI"],
+                capstone: "Research and present on a cutting-edge AI technology or application, discussing its workings and implications."
+            },
+            {
+                name: "Managing a business venture",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Biz+Mgmt",
+                description: "Covers the essential aspects of managing a small business, including operations, finance, marketing, and human resources.",
+                objectives: ["Understand key business functions.", "Develop basic financial literacy for business.", "Create simple marketing strategies.", "Manage operational processes efficiently.", "Understand legal and ethical considerations in business."],
+                topics: ["Business Operations", "Financial Management (Budgeting, Pricing)", "Marketing and Sales Strategies", "Human Resources Basics", "Legal Structures and Compliance", "Customer Relations", "Risk Management"],
+                capstone: "Develop a comprehensive business plan for their own startup idea, including financial projections and a marketing strategy."
+            },
+            {
+                name: "Launching a business venture",
+                levels: ["JSS 1", "JSS 2", "JSS 3"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=Biz+Launch",
+                description: "Guides students through the practical steps of planning, starting, and launching a new business venture.",
+                objectives: ["Develop a comprehensive business plan.", "Understand funding options for startups.", "Navigate legal requirements for business registration.", "Create a launch strategy.", "Identify key success factors for startups."],
+                topics: ["Business Plan Development", "Market Research", "Funding and Investment", "Legal and Regulatory Requirements", "Branding and Marketing for Launch", "Sales and Distribution Channels", "Pitching a Business Idea"],
+                capstone: "Develop a detailed business plan for their own startup idea, including financial projections and a marketing strategy."
+            },
+            {
+                name: "Introduction to Greenhouse Gas Accounting for IT",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=GHG+IT",
+                description: "Introduces the principles of Greenhouse Gas (GHG) accounting specifically within the context of Information Technology operations and infrastructure.",
+                objectives: ["Understand the basics of GHG emissions and climate change.", "Identify sources of GHG emissions in IT (e.g., data centers, hardware).", "Learn methods for measuring and reporting IT-related GHG emissions.", "Explore strategies for reducing the carbon footprint of IT operations."],
+                topics: ["Climate Change and GHG Basics", "Scope 1, 2, and 3 Emissions", "IT Energy Consumption", "Data Center Efficiency", "Hardware Lifecycle Emissions", "Carbon Footprint Calculation for IT", "Green IT Strategies", "Reporting Standards (e.g., GHG Protocol basics)"],
+                capstone: "Analyze the carbon footprint of a hypothetical IT setup (e.g., a small office network) and propose recommendations for reduction."
+            },
+            {
+                name: "Cyber Threat Management",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Threat+Mgmt",
+                description: "Focuses on the systematic process of identifying, assessing, and mitigating cyber threats to an organization's assets.",
+                objectives: ["Understand the cyber threat landscape.", "Perform threat intelligence gathering.", "Conduct risk assessments.", "Develop and implement threat mitigation strategies.", "Manage security incidents effectively."],
+                topics: ["Threat Intelligence", "Vulnerability Management", "Risk Assessment Methodologies", "Incident Response Lifecycle", "Security Operations Center (SOC) functions", "Threat Hunting", "Security Frameworks (NIST, ISO 27001)"],
+                capstone: "Create an incident response plan for a simulated cyberattack scenario."
+            },
+            {
+                name: "Ethical Hacker",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=Ethical+Hacker",
+                description: "Introduces the methodologies and tools used by ethical hackers to identify and exploit vulnerabilities in systems and networks, for defensive purposes.",
+                objectives: ["Understand ethical hacking concepts and phases.", "Perform reconnaissance and scanning.", "Identify common vulnerabilities.", "Understand penetration testing methodologies.", "Use basic ethical hacking tools responsibly."],
+                topics: ["Introduction to Ethical Hacking", "Reconnaissance (Passive and Active)", "Scanning and Enumeration", "Vulnerability Analysis", "Exploitation Basics", "Post-Exploitation", "Web Application Hacking Basics", "Wireless Hacking Basics", "Legal and Ethical Considerations"],
+                capstone: "Conduct a simulated penetration test on a controlled, vulnerable environment and document findings."
+            },
+            // Programming courses (SSS 1, SSS 2)
+            {
+                name: "Linux",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=Linux",
+                description: "An introduction to the Linux operating system, focusing on command-line interface, file system navigation, and basic system administration.",
+                objectives: ["Install and navigate a Linux distribution.", "Use essential Linux commands.", "Manage files and directories from the command line.", "Understand user permissions.", "Perform basic package management."],
+                topics: ["Linux History and Distributions", "Installation Basics", "Command Line Interface (CLI)", "File System Hierarchy", "Basic Commands (ls, cd, mkdir, rm, cp, mv)", "User and Group Management", "Permissions", "Package Management (apt, yum basics)"],
+                capstone: "Set up a basic Linux environment and demonstrate common command-line tasks."
+            },
+            {
+                name: "Python Essentials 1",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Python+1",
+                description: "Introduces fundamental Python programming concepts, including variables, data types, control flow, and functions.",
+                objectives: ["Write basic Python programs.", "Understand variables and data types.", "Implement conditional statements and loops.", "Define and call functions.", "Debug simple Python code."],
+                topics: ["Introduction to Programming", "Python Syntax Basics", "Variables and Data Types", "Operators", "Input/Output", "Conditional Statements (if/else)", "Loops (for/while)", "Functions"],
+                capstone: "Develop a simple calculator or a text-based game (e.g., 'Guess the Number')."
+            },
+            {
+                name: "Python Essentials 2",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=Python+2",
+                description: "Builds upon Python Essentials 1, covering more advanced topics like data structures, object-oriented programming, and file I/O.",
+                objectives: ["Work with lists, tuples, dictionaries, and sets.", "Understand object-oriented programming (OOP) concepts.", "Perform file reading and writing operations.", "Handle exceptions.", "Develop modular Python programs."],
+                topics: ["Data Structures (Lists, Tuples, Dictionaries, Sets)", "Object-Oriented Programming (Classes, Objects, Inheritance)", "File I/O", "Error Handling and Exceptions", "Modules and Packages", "Introduction to Libraries (e.g., math, random)"],
+                capstone: "Create a simple inventory management system or a contact book application that stores data in a file."
+            },
+            {
+                name: "C Essentials 1",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=C+Ess+1",
+                description: "Covers the core syntax and concepts of the C programming language, focusing on foundational programming constructs.",
+                objectives: ["Understand C program structure.", "Work with variables and data types.", "Implement basic input/output operations.", "Use control flow statements (if, switch, loops).", "Write simple C functions."],
+                topics: ["Introduction to C", "Basic Syntax", "Data Types and Variables", "Operators", "Input/Output (printf, scanf)", "Conditional Statements", "Loops", "Functions"],
+                capstone: "Create a program that calculates simple interest or converts units."
+            },
+            {
+                name: "C Essentials 2",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=C+Ess+2",
+                description: "Expands on C Essentials 1, introducing pointers, arrays, strings, structures, and dynamic memory allocation.",
+                objectives: ["Understand and use pointers effectively.", "Work with arrays and strings.", "Define and use structures.", "Implement dynamic memory allocation.", "Handle file operations in C."],
+                topics: ["Pointers", "Arrays", "Strings", "Structures and Unions", "Dynamic Memory Allocation (malloc, free)", "File I/O", "Command Line Arguments"],
+                capstone: "Develop a program to manage student records using structures and file I/O."
+            },
+            {
+                name: "C Advanced",
+                levels: ["SSS 2"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=C+Adv",
+                description: "Explores advanced topics in C programming, including complex data structures, algorithms, and system programming concepts.",
+                objectives: ["Implement complex data structures (linked lists, trees, graphs).", "Understand and apply common algorithms (sorting, searching).", "Work with memory management in detail.", "Perform advanced file I/O operations.", "Understand basic system calls."],
+                topics: ["Advanced Pointers", "Linked Lists (Singly, Doubly, Circular)", "Stacks and Queues", "Trees (Binary Trees, BST)", "Sorting Algorithms (Bubble, Selection, Insertion, Merge, Quick)", "Searching Algorithms (Linear, Binary)", "Dynamic Memory Allocation (malloc, free)", "File Handling (Binary Files)", "Introduction to System Calls"],
+                capstone: "Develop a program that implements a data structure (e.g., a linked list-based contact manager) or a sorting utility."
+            },
+            {
+                name: "JavaScript Essentials 1",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=JS+1",
+                description: "An introduction to JavaScript, the language of the web, covering basic syntax, DOM manipulation, and interactive web elements.",
+                objectives: ["Understand JavaScript fundamentals.", "Manipulate HTML elements using the DOM.", "Respond to user events.", "Create dynamic web content.", "Debug JavaScript code in a browser."],
+                topics: ["Introduction to JavaScript", "Variables and Data Types", "Operators", "Control Flow", "Functions", "DOM Manipulation", "Event Handling", "Browser Console"],
+                capstone: "Build a simple interactive web page (e.g., a light switch, a basic form validator)."
+            },
+            {
+                name: "JavaScript Essentials 2",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=JS+2",
+                description: "Delves deeper into JavaScript, covering advanced functions, asynchronous programming, and working with APIs.",
+                objectives: ["Understand higher-order functions and closures.", "Implement asynchronous operations (callbacks, Promises).", "Fetch data from APIs.", "Work with JSON data.", "Build more complex interactive web applications."],
+                topics: ["Advanced Functions", "Closures", "Asynchronous JavaScript (Callbacks, Promises, Async/Await)", "Fetch API", "JSON Data", "Error Handling in JavaScript", "Introduction to Modern JavaScript Features (ES6+)"],
+                capstone: "Build a web application that fetches and displays data from a public API (e.g., weather API, movie API)."
+            },
+            {
+                name: "Android App Development using Kotlin",
+                levels: ["SSS 2"],
+                imageUrl: "https://placehold.co/60x60/2563eb/FFFFFF?text=Android",
+                description: "Learn to build native Android applications using the Kotlin programming language and Android Studio, from UI design to basic data persistence.",
+                objectives: ["Understand Android architecture and components.", "Design user interfaces using XML layouts.", "Implement app logic with Kotlin.", "Handle user input and events.", "Work with basic data storage mechanisms (e.g., SharedPreferences).", "Debug Android applications."],
+                topics: ["Kotlin Fundamentals for Android", "Android Studio IDE and Project Structure", "Layouts and Views (LinearLayout, RelativeLayout, ConstraintLayout)", "Activities and Intents", "Lifecycle of an Activity", "User Input and Event Handling", "RecyclerView and Adapters", "Data Persistence (SharedPreferences, SQLite basics)", "Networking Basics (API calls)"],
+                capstone: "Develop a functional Android application, such as a simple calculator, a to-do list app, or a basic quiz game."
+            },
+            {
+                name: "Data Science Essentials with Python",
+                levels: ["SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/1e40af/FFFFFF?text=DS+Python",
+                description: "A practical course on data science using Python, covering data manipulation, statistical analysis, machine learning basics, and visualization with Python libraries.",
+                objectives: ["Manipulate and clean data using Pandas.", "Perform statistical analysis with NumPy and SciPy.", "Implement basic machine learning models (e.g., linear regression, classification).", "Create advanced data visualizations with Matplotlib/Seaborn.", "Solve real-world data problems using Python."],
+                topics: ["Python for Data Science (NumPy, Pandas)", "Data Cleaning and Preprocessing", "Exploratory Data Analysis (EDA) with Python", "Statistical Modeling", "Introduction to Machine Learning (Supervised Learning)", "Model Evaluation", "Data Visualization (Matplotlib, Seaborn)"],
+                capstone: "Build a predictive model using a real-world dataset and present the analysis and results."
+            },
+            // New course: Web Development Basics
+            {
+                name: "Web Development Basics",
+                levels: ["JSS 3", "SSS 1", "SSS 2"],
+                imageUrl: "https://placehold.co/60x60/f59e0b/1e293b?text=Web+Dev",
+                description: "An introductory course to the fundamentals of web development, covering HTML, CSS, and basic JavaScript to build static web pages.",
+                objectives: ["Understand the core concepts of web development.", "Create structured web content using HTML.", "Style web pages using CSS.", "Add basic interactivity with JavaScript.", "Deploy a simple static website."],
+                topics: ["Introduction to Web (Client-Server, Browsers)", "HTML Structure and Elements", "CSS Selectors, Properties, and Layouts (Flexbox/Grid basics)", "Basic JavaScript Syntax and DOM Manipulation", "Responsive Design Principles", "Web Hosting and Deployment Basics"],
+                capstone: "Build a multi-page personal portfolio website or a simple informational website for a small business."
+            },
+        ];
+
+        // Define the order of levels for display
+        const levelOrder = ["Basic", "JSS 1", "JSS 2", "JSS 3", "SSS 1", "SSS 2"];
+
+        // Get DOM elements
+        const courseSelectionDiv = document.getElementById('courseSelection');
+        const arrangeProgramsBtn = document.getElementById('arrangeProgramsBtn');
+        const downloadReportBtn = document.getElementById('downloadReportBtn');
+        const organizedCurriculumDiv = document.getElementById('organizedCurriculum');
+        const messageBox = document.getElementById('messageBox');
+
+        /**
+         * Displays a temporary message to the user.
+         * @param {string} message - The message to display.
+         * @param {string} type - The type of message (e.g., 'error', 'success').
+         */
+        function showMessage(message, type = 'error') {
+            messageBox.textContent = message;
+            messageBox.style.backgroundColor = type === 'error' ? '#ef4444' : '#22c55e';
+            messageBox.classList.add('show');
+
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, 3000);
+        }
+
+        /**
+         * Handles the change event for course checkboxes to enforce the 3-program limit per class.
+         * @param {Event} event - The change event object.
+         */
+        function handleCheckboxChange(event) {
+            const checkbox = event.target;
+            const selectedLevel = checkbox.dataset.selectedLevel;
+
+            if (!selectedLevel) {
+                return;
+            }
+
+            const checkboxesForSelectedLevel = document.querySelectorAll(
+                `#courseSelection input[type="checkbox"][data-selected-level="${selectedLevel}"]`
+            );
+            const checkedCountForLevel = Array.from(checkboxesForSelectedLevel).filter(cb => cb.checked).length;
+
+            if (checkbox.checked && checkedCountForLevel > 3) {
+                checkbox.checked = false;
+                showMessage(`You can select a maximum of 3 programs for ${selectedLevel} class.`, 'error');
+            }
+        }
+
+        /**
+         * Renders the checkboxes for all available courses and attaches event listeners.
+         * Now includes all applicable course levels in the label and displays images.
+         * Programs are sorted by class level for display.
+         */
+        function renderCourseSelection() {
+            courseSelectionDiv.innerHTML = '';
+            const renderableCourses = [];
+
+            // Create a flat list of course-level pairs for rendering
+            levelOrder.forEach(level => {
+                allCourses.forEach(course => {
+                    if (course.levels.includes(level)) {
+                        renderableCourses.push({
+                            courseName: course.name,
+                            selectedLevel: level,
+                            imageUrl: course.imageUrl,
+                            originalCourseDetails: course
+                        });
+                    }
+                });
+            });
+
+            // Sort the renderable courses by their selected level based on levelOrder
+            renderableCourses.sort((a, b) => {
+                const levelAIndex = levelOrder.indexOf(a.selectedLevel);
+                const levelBIndex = levelOrder.indexOf(b.selectedLevel);
+                if (levelAIndex !== levelBIndex) {
+                    return levelAIndex - levelBIndex;
+                }
+                // If levels are the same, sort alphabetically by course name
+                return a.courseName.localeCompare(b.courseName);
+            });
+
+            renderableCourses.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'checkbox-item';
+                const checkboxId = `${item.courseName.replace(/\s/g, '-')}-${item.selectedLevel}`.replace(/[^a-zA-Z0-9-]/g, '');
+                div.innerHTML = `
+                    <img src="${item.imageUrl}" alt="${item.courseName} icon" onerror="this.onerror=null;this.src='https://placehold.co/60x60/cccccc/000000?text=No+Image';" />
+                    <input type="checkbox" id="${checkboxId}" value="${item.courseName}" data-course-name="${item.courseName}" data-selected-level="${item.selectedLevel}">
+                    <label for="${checkboxId}" class="text-gray-700 text-sm font-medium">${item.courseName} <span class="text-gray-500 text-xs">(${item.selectedLevel})</span></label>
+                `;
+                courseSelectionDiv.appendChild(div);
+
+                const newCheckbox = document.getElementById(checkboxId);
+                if (newCheckbox) {
+                    newCheckbox.addEventListener('change', handleCheckboxChange);
+                }
+            });
+        }
+
+        /**
+         * Arranges selected programs by their defined levels and displays them.
+         */
+        function arrangePrograms() {
+            const selectedCheckboxes = document.querySelectorAll('#courseSelection input[type="checkbox"]:checked');
+            const selectedCourses = Array.from(selectedCheckboxes).map(checkbox => ({
+                name: checkbox.dataset.courseName,
+                level: checkbox.dataset.selectedLevel
+            }));
+
+            if (selectedCourses.length === 0) {
+                organizedCurriculumDiv.innerHTML = '<p class="text-gray-500 text-center">No programs selected. Please select at least one program.</p>';
+                return;
+            }
+
+            const groupedCourses = {};
+            selectedCourses.forEach(course => {
+                if (!groupedCourses[course.level]) {
+                    groupedCourses[course.level] = [];
+                }
+                if (!groupedCourses[course.level].some(c => c.name === course.name)) {
+                    groupedCourses[course.level].push(course);
+                }
+            });
+
+            const sortedLevels = levelOrder.filter(level => groupedCourses[level]);
+
+            organizedCurriculumDiv.innerHTML = '';
+
+            if (sortedLevels.length === 0) {
+                organizedCurriculumDiv.innerHTML = '<p class="text-gray-500 text-center">No programs selected for any recognized class level.</p>';
+                return;
+            }
+
+            sortedLevels.forEach(level => {
+                const levelSection = document.createElement('div');
+                levelSection.className = 'level-section';
+                levelSection.innerHTML = `
+                    <h3 class="text-xl">${level}</h3>
+                    <ul>
+                        ${groupedCourses[level].map(course => `<li>${course.name}</li>`).join('')}
+                    </ul>
+                `;
+                organizedCurriculumDiv.appendChild(levelSection);
+            });
+        }
+
+        /**
+         * Generates and downloads a styled PDF report of the organized curriculum.
+         */
+        function downloadCurriculumReport() {
+            const selectedCheckboxes = document.querySelectorAll('#courseSelection input[type="checkbox"]:checked');
+            const selectedCoursesForReport = Array.from(selectedCheckboxes).map(checkbox => {
+                const courseName = checkbox.dataset.courseName;
+                const selectedLevel = checkbox.dataset.selectedLevel;
+                const courseDetails = allCourses.find(c => c.name === courseName);
+                return {
+                    name: courseName,
+                    selectedLevel: selectedLevel,
+                    details: courseDetails // Pass the full course object
+                };
+            });
+
+            if (selectedCoursesForReport.length === 0) {
+                showMessage("Please select and arrange the curriculum first before downloading a report.", "error");
+                return;
+            }
+
+            const groupedCoursesForReport = {};
+            selectedCoursesForReport.forEach(course => {
+                if (!groupedCoursesForReport[course.selectedLevel]) {
+                    groupedCoursesForReport[course.selectedLevel] = [];
+                }
+                groupedCoursesForReport[course.selectedLevel].push(course);
+            });
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            let yOffset = 20;
+            const margin = 20;
+            const lineHeight = 7;
+            const maxPageHeight = doc.internal.pageSize.height - margin;
+
+            function checkPageBreak(requiredHeight) {
+                if (yOffset + requiredHeight > maxPageHeight) {
+                    doc.addPage();
+                    yOffset = margin;
+                    return true;
+                }
+                return false;
+            }
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(67, 56, 202);
+            doc.text("DigSkills Curriculum Report", doc.internal.pageSize.width / 2, yOffset, { align: "center" });
+            yOffset += 15;
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.setTextColor(75, 85, 99);
+            doc.text("Generated on: " + new Date().toLocaleDateString(), margin, yOffset);
+            yOffset += 15;
+
+            const sortedLevelsForReport = levelOrder.filter(level => groupedCoursesForReport[level]);
+
+            if (sortedLevelsForReport.length === 0) {
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text("No curriculum arranged for reporting.", margin, yOffset);
+            } else {
+                sortedLevelsForReport.forEach(level => {
+                    checkPageBreak(3 * lineHeight);
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(18);
+                    doc.setTextColor(67, 56, 202);
+                    doc.text(level, margin, yOffset);
+                    yOffset += lineHeight * 1.5;
+
+                    // Sort courses alphabetically within each level for consistent report generation
+                    groupedCoursesForReport[level].sort((a, b) => a.name.localeCompare(b.name));
+
+                    groupedCoursesForReport[level].forEach(course => {
+                        const courseDetails = course.details;
+                        if (!courseDetails) return;
+
+                        checkPageBreak(3 * lineHeight);
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(14);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text(`${course.name} (for ${course.selectedLevel})`, margin + 5, yOffset);
+                        yOffset += lineHeight;
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(10);
+                        doc.setTextColor(55, 65, 81);
+                        doc.text("Description:", margin + 10, yOffset);
+                        yOffset += lineHeight;
+                        const descriptionLines = doc.splitTextToSize(courseDetails.description, doc.internal.pageSize.width - 2 * margin - 20);
+                        checkPageBreak(descriptionLines.length * lineHeight);
+                        doc.text(descriptionLines, margin + 15, yOffset);
+                        yOffset += descriptionLines.length * lineHeight;
+
+                        checkPageBreak(courseDetails.objectives.length * lineHeight + 2 * lineHeight);
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(10);
+                        doc.text("Objectives:", margin + 10, yOffset);
+                        yOffset += lineHeight;
+                        doc.setFont("helvetica", "normal");
+                        courseDetails.objectives.forEach(obj => {
+                            const objLines = doc.splitTextToSize(`- ${obj}`, doc.internal.pageSize.width - 2 * margin - 25);
+                            checkPageBreak(objLines.length * lineHeight);
+                            doc.text(objLines, margin + 15, yOffset);
+                            yOffset += objLines.length * lineHeight;
+                        });
+
+                        checkPageBreak(courseDetails.topics.length * lineHeight + 2 * lineHeight);
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(10);
+                        doc.text("Topics to be treated:", margin + 10, yOffset);
+                        yOffset += lineHeight;
+                        doc.setFont("helvetica", "normal");
+                        courseDetails.topics.forEach(topic => {
+                            const topicLines = doc.splitTextToSize(`- ${topic}`, doc.internal.pageSize.width - 2 * margin - 25);
+                            checkPageBreak(topicLines.length * lineHeight);
+                            doc.text(topicLines, margin + 15, yOffset);
+                            yOffset += topicLines.length * lineHeight;
+                        });
+
+                        if (courseDetails.capstone) {
+                            checkPageBreak(2 * lineHeight);
+                            doc.setFont("helvetica", "bold");
+                            doc.setFontSize(10);
+                            doc.text("Capstone Project:", margin + 10, yOffset);
+                            yOffset += lineHeight;
+                            doc.setFont("helvetica", "normal");
+                            const capstoneLines = doc.splitTextToSize(courseDetails.capstone, doc.internal.pageSize.width - 2 * margin - 20);
+                            checkPageBreak(capstoneLines.length * lineHeight);
+                            doc.text(capstoneLines, margin + 15, yOffset);
+                            yOffset += capstoneLines.length * lineHeight;
+                        }
+
+                        yOffset += lineHeight;
+                    });
+                    yOffset += lineHeight * 2;
+                });
+            }
+
+            doc.save('DigSkills_Curriculum_Report.pdf');
+            showMessage("Curriculum report downloaded successfully!", "success");
+        }
+
+        // Initialize the webpage
+        window.onload = function() {
+            renderCourseSelection();
+            arrangeProgramsBtn.addEventListener('click', arrangePrograms);
+            downloadReportBtn.addEventListener('click', downloadCurriculumReport);
+        };
+    </script>
+</body>
+</html>
