@@ -723,9 +723,9 @@
         <h2>Transform Teaching with AI</h2>
         <p>Equip your educators with the skills they need to thrive in the digital classroom of tomorrow.</p>
         <!-- Calendly link widget begin -->
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
-<a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/dig2skills/digskills-training'});return false;">Schedule time with me</a>
+<a class="calendly-button" href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/dig2skills/digskills-training'});return false;">
+  <i class="fas fa-calendar-alt"></i> Schedule An Appointment
+</a>
 <!-- Calendly link widget end -->
     </section>
     
@@ -778,32 +778,12 @@
         <div class="footer-bottom">
             <p>&copy; 2025 DigSkills. All rights reserved.</p>
         </div>
-    </footer>
-
-           <!-- Calendly link widget begin -->
+    </footer> 
+    <!-- Calendly badge widget begin -->
 <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
-<style>
-  .calendly-buttons {
-    display: inline-block;
-    background-color: #FFD700; /* Yellow color */
-    color: #000; /* Black text */
-    padding: 12px 24px;
-    border-radius: 30px; /* Rounded corners */
-    text-decoration: none;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-  }
-  .calendly-buttons:hover {
-    background-color: #FFC000; /* Darker yellow on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
-</style>
-<a class="calendly-buttons" href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/dig2skills/digskills-training'});return false;">Schedule An Appointment</a>
-<!-- Calendly link widget end -->
-  
+<script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/dig2skills/digskills-training', text: 'Schedule time with me', color: '#0069ff', textColor: '#ffffff', branding: true }); }</script>
+<!-- Calendly badge widget end -->
 
     <script>
         // Mobile menu functionality
