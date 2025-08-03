@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | Academy Name</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles - Matching your academy */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: auto;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a.active {
+            color: var(--accent);
+        }
+        
+        .nav-links a.active:after {
+            width: 100%;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        /* Admin Portal Specific Styles */
+        .admin-container {
+            padding-top: 80px;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+        
+        .admin-title {
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .admin-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .admin-table th, 
+        .admin-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .admin-table th {
+            background: var(--light);
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-pending {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+        
+        .admin-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .outline-btn {
+            padding: 0.3rem 0.8rem;
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .outline-btn:hover {
+            background: #f1f5f9;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                flex-direction: column;
+                padding: 1rem 5%;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0.8rem 0;
+            }
+        }
+    </style>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="your-logo.png" alt="Logo" class="logo-icon">
+                <span>Admin Portal</span>
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html">Back to Academy</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="admin-container">
+        <h1 class="admin-title">Student Management</h1>
+        
+        <div class="admin-card">
+            <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Create New Student Account</h2>
+            <form id="createStudentForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="studentFirstName">First Name</label>
+                        <input type="text" id="studentFirstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentLastName">Last Name</label>
+                        <input type="text" id="studentLastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentEmail">Email</label>
+                        <input type="email" id="studentEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentProgram">Program</label>
+                        <select id="studentProgram" required>
+                            <option value="">Select Program</option>
+                            <!-- Will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPassword">Temporary Password</label>
+                        <input type="password" id="studentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentId">Student ID</label>
+                        <input type="text" id="studentId" required>
+                    </div>
+                </div>
+                <button type="submit" class="admin-btn">Create Account</button>
+            </form>
+        </div>
+        
+        <div class="admin-card">
+            <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Student Accounts</h2>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Program</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTable">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Firebase with your config
+        const firebaseConfig = {
+    apiKey: "AIzaSyBxNLV0sCUeKh_qCPIlkIitL119LmRnLzE",
+    authDomain: "digskills-academy-c3a1b.firebaseapp.com",
+    projectId: "digskills-academy-c3a1b",
+    storageBucket: "digskills-academy-c3a1b.firebasestorage.app",
+    messagingSenderId: "851779746922",
+    appId: "1:851779746922:web:8134b702c481daa0ae9e13",
+    measurementId: "G-0127TR3Y96"
+  };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // DOM Elements
+        const createStudentForm = document.getElementById('createStudentForm');
+        const studentsTable = document.getElementById('studentsTable');
+        const studentProgramSelect = document.getElementById('studentProgram');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Form submission for creating new student
+        createStudentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('studentFirstName').value;
+            const lastName = document.getElementById('studentLastName').value;
+            const email = document.getElementById('studentEmail').value;
+            const program = document.getElementById('studentProgram').value;
+            const password = document.getElementById('studentPassword').value;
+            const studentId = document.getElementById('studentId').value;
+            
+            try {
+                // Create user in Firebase Auth
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Create student record in Firestore
+                await firebase.firestore().collection('students').doc(user.uid).set({
+                    firstName,
+                    lastName,
+                    email,
+                    studentId,
+                    program,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'active'
+                });
+                
+                alert('Student account created successfully!');
+                createStudentForm.reset();
+                loadStudents();
+            } catch (error) {
+                alert('Error creating student: ' + error.message);
+            }
+        });
+        
+        // Load all students
+        async function loadStudents() {
+            studentsTable.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
+            
+            try {
+                const snapshot = await firebase.firestore().collection('students').orderBy('createdAt', 'desc').get();
+                studentsTable.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    studentsTable.innerHTML = '<tr><td colspan="6">No students found</td></tr>';
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    const student = doc.data();
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.studentId}</td>
+                        <td>${student.firstName} ${student.lastName}</td>
+                        <td>${student.email}</td>
+                        <td>${student.program}</td>
+                        <td><span class="status-badge status-active">Active</span></td>
+                        <td>
+                            <button class="outline-btn">Edit</button>
+                            <button class="outline-btn">Reset PW</button>
+                        </td>
+                    `;
+                    studentsTable.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error loading students:", error);
+                studentsTable.innerHTML = '<tr><td colspan="6">Error loading students</td></tr>';
+            }
+        }
+        
+        // Load programs for dropdown
+        async function loadPrograms() {
+            try {
+                const snapshot = await firebase.firestore().collection('programs').get();
+                
+                snapshot.forEach(doc => {
+                    const program = doc.data();
+                    const option = document.createElement('option');
+                    option.value = program.id;
+                    option.textContent = program.name;
+                    studentProgramSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error loading programs:", error);
+            }
+        }
+        
+        // Logout Functionality
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'index.html';
+            });
+        });
+        
+        // Check Admin Auth (simplified - implement proper auth in production)
+        const adminPassword = "password";
+        
+        if (!localStorage.getItem('adminAuth') || localStorage.getItem('adminAuth') !== adminPassword) {
+            const password = prompt("Enter admin password:");
+            if (password === adminPassword) {
+                localStorage.setItem('adminAuth', password);
+            } else {
+                alert("Unauthorized access");
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Initialize admin page
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStudents();
+            loadPrograms();
+        });
+    </script>
+</body>
+</html>

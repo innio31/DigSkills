@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal | Academy Name</title>
+    <!-- Use your existing styles -->
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles - Matching your academy */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: auto;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a.active {
+            color: var(--accent);
+        }
+        
+        .nav-links a.active:after {
+            width: 100%;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        /* Portal Specific Styles */
+        .portal-container {
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+        
+        .login-container {
+            max-width: 500px;
+            margin: 5rem auto;
+            background: white;
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .login-form input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #64748b;
+        }
+        
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        /* Dashboard Styles (hidden by default) */
+        .dashboard {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .greeting h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .greeting p {
+            color: #64748b;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+        
+        .user-profile {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 auto 1rem;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .user-email {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .sidebar-nav a {
+            display: block;
+            padding: 0.8rem;
+            border-radius: 8px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-nav a:hover, 
+        .sidebar-nav a.active {
+            background: var(--light);
+            color: var(--primary);
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .dashboard-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-header h3 {
+            color: var(--dark);
+        }
+        
+        .card-header a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .course-image {
+            height: 120px;
+            background: #e2e8f0;
+            position: relative;
+        }
+        
+        .course-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: var(--success);
+        }
+        
+        .course-content {
+            padding: 1.2rem;
+        }
+        
+        .course-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .course-instructor {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        
+        .announcement-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .announcement-item:last-child {
+            border-bottom: none;
+        }
+        
+        .announcement-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .announcement-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .announcement-content {
+            color: #475569;
+            line-height: 1.6;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                flex-direction: column;
+                padding: 1rem 5%;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0.8rem 0;
+            }
+        }
+    </style>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="your-logo.png" alt="Logo" class="logo-icon">
+                <span>Academy Portal</span>
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html">Back to Academy</a></li>
+                <li><a href="#" id="dashboardLink" style="display: none;">Dashboard</a></li>
+                <li><a href="#" id="logoutBtn" style="display: none;">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="portal-container">
+        <!-- Login Section (shown by default) -->
+        <div class="login-container" id="loginSection">
+            <h1 class="login-title">Student Portal Login</h1>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            <p class="login-footer">
+                Need help? <a href="mailto: dig2skills@gmail.com">Contact support</a>
+            </p>
+        </div>
+        
+        <!-- Dashboard Section (hidden until login) -->
+        <div class="dashboard" id="dashboardSection">
+            <div class="dashboard-header">
+                <div class="greeting">
+                    <h2>Welcome back, <span id="greetingName">Student</span>!</h2>
+                    <p>Here's what's happening with your courses today.</p>
+                </div>
+                <div>
+                    <button class="cta-button"><i class="fas fa-plus"></i> Join Course</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <aside class="sidebar">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar">S</div>
+                        <h3 class="user-name" id="userName">Student Name</h3>
+                        <p class="user-email" id="userEmail">student@example.com</p>
+                    </div>
+                    
+                    <ul class="sidebar-nav">
+                        <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                        <li><a href="#"><i class="fas fa-book"></i> My Courses</a></li>
+                        <li><a href="#"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+                        <li><a href="#"><i class="fas fa-tasks"></i> Assignments</a></li>
+                        <li><a href="#"><i class="fas fa-chart-bar"></i> Grades</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> Messages</a></li>
+                        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                    </ul>
+                </aside>
+                
+                <main class="main-content">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Current Courses</h3>
+                            <a href="#">View All</a>
+                        </div>
+                        <div class="courses-grid" id="currentCourses">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Recent Announcements</h3>
+                            <a href="#">View All</a>
+                        </div>
+                        <div id="announcementsList">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Upcoming Assignments</h3>
+                            <a href="#">View All</a>
+                        </div>
+                        <div id="assignmentsList">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Firebase with your config
+        const firebaseConfig = {
+    apiKey: "AIzaSyBxNLV0sCUeKh_qCPIlkIitL119LmRnLzE",
+    authDomain: "digskills-academy-c3a1b.firebaseapp.com",
+    projectId: "digskills-academy-c3a1b",
+    storageBucket: "digskills-academy-c3a1b.firebasestorage.app",
+    messagingSenderId: "851779746922",
+    appId: "1:851779746922:web:8134b702c481daa0ae9e13",
+    measurementId: "G-0127TR3Y96"
+  };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // DOM Elements
+        const loginForm = document.getElementById('loginForm');
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const dashboardLink = document.getElementById('dashboardLink');
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Login Form Submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Show dashboard
+                    loginSection.style.display = 'none';
+                    dashboardSection.style.display = 'block';
+                    dashboardLink.style.display = 'block';
+                    logoutBtn.style.display = 'block';
+                    
+                    // Update UI with user data
+                    updateDashboard(userCredential.user);
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        });
+        
+        // Logout Functionality
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            firebase.auth().signOut().then(() => {
+                // Show login form
+                loginSection.style.display = 'block';
+                dashboardSection.style.display = 'none';
+                dashboardLink.style.display = 'none';
+                logoutBtn.style.display = 'none';
+            });
+        });
+        
+        // Update Dashboard with User Data
+        function updateDashboard(user) {
+            // Update user info
+            document.getElementById('userName').textContent = user.displayName || 'Student';
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('greetingName').textContent = user.displayName?.split(' ')[0] || 'Student';
+            
+            // Set avatar initials
+            const name = user.displayName || 'S';
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById('userAvatar').textContent = initials;
+            
+            // Load user data from Firestore
+            loadUserData(user.uid);
+        }
+        
+        // Load User Data from Firestore
+        async function loadUserData(userId) {
+            const db = firebase.firestore();
+            const userRef = db.collection('students').doc(userId);
+            
+            try {
+                const doc = await userRef.get();
+                if (doc.exists) {
+                    const userData = doc.data();
+                    // Populate dashboard with user data
+                    populateCourses(userData.courses || []);
+                    populateAnnouncements(userData.announcements || []);
+                    populateAssignments(userData.assignments || []);
+                    
+                    // Setup real-time listeners
+                    setupRealtimeUpdates(userId);
+                }
+            } catch (error) {
+                console.error("Error loading user data:", error);
+            }
+        }
+        
+        // Populate Courses
+        function populateCourses(courses) {
+            const container = document.getElementById('currentCourses');
+            container.innerHTML = '';
+            
+            courses.forEach(course => {
+                const progress = Math.floor(Math.random() * 100); // Replace with actual progress
+                
+                const courseCard = document.createElement('div');
+                courseCard.className = 'course-card';
+                courseCard.innerHTML = `
+                    <div class="course-image">
+                        <div class="course-progress" style="width: ${progress}%"></div>
+                    </div>
+                    <div class="course-content">
+                        <h4 class="course-title">${course.name}</h4>
+                        <p class="course-instructor">${course.instructor}</p>
+                        <div class="course-meta">
+                            <span>${progress}% Complete</span>
+                            <span>${course.lessons} Lessons</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(courseCard);
+            });
+        }
+        
+        // Populate Announcements
+        function populateAnnouncements(announcements) {
+            const container = document.getElementById('announcementsList');
+            container.innerHTML = '';
+            
+            announcements.forEach(announcement => {
+                const announcementItem = document.createElement('div');
+                announcementItem.className = 'announcement-item';
+                announcementItem.innerHTML = `
+                    <h4 class="announcement-title">${announcement.title}</h4>
+                    <div class="announcement-meta">
+                        <span>${announcement.course}</span>
+                        <span>${announcement.date}</span>
+                    </div>
+                    <p class="announcement-content">${announcement.content}</p>
+                `;
+                container.appendChild(announcementItem);
+            });
+        }
+        
+        // Populate Assignments
+        function populateAssignments(assignments) {
+            const container = document.getElementById('assignmentsList');
+            container.innerHTML = '';
+            
+            assignments.forEach(assignment => {
+                const assignmentItem = document.createElement('div');
+                assignmentItem.className = 'announcement-item';
+                assignmentItem.innerHTML = `
+                    <h4 class="announcement-title">${assignment.title}</h4>
+                    <div class="announcement-meta">
+                        <span>${assignment.course}</span>
+                        <span>Due: ${assignment.dueDate}</span>
+                        <span>Status: ${assignment.status}</span>
+                    </div>
+                `;
+                container.appendChild(assignmentItem);
+            });
+        }
+        
+        // Setup Real-time Updates
+        function setupRealtimeUpdates(userId) {
+            const db = firebase.firestore();
+            
+            // Real-time courses updates
+            db.collection('enrollments')
+                .where('studentId', '==', userId)
+                .onSnapshot((snapshot) => {
+                    const courses = [];
+                    snapshot.forEach(doc => {
+                        courses.push(doc.data());
+                    });
+                    populateCourses(courses);
+                });
+            
+            // Real-time announcements
+            db.collection('announcements')
+                .where('forStudents', 'array-contains', userId)
+                .orderBy('date', 'desc')
+                .limit(5)
+                .onSnapshot((snapshot) => {
+                    const announcements = [];
+                    snapshot.forEach(doc => {
+                        announcements.push(doc.data());
+                    });
+                    populateAnnouncements(announcements);
+                });
+            
+            // Real-time assignments
+            db.collection('assignments')
+                .where('forStudents', 'array-contains', userId)
+                .where('dueDate', '>=', new Date().toISOString())
+                .orderBy('dueDate', 'asc')
+                .limit(5)
+                .onSnapshot((snapshot) => {
+                    const assignments = [];
+                    snapshot.forEach(doc => {
+                        assignments.push(doc.data());
+                    });
+                    populateAssignments(assignments);
+                });
+        }
+        
+        // Check Auth State on Page Load
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in
+                loginSection.style.display = 'none';
+                dashboardSection.style.display = 'block';
+                dashboardLink.style.display = 'block';
+                logoutBtn.style.display = 'block';
+                updateDashboard(user);
+            } else {
+                // User is signed out
+                loginSection.style.display = 'block';
+                dashboardSection.style.display = 'none';
+                dashboardLink.style.display = 'none';
+                logoutBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
