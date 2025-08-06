@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal | Academy Name</title>
-    <!-- Use your existing styles -->
     <style>
         :root {
             --primary: #2563eb;
@@ -13,6 +12,7 @@
             --light: #f8fafc;
             --dark: #1e293b;
             --success: #10b981;
+            --danger: #ef4444;
         }
         
         * {
@@ -28,7 +28,7 @@
             overflow-x: hidden;
         }
         
-        /* Header Styles - Matching your academy */
+        /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -105,15 +105,10 @@
             width: 100%;
         }
         
-        /* Portal Specific Styles */
-        .portal-container {
-            padding-top: 80px;
-            min-height: 100vh;
-        }
-        
+        /* Login Container */
         .login-container {
             max-width: 500px;
-            margin: 5rem auto;
+            margin: 10rem auto 5rem;
             background: white;
             border-radius: 10px;
             padding: 2.5rem;
@@ -124,10 +119,12 @@
             text-align: center;
             margin-bottom: 2rem;
             color: var(--primary);
+            font-size: 1.8rem;
         }
         
         .login-form .form-group {
             margin-bottom: 1.5rem;
+            position: relative;
         }
         
         .login-form label {
@@ -152,6 +149,19 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
         
+        .password-container {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #64748b;
+        }
+        
         .login-btn {
             width: 100%;
             padding: 0.8rem;
@@ -163,6 +173,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-top: 1rem;
         }
         
         .login-btn:hover {
@@ -178,14 +189,15 @@
         .login-footer a {
             color: var(--primary);
             text-decoration: none;
+            font-weight: 500;
         }
         
-        /* Dashboard Styles (hidden by default) */
+        /* Dashboard Styles */
         .dashboard {
             display: none;
             max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 5%;
+            margin: 6rem auto 2rem;
+            padding: 0 5%;
         }
         
         .dashboard-header {
@@ -223,18 +235,38 @@
             margin-bottom: 1.5rem;
         }
         
-        .user-avatar {
-            width: 80px;
-            height: 80px;
+        .user-avatar-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1rem;
+        }
+        
+        #userAvatarImg {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            background: var(--primary);
+            object-fit: cover;
+            border: 3px solid var(--primary);
+        }
+        
+        .avatar-upload-label {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--accent);
             color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 0 auto 1rem;
+            cursor: pointer;
+        }
+        
+        .avatar-upload-label:hover {
+            background: var(--secondary);
         }
         
         .user-name {
@@ -386,6 +418,79 @@
             line-height: 1.6;
         }
         
+        .assignment-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .assignment-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            background: #fef9c3;
+            color: #854d0e;
+        }
+        
+        .assignment-status.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .assignment-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .event-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+        
+        .event-day {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .event-month {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+        
+        /* Loading and error states */
+        .loading, .no-data, .error {
+            padding: 1rem;
+            text-align: center;
+            color: #64748b;
+        }
+        
+        .error {
+            color: var(--danger);
+        }
+        
         /* Responsive Styles */
         @media (max-width: 768px) {
             .dashboard-grid {
@@ -414,130 +519,154 @@
             .nav-links li {
                 margin: 0.8rem 0;
             }
+            
+            .login-container {
+                margin: 8rem auto 3rem;
+                padding: 1.5rem;
+            }
         }
     </style>
-    <!-- Add Font Awesome for icons -->
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">
                 <img src="images/logo.png" alt="Logo" class="logo-icon">
-                <span>Academy Portal</span>
+                <span>Student Portal</span>
             </div>
             <button class="mobile-menu-btn">
                 <i class="fas fa-bars"></i>
             </button>
             <ul class="nav-links">
-                <li><a href="academy.html">Back to Academy</a></li>
+                <li><a href="index.html">Back to Academy</a></li>
                 <li><a href="#" id="dashboardLink" style="display: none;">Dashboard</a></li>
                 <li><a href="#" id="logoutBtn" style="display: none;">Logout</a></li>
             </ul>
         </nav>
     </header>
     
-    <div class="portal-container">
-        <!-- Login Section (shown by default) -->
-        <div class="login-container" id="loginSection">
-            <h1 class="login-title">Student Portal Login</h1>
-            <form class="login-form" id="loginForm">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required>
+    <!-- Login Section -->
+    <div class="login-container" id="loginSection">
+        <h1 class="login-title">Student Login</h1>
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="Enter your academy email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" required placeholder="Enter your password">
+                    <span class="toggle-password" id="togglePassword">
+                        <i class="far fa-eye"></i>
+                    </span>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required>
-                </div>
-                <button type="submit" class="login-btn">Login</button>
-            </form>
-            <p class="login-footer">
-                Need help? <a href="mailto: dig2skills@gmail.com">Contact support</a>
-            </p>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <p class="login-footer">
+            Having trouble? <a href="mailto:support@academy.com">Contact support</a>
+        </p>
+    </div>
+    
+    <!-- Dashboard Section -->
+    <div class="dashboard" id="dashboardSection">
+        <div class="dashboard-header">
+            <div class="greeting">
+                <h2>Welcome back, <span id="greetingName">Student</span>!</h2>
+                <p>Here's what's happening with your courses today.</p>
+            </div>
+            <div>
+                <button class="cta-button"><i class="fas fa-plus"></i> Join Course</button>
+            </div>
         </div>
         
-        <!-- Dashboard Section (hidden until login) -->
-        <div class="dashboard" id="dashboardSection">
-            <div class="dashboard-header">
-                <div class="greeting">
-                    <h2>Welcome back, <span id="greetingName">Student</span>!</h2>
-                    <p>Here's what's happening with your courses today.</p>
-                </div>
-                <div>
-                    <button class="cta-button"><i class="fas fa-plus"></i> Join Course</button>
-                </div>
-            </div>
-            
-            <div class="dashboard-grid">
-                <aside class="sidebar">
-                    <div class="user-profile">
-                        <div class="user-avatar" id="userAvatar">S</div>
-                        <h3 class="user-name" id="userName">Student Name</h3>
-                        <p class="user-email" id="userEmail">student@example.com</p>
+        <div class="dashboard-grid">
+            <aside class="sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar-container">
+                        <img id="userAvatarImg" src="images/default-avatar.png" alt="Profile Picture">
+                        <label for="avatarUpload" class="avatar-upload-label">
+                            <i class="fas fa-camera"></i>
+                            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                        </label>
                     </div>
-                    
-                    <ul class="sidebar-nav">
-                        <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                        <li><a href="#"><i class="fas fa-book"></i> My Courses</a></li>
-                        <li><a href="#"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
-                        <li><a href="#"><i class="fas fa-tasks"></i> Assignments</a></li>
-                        <li><a href="#"><i class="fas fa-chart-bar"></i> Grades</a></li>
-                        <li><a href="#"><i class="fas fa-envelope"></i> Messages</a></li>
-                        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
-                    </ul>
-                </aside>
+                    <h3 class="user-name" id="userName">Loading...</h3>
+                    <p class="user-email" id="userEmail">user@example.com</p>
+                </div>
                 
-                <main class="main-content">
-                    <div class="dashboard-card">
-                        <div class="card-header">
-                            <h3>Current Courses</h3>
-                            <a href="#">View All</a>
-                        </div>
-                        <div class="courses-grid" id="currentCourses">
-                            <!-- Will be populated by JavaScript -->
-                        </div>
+                <ul class="sidebar-nav">
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> My Courses</a></li>
+                    <li><a href="#"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+                    <li><a href="#"><i class="fas fa-tasks"></i> Assignments</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Grades</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> Messages</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </aside>
+            
+            <main class="main-content">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Current Courses</h3>
+                        <a href="#">View All</a>
                     </div>
-                    
-                    <div class="dashboard-card">
-                        <div class="card-header">
-                            <h3>Recent Announcements</h3>
-                            <a href="#">View All</a>
-                        </div>
-                        <div id="announcementsList">
-                            <!-- Will be populated by JavaScript -->
-                        </div>
+                    <div class="courses-grid" id="currentCourses">
+                        <div class="loading">Loading your courses...</div>
                     </div>
-                    
-                    <div class="dashboard-card">
-                        <div class="card-header">
-                            <h3>Upcoming Assignments</h3>
-                            <a href="#">View All</a>
-                        </div>
-                        <div id="assignmentsList">
-                            <!-- Will be populated by JavaScript -->
-                        </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Recent Announcements</h3>
+                        <a href="#">View All</a>
                     </div>
-                </main>
-            </div>
+                    <div id="announcementsList">
+                        <div class="loading">Loading announcements...</div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Upcoming Assignments</h3>
+                        <a href="#">View All</a>
+                    </div>
+                    <div id="assignmentsList">
+                        <div class="loading">Loading assignments...</div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Upcoming Events</h3>
+                        <a href="#">View Calendar</a>
+                    </div>
+                    <div id="calendarEvents">
+                        <div class="loading">Loading events...</div>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
     
     <script>
         // Initialize Firebase with your config
         const firebaseConfig = {
-    apiKey: "AIzaSyBxNLV0sCUeKh_qCPIlkIitL119LmRnLzE",
-    authDomain: "digskills-academy-c3a1b.firebaseapp.com",
-    projectId: "digskills-academy-c3a1b",
-    storageBucket: "digskills-academy-c3a1b.firebasestorage.app",
-    messagingSenderId: "851779746922",
-    appId: "1:851779746922:web:8134b702c481daa0ae9e13",
-    measurementId: "G-0127TR3Y96"
-  };
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
         
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -548,13 +677,23 @@
         const dashboardSection = document.getElementById('dashboardSection');
         const logoutBtn = document.getElementById('logoutBtn');
         const dashboardLink = document.getElementById('dashboardLink');
-        
-        // Mobile menu toggle
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const avatarUpload = document.getElementById('avatarUpload');
+        const userAvatarImg = document.getElementById('userAvatarImg');
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
         
+        // Mobile menu toggle
         mobileMenuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
+        });
+        
+        // Toggle password visibility
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
         });
         
         // Login Form Submission
@@ -563,19 +702,26 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
+            // Show loading state
+            const loginBtn = loginForm.querySelector('button');
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Show dashboard
+                    // Hide login, show dashboard
                     loginSection.style.display = 'none';
                     dashboardSection.style.display = 'block';
                     dashboardLink.style.display = 'block';
                     logoutBtn.style.display = 'block';
                     
-                    // Update UI with user data
+                    // Load user data
                     updateDashboard(userCredential.user);
                 })
                 .catch((error) => {
                     alert(error.message);
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Login';
                 });
         });
         
@@ -588,155 +734,267 @@
                 dashboardSection.style.display = 'none';
                 dashboardLink.style.display = 'none';
                 logoutBtn.style.display = 'none';
+                
+                // Clear form
+                loginForm.reset();
+                passwordInput.type = 'password';
+                togglePassword.innerHTML = '<i class="far fa-eye"></i>';
             });
         });
         
+        // Profile picture handling
+        avatarUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const userId = firebase.auth().currentUser.uid;
+                const storageRef = firebase.storage().ref();
+                const uploadTask = storageRef.child(`profile-pictures/${userId}`).put(file);
+                
+                // Show loading state
+                userAvatarImg.style.opacity = '0.5';
+                
+                uploadTask.on('state_changed',
+                    null,
+                    (error) => {
+                        console.error("Upload error:", error);
+                        alert("Error uploading picture: " + error.message);
+                        userAvatarImg.style.opacity = '1';
+                    },
+                    () => {
+                        // Upload complete
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            userAvatarImg.src = downloadURL;
+                            userAvatarImg.style.opacity = '1';
+                            // Save URL to user's Firestore document
+                            firebase.firestore().collection('students').doc(userId).update({
+                                profilePicture: downloadURL
+                            });
+                        });
+                    }
+                );
+            }
+        });
+        
         // Update Dashboard with User Data
-        function updateDashboard(user) {
-            // Update user info
-            document.getElementById('userName').textContent = user.displayName || 'Student';
-            document.getElementById('userEmail').textContent = user.email;
-            document.getElementById('greetingName').textContent = user.displayName?.split(' ')[0] || 'Student';
-            
-            // Set avatar initials
-            const name = user.displayName || 'S';
-            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
-            document.getElementById('userAvatar').textContent = initials;
+        async function updateDashboard(user) {
+            // Load profile picture if exists
+            loadProfilePicture(user.uid);
             
             // Load user data from Firestore
-            loadUserData(user.uid);
-        }
-        
-        // Load User Data from Firestore
-        async function loadUserData(userId) {
-            const db = firebase.firestore();
-            const userRef = db.collection('students').doc(userId);
-            
             try {
-                const doc = await userRef.get();
+                const doc = await firebase.firestore().collection('students').doc(user.uid).get();
+                
                 if (doc.exists) {
                     const userData = doc.data();
-                    // Populate dashboard with user data
-                    populateCourses(userData.courses || []);
-                    populateAnnouncements(userData.announcements || []);
-                    populateAssignments(userData.assignments || []);
                     
-                    // Setup real-time listeners
-                    setupRealtimeUpdates(userId);
+                    // Display user name
+                    const fullName = `${userData.firstName} ${userData.lastName}`;
+                    document.getElementById('userName').textContent = fullName;
+                    document.getElementById('greetingName').textContent = userData.firstName;
+                    document.getElementById('userEmail').textContent = user.email;
+                    
+                    // Load other data
+                    await loadCourses(user.uid);
+                    await loadAnnouncements(user.uid);
+                    await loadAssignments(user.uid);
+                    await loadCalendarEvents(user.uid);
                 }
             } catch (error) {
                 console.error("Error loading user data:", error);
             }
         }
         
-        // Populate Courses
-        function populateCourses(courses) {
+        // Load profile picture
+        function loadProfilePicture(userId) {
+            firebase.storage().ref().child(`profile-pictures/${userId}`).getDownloadURL()
+                .then((url) => {
+                    userAvatarImg.src = url;
+                })
+                .catch(() => {
+                    // Use default if no picture exists
+                    userAvatarImg.src = "images/default-avatar.png";
+                });
+        }
+        
+        // Load courses
+        async function loadCourses(userId) {
             const container = document.getElementById('currentCourses');
-            container.innerHTML = '';
+            container.innerHTML = '<div class="loading">Loading courses...</div>';
             
-            courses.forEach(course => {
-                const progress = Math.floor(Math.random() * 100); // Replace with actual progress
+            try {
+                const snapshot = await firebase.firestore().collection('enrollments')
+                    .where('studentId', '==', userId)
+                    .get();
+                    
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="no-data">No courses enrolled yet</div>';
+                    return;
+                }
                 
-                const courseCard = document.createElement('div');
-                courseCard.className = 'course-card';
-                courseCard.innerHTML = `
-                    <div class="course-image">
-                        <div class="course-progress" style="width: ${progress}%"></div>
-                    </div>
-                    <div class="course-content">
-                        <h4 class="course-title">${course.name}</h4>
-                        <p class="course-instructor">${course.instructor}</p>
-                        <div class="course-meta">
-                            <span>${progress}% Complete</span>
-                            <span>${course.lessons} Lessons</span>
+                container.innerHTML = '';
+                const coursesPromises = snapshot.docs.map(async doc => {
+                    const enrollment = doc.data();
+                    const courseDoc = await firebase.firestore().collection('programs').doc(enrollment.courseId).get();
+                    return courseDoc.data();
+                });
+                
+                const courses = await Promise.all(coursesPromises);
+                courses.forEach(course => {
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    courseCard.innerHTML = `
+                        <div class="course-image" style="background: ${getCategoryColor(course.category)}">
+                            <div class="course-progress" style="width: ${Math.floor(Math.random() * 100)}%"></div>
                         </div>
-                    </div>
-                `;
-                container.appendChild(courseCard);
-            });
+                        <div class="course-content">
+                            <h4 class="course-title">${course.name}</h4>
+                            <p class="course-instructor">${course.duration}</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-book"></i> ${course.category.toUpperCase()}</span>
+                                <span><i class="fas fa-calendar"></i> Started: ${new Date().toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(courseCard);
+                });
+            } catch (error) {
+                console.error("Error loading courses:", error);
+                container.innerHTML = '<div class="error">Error loading courses</div>';
+            }
         }
         
-        // Populate Announcements
-        function populateAnnouncements(announcements) {
+        function getCategoryColor(category) {
+            switch(category) {
+                case 'online': return '#3b82f6';
+                case 'onsite': return '#10b981';
+                case 'school': return '#8b5cf6';
+                default: return '#e2e8f0';
+            }
+        }
+        
+        // Load announcements
+        async function loadAnnouncements(userId) {
             const container = document.getElementById('announcementsList');
-            container.innerHTML = '';
+            container.innerHTML = '<div class="loading">Loading announcements...</div>';
             
-            announcements.forEach(announcement => {
-                const announcementItem = document.createElement('div');
-                announcementItem.className = 'announcement-item';
-                announcementItem.innerHTML = `
-                    <h4 class="announcement-title">${announcement.title}</h4>
-                    <div class="announcement-meta">
-                        <span>${announcement.course}</span>
-                        <span>${announcement.date}</span>
-                    </div>
-                    <p class="announcement-content">${announcement.content}</p>
-                `;
-                container.appendChild(announcementItem);
-            });
+            try {
+                const snapshot = await firebase.firestore().collection('announcements')
+                    .where('forStudents', 'array-contains', userId)
+                    .orderBy('date', 'desc')
+                    .limit(5)
+                    .get();
+                    
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="no-data">No announcements found</div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const announcement = doc.data();
+                    const announcementItem = document.createElement('div');
+                    announcementItem.className = 'announcement-item';
+                    announcementItem.innerHTML = `
+                        <h4 class="announcement-title">${announcement.title}</h4>
+                        <div class="announcement-meta">
+                            <span><i class="fas fa-calendar-alt"></i> ${new Date(announcement.date.seconds * 1000).toLocaleDateString()}</span>
+                            <span><i class="fas fa-user-tie"></i> ${announcement.author}</span>
+                        </div>
+                        <p class="announcement-content">${announcement.content}</p>
+                    `;
+                    container.appendChild(announcementItem);
+                });
+            } catch (error) {
+                console.error("Error loading announcements:", error);
+                container.innerHTML = '<div class="error">Error loading announcements</div>';
+            }
         }
         
-        // Populate Assignments
-        function populateAssignments(assignments) {
+        // Load assignments
+        async function loadAssignments(userId) {
             const container = document.getElementById('assignmentsList');
-            container.innerHTML = '';
+            container.innerHTML = '<div class="loading">Loading assignments...</div>';
             
-            assignments.forEach(assignment => {
-                const assignmentItem = document.createElement('div');
-                assignmentItem.className = 'announcement-item';
-                assignmentItem.innerHTML = `
-                    <h4 class="announcement-title">${assignment.title}</h4>
-                    <div class="announcement-meta">
-                        <span>${assignment.course}</span>
-                        <span>Due: ${assignment.dueDate}</span>
-                        <span>Status: ${assignment.status}</span>
-                    </div>
-                `;
-                container.appendChild(assignmentItem);
-            });
+            try {
+                const snapshot = await firebase.firestore().collection('assignments')
+                    .where('forStudents', 'array-contains', userId)
+                    .where('dueDate', '>=', new Date())
+                    .orderBy('dueDate', 'asc')
+                    .limit(5)
+                    .get();
+                    
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="no-data">No upcoming assignments</div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const assignment = doc.data();
+                    const assignmentItem = document.createElement('div');
+                    assignmentItem.className = 'assignment-item';
+                    assignmentItem.innerHTML = `
+                        <div class="assignment-header">
+                            <h4 class="assignment-title">${assignment.title}</h4>
+                            <span class="assignment-status ${assignment.status === 'submitted' ? 'completed' : ''}">
+                                ${assignment.status || 'pending'}
+                            </span>
+                        </div>
+                        <div class="assignment-meta">
+                            <span><i class="fas fa-book"></i> ${assignment.course}</span>
+                            <span><i class="fas fa-clock"></i> Due: ${new Date(assignment.dueDate.seconds * 1000).toLocaleString()}</span>
+                        </div>
+                        <p class="assignment-description">${assignment.description}</p>
+                        <button class="assignment-action">View Details</button>
+                    `;
+                    container.appendChild(assignmentItem);
+                });
+            } catch (error) {
+                console.error("Error loading assignments:", error);
+                container.innerHTML = '<div class="error">Error loading assignments</div>';
+            }
         }
         
-        // Setup Real-time Updates
-        function setupRealtimeUpdates(userId) {
-            const db = firebase.firestore();
+        // Load calendar events
+        async function loadCalendarEvents(userId) {
+            const container = document.getElementById('calendarEvents');
+            container.innerHTML = '<div class="loading">Loading events...</div>';
             
-            // Real-time courses updates
-            db.collection('enrollments')
-                .where('studentId', '==', userId)
-                .onSnapshot((snapshot) => {
-                    const courses = [];
-                    snapshot.forEach(doc => {
-                        courses.push(doc.data());
-                    });
-                    populateCourses(courses);
+            try {
+                const snapshot = await firebase.firestore().collection('calendarEvents')
+                    .where('forStudents', 'array-contains', userId)
+                    .where('eventDate', '>=', new Date())
+                    .orderBy('eventDate', 'asc')
+                    .limit(5)
+                    .get();
+                    
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="no-data">No upcoming events</div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const event = doc.data();
+                    const eventItem = document.createElement('div');
+                    eventItem.className = 'event-item';
+                    eventItem.innerHTML = `
+                        <div class="event-date">
+                            <span class="event-day">${new Date(event.eventDate.seconds * 1000).getDate()}</span>
+                            <span class="event-month">${new Date(event.eventDate.seconds * 1000).toLocaleString('default', { month: 'short' })}</span>
+                        </div>
+                        <div class="event-details">
+                            <h4 class="event-title">${event.title}</h4>
+                            <p class="event-time"><i class="fas fa-clock"></i> ${new Date(event.eventDate.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            <p class="event-location"><i class="fas fa-map-marker-alt"></i> ${event.location || 'Online'}</p>
+                        </div>
+                    `;
+                    container.appendChild(eventItem);
                 });
-            
-            // Real-time announcements
-            db.collection('announcements')
-                .where('forStudents', 'array-contains', userId)
-                .orderBy('date', 'desc')
-                .limit(5)
-                .onSnapshot((snapshot) => {
-                    const announcements = [];
-                    snapshot.forEach(doc => {
-                        announcements.push(doc.data());
-                    });
-                    populateAnnouncements(announcements);
-                });
-            
-            // Real-time assignments
-            db.collection('assignments')
-                .where('forStudents', 'array-contains', userId)
-                .where('dueDate', '>=', new Date().toISOString())
-                .orderBy('dueDate', 'asc')
-                .limit(5)
-                .onSnapshot((snapshot) => {
-                    const assignments = [];
-                    snapshot.forEach(doc => {
-                        assignments.push(doc.data());
-                    });
-                    populateAssignments(assignments);
-                });
+            } catch (error) {
+                console.error("Error loading events:", error);
+                container.innerHTML = '<div class="error">Error loading events</div>';
+            }
         }
         
         // Check Auth State on Page Load
@@ -758,6 +1016,4 @@
         });
     </script>
 </body>
-
 </html>
-
