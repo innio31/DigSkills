@@ -329,6 +329,101 @@
             </div>
         </div>
     </div>
+
+    <!-- Add to admin-portal.html -->
+<div class="admin-card">
+    <h2>Create Announcement</h2>
+    <form id="announcementForm">
+        <div class="form-group">
+            <label for="announcementTitle">Title</label>
+            <input type="text" id="announcementTitle" required>
+        </div>
+        <div class="form-group">
+            <label for="announcementContent">Content</label>
+            <textarea id="announcementContent" rows="4" required></textarea>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="announcementCourses">For Courses (select multiple)</label>
+                <select id="announcementCourses" multiple>
+                    <!-- Will be populated with courses -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="announcementDate">Date</label>
+                <input type="datetime-local" id="announcementDate" required>
+            </div>
+        </div>
+        <button type="submit" class="admin-btn">Post Announcement</button>
+    </form>
+</div>
+
+    <div class="admin-card">
+    <h2>Create Assignment</h2>
+    <form id="assignmentForm">
+        <div class="form-group">
+            <label for="assignmentTitle">Title</label>
+            <input type="text" id="assignmentTitle" required>
+        </div>
+        <div class="form-group">
+            <label for="assignmentDescription">Description</label>
+            <textarea id="assignmentDescription" rows="4" required></textarea>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="assignmentCourse">For Course</label>
+                <select id="assignmentCourse" required>
+                    <!-- Will be populated -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="assignmentDueDate">Due Date</label>
+                <input type="datetime-local" id="assignmentDueDate" required>
+            </div>
+            <div class="form-group">
+                <label for="assignmentPoints">Total Points</label>
+                <input type="number" id="assignmentPoints" required>
+            </div>
+        </div>
+        <button type="submit" class="admin-btn">Create Assignment</button>
+    </form>
+    </div>
+
+    <div class="admin-card">
+    <h2>Record Grades</h2>
+    <form id="gradeForm">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="gradeStudent">Student</label>
+                <select id="gradeStudent" required>
+                    <!-- Will be populated -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gradeCourse">Course</label>
+                <select id="gradeCourse" required>
+                    <!-- Will be populated -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gradeValue">Grade (%)</label>
+                <input type="number" id="gradeValue" min="0" max="100" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="gradeAssignment">For Assignment (optional)</label>
+            <select id="gradeAssignment">
+                <option value="">None</option>
+                <!-- Will be populated -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="gradeComments">Comments</label>
+            <textarea id="gradeComments" rows="3"></textarea>
+        </div>
+        <button type="submit" class="admin-btn">Record Grade</button>
+    </form>
+    </div>
     
     <script>
         // Initialize Firebase with your config
@@ -612,10 +707,197 @@ async function loadStudents() {
     studentsTable.innerHTML = '<tr><td colspan="6">Error loading students</td></tr>';
   }
 }
+        // Add to admin-portal.js
+async function loadStudentsForGrades() {
+    const select = document.getElementById('gradeStudent');
+    try {
+        const snapshot = await firebase.firestore().collection('students').get();
+        select.innerHTML = '<option value="">Select Student</option>';
+        snapshot.forEach(doc => {
+            const student = doc.data();
+            const option = document.createElement('option');
+            option.value = doc.id;
+            option.textContent = `${student.firstName} ${student.lastName} (${student.email})`;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error loading students:", error);
+    }
+}
+
+async function loadAssignmentsForGrades(courseId) {
+    const select = document.getElementById('gradeAssignment');
+    try {
+        const snapshot = await firebase.firestore().collection('assignments')
+            .where('courseId', '==', courseId)
+            .get();
+        
+        select.innerHTML = '<option value="">None</option>';
+        snapshot.forEach(doc => {
+            const option = document.createElement('option');
+            option.value = doc.id;
+            option.textContent = doc.data().title;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error loading assignments:", error);
+    }
+}
+
+document.getElementById('gradeCourse').addEventListener('change', async (e) => {
+    if (e.target.value) {
+        await loadAssignmentsForGrades(e.target.value);
+    }
+});
+
+document.getElementById('gradeForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const studentId = document.getElementById('gradeStudent').value;
+    const courseId = document.getElementById('gradeCourse').value;
+    const value = document.getElementById('gradeValue').value;
+    const assignmentId = document.getElementById('gradeAssignment').value;
+    const comments = document.getElementById('gradeComments').value;
+    
+    const studentDoc = await firebase.firestore().collection('students').doc(studentId).get();
+    const courseDoc = await firebase.firestore().collection('programs').doc(courseId).get();
+    
+    try {
+        await firebase.firestore().collection('grades').add({
+            studentId,
+            studentName: `${studentDoc.data().firstName} ${studentDoc.data().lastName}`,
+            course: courseDoc.data().name,
+            courseId,
+            assignmentId: assignmentId || null,
+            value: parseInt(value),
+            comments: comments || null,
+            date: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        alert('Grade recorded successfully!');
+        e.target.reset();
+    } catch (error) {
+        console.error("Error recording grade:", error);
+        alert('Error: ' + error.message);
+    }
+});
+        // Add to admin-portal.js
+async function loadCoursesForAssignments() {
+    const select = document.getElementById('assignmentCourse');
+    try {
+        const snapshot = await firebase.firestore().collection('programs').get();
+        select.innerHTML = '<option value="">Select Course</option>';
+        snapshot.forEach(doc => {
+            const option = document.createElement('option');
+            option.value = doc.id;
+            option.textContent = doc.data().name;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error loading courses:", error);
+    }
+}
+
+document.getElementById('assignmentForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const title = document.getElementById('assignmentTitle').value;
+    const description = document.getElementById('assignmentDescription').value;
+    const courseId = document.getElementById('assignmentCourse').value;
+    const dueDate = new Date(document.getElementById('assignmentDueDate').value);
+    const points = document.getElementById('assignmentPoints').value;
+    
+    // Get all students in this course
+    const snapshot = await firebase.firestore().collection('enrollments')
+        .where('courseId', '==', courseId)
+        .get();
+    
+    const studentIds = snapshot.docs.map(doc => doc.data().studentId);
+    const courseName = (await firebase.firestore().collection('programs').doc(courseId).get()).data().name;
+    
+    try {
+        await firebase.firestore().collection('assignments').add({
+            title,
+            description,
+            course: courseName,
+            courseId,
+            dueDate: firebase.firestore.Timestamp.fromDate(dueDate),
+            points: parseInt(points),
+            forStudents: studentIds,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert('Assignment created successfully!');
+        e.target.reset();
+    } catch (error) {
+        console.error("Error creating assignment:", error);
+        alert('Error: ' + error.message);
+    }
+});
+        // Add to admin-portal.js
+async function loadCoursesForAnnouncements() {
+    const select = document.getElementById('announcementCourses');
+    try {
+        const snapshot = await firebase.firestore().collection('programs').get();
+        select.innerHTML = '';
+        snapshot.forEach(doc => {
+            const option = document.createElement('option');
+            option.value = doc.id;
+            option.textContent = doc.data().name;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error loading courses:", error);
+    }
+}
+
+document.getElementById('announcementForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const title = document.getElementById('announcementTitle').value;
+    const content = document.getElementById('announcementContent').value;
+    const selectedCourses = Array.from(document.getElementById('announcementCourses').selectedOptions)
+        .map(option => option.value);
+    const date = new Date(document.getElementById('announcementDate').value);
+    
+    // Get all students enrolled in selected courses
+    const enrolledStudents = await getStudentsInCourses(selectedCourses);
+    
+    try {
+        await firebase.firestore().collection('announcements').add({
+            title,
+            content,
+            date: firebase.firestore.Timestamp.fromDate(date),
+            author: "Admin", // Or get admin name
+            forStudents: enrolledStudents,
+            forCourses: selectedCourses
+        });
+        alert('Announcement posted successfully!');
+        e.target.reset();
+    } catch (error) {
+        console.error("Error posting announcement:", error);
+        alert('Error: ' + error.message);
+    }
+});
+
+async function getStudentsInCourses(courseIds) {
+    const studentIds = new Set();
+    const promises = courseIds.map(async courseId => {
+        const snapshot = await firebase.firestore().collection('enrollments')
+            .where('courseId', '==', courseId)
+            .get();
+        snapshot.forEach(doc => {
+            studentIds.add(doc.data().studentId);
+        });
+    });
+    
+    await Promise.all(promises);
+    return Array.from(studentIds);
+}
     </script>
 </body>
 
 </html>
+
 
 
 
