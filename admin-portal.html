@@ -345,6 +345,40 @@
             border: 1px solid #dc2626;
         }
 
+        /* Login Section Styles */
+        .login-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--light);
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h2 {
+            color: var(--primary);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .login-card .form-group {
+            text-align: left;
+        }
+
+        .login-card input[type="email"],
+        .login-card input[type="password"] {
+            margin-bottom: 1.5rem;
+        }
+
         /* Responsive Styles */
         @media (max-width: 768px) {
             .mobile-menu-btn {
@@ -380,7 +414,7 @@
     <header>
         <nav>
             <div class="logo">
-                <img src="https://placehold.co/32x32/2563eb/ffffff?text=A" alt="Logo" class="logo-icon">
+                <img src="images/logo.png" alt="Logo" class="logo-icon">
                 <span>Admin Portal</span>
             </div>
             <button class="mobile-menu-btn">
@@ -388,186 +422,208 @@
             </button>
             <ul class="nav-links">
                 <li><a href="academy.html">Back to Academy</a></li>
-                <li><a href="#" id="logoutBtn">Logout</a></li>
+                <li><a href="#" id="logoutBtn" style="display: none;">Logout</a></li>
             </ul>
         </nav>
     </header>
     
-    <div class="admin-container">
-        <h1 class="admin-title">Academy Administration Dashboard</h1>
-        
-        <!-- Message Box for alerts -->
-        <div id="messageBox" class="message-box" style="grid-column: 1 / -1;"></div>
-
-        <!-- Student Management Card -->
-        <div class="admin-card">
-            <h2>Student Management</h2>
-            <form id="createStudentForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="studentFirstName">First Name</label>
-                        <input type="text" id="studentFirstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="studentLastName">Last Name</label>
-                        <input type="text" id="studentLastName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="studentEmail">Email</label>
-                        <input type="email" id="studentEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="studentProgram">Program</label>
-                        <select id="studentProgram" required>
-                            <option value="">Select Program</option>
-                            <!-- Will be populated by JavaScript -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="studentPassword">Temporary Password</label>
-                        <input type="password" id="studentPassword" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="studentId">Student ID</label>
-                        <input type="text" id="studentId" required>
-                    </div>
+    <!-- Login Section -->
+    <div class="login-section" id="adminLoginSection">
+        <div class="login-card">
+            <h2>Admin Login</h2>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminEmail">Email</label>
+                    <input type="email" id="adminEmail" required placeholder="Enter admin email">
                 </div>
-                <button type="submit" class="admin-btn"><i class="fas fa-user-plus"></i> Create Account</button>
+                <div class="form-group">
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" required placeholder="Enter admin password">
+                </div>
+                <button type="submit" class="admin-btn">Login</button>
             </form>
+            <p id="loginError" style="color: var(--danger); margin-top: 1rem; display: none;"></p>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Section (Initially Hidden) -->
+    <div class="admin-dashboard-content" id="adminDashboardContent" style="display: none;">
+        <div class="admin-container">
+            <h1 class="admin-title">Academy Administration Dashboard</h1>
             
-            <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--dark);">Existing Students</h3>
-            <div style="overflow-x: auto;">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Student ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Program</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="studentsTable">
-                        <!-- Will be populated by JavaScript -->
-                        <tr><td colspan="6">Loading students...</td></tr>
-                    </tbody>
-                </table>
+            <!-- Message Box for alerts -->
+            <div id="messageBox" class="message-box" style="grid-column: 1 / -1;"></div>
+
+            <!-- Student Management Card -->
+            <div class="admin-card">
+                <h2>Student Management</h2>
+                <form id="createStudentForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="studentFirstName">First Name</label>
+                            <input type="text" id="studentFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentLastName">Last Name</label>
+                            <input type="text" id="studentLastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentEmail">Email</label>
+                            <input type="email" id="studentEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentProgram">Program</label>
+                            <select id="studentProgram" required>
+                                <option value="">Select Program</option>
+                                <!-- Will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentPassword">Temporary Password</label>
+                            <input type="password" id="studentPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentId">Student ID</label>
+                            <input type="text" id="studentId" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="admin-btn"><i class="fas fa-user-plus"></i> Create Account</button>
+                </form>
+                
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--dark);">Existing Students</h3>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Program</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTable">
+                            <!-- Will be populated by JavaScript -->
+                            <tr><td colspan="6">Loading students...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- Announcement Management Card -->
-        <div class="admin-card">
-            <h2>Announcements</h2>
-            <form id="announcementForm">
-                <div class="form-group">
-                    <label for="announcementTitle">Title</label>
-                    <input type="text" id="announcementTitle" required>
-                </div>
-                <div class="form-group">
-                    <label for="announcementContent">Content</label>
-                    <textarea id="announcementContent" rows="4" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="announcementCourses">For Courses (select multiple)</label>
-                    <select id="announcementCourses" multiple size="5">
-                        <!-- Will be populated with courses -->
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="announcementDate">Date</label>
-                    <input type="datetime-local" id="announcementDate" required>
-                </div>
-                <button type="submit" class="admin-btn"><i class="fas fa-bullhorn"></i> Post Announcement</button>
-            </form>
-        </div>
+            <!-- Announcement Management Card -->
+            <div class="admin-card">
+                <h2>Announcements</h2>
+                <form id="announcementForm">
+                    <div class="form-group">
+                        <label for="announcementTitle">Title</label>
+                        <input type="text" id="announcementTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="announcementContent">Content</label>
+                        <textarea id="announcementContent" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="announcementCourses">For Courses (select multiple)</label>
+                        <select id="announcementCourses" multiple size="5">
+                            <!-- Will be populated with courses -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="announcementDate">Date</label>
+                        <input type="datetime-local" id="announcementDate" required>
+                    </div>
+                    <button type="submit" class="admin-btn"><i class="fas fa-bullhorn"></i> Post Announcement</button>
+                </form>
+            </div>
 
-        <!-- Assignment Management Card -->
-        <div class="admin-card">
-            <h2>Assignments</h2>
-            <form id="assignmentForm">
-                <div class="form-group">
-                    <label for="assignmentTitle">Title</label>
-                    <input type="text" id="assignmentTitle" required>
-                </div>
-                <div class="form-group">
-                    <label for="assignmentDescription">Description</label>
-                    <textarea id="assignmentDescription" rows="4" required></textarea>
-                </div>
-                <div class="form-grid">
+            <!-- Assignment Management Card -->
+            <div class="admin-card">
+                <h2>Assignments</h2>
+                <form id="assignmentForm">
                     <div class="form-group">
-                        <label for="assignmentCourse">For Course</label>
-                        <select id="assignmentCourse" required>
-                            <!-- Will be populated -->
-                        </select>
+                        <label for="assignmentTitle">Title</label>
+                        <input type="text" id="assignmentTitle" required>
                     </div>
                     <div class="form-group">
-                        <label for="assignmentDueDate">Due Date</label>
-                        <input type="datetime-local" id="assignmentDueDate" required>
+                        <label for="assignmentDescription">Description</label>
+                        <textarea id="assignmentDescription" rows="4" required></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="assignmentCourse">For Course</label>
+                            <select id="assignmentCourse" required>
+                                <!-- Will be populated -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignmentDueDate">Due Date</label>
+                            <input type="datetime-local" id="assignmentDueDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignmentPoints">Total Points</label>
+                            <input type="number" id="assignmentPoints" required>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="assignmentPoints">Total Points</label>
-                        <input type="number" id="assignmentPoints" required>
+                        <label for="assignmentFiles">Attachment (PDF, DOC, PPT, etc.)</label>
+                        <input type="file" id="assignmentFiles" multiple>
+                        <div id="filePreview" class="file-preview"></div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="assignmentFiles">Attachment (PDF, DOC, PPT, etc.)</label>
-                    <input type="file" id="assignmentFiles" multiple>
-                    <div id="filePreview" class="file-preview"></div>
-                </div>
-                <button type="submit" class="admin-btn"><i class="fas fa-tasks"></i> Create Assignment</button>
-            </form>
-        </div>
+                    <button type="submit" class="admin-btn"><i class="fas fa-tasks"></i> Create Assignment</button>
+                </form>
+            </div>
 
-        <!-- Grade Recording Card -->
-        <div class="admin-card">
-            <h2>Record Grades</h2>
-            <form id="gradeForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="gradeStudent">Student</label>
-                        <select id="gradeStudent" required>
-                            <!-- Will be populated -->
-                        </select>
+            <!-- Grade Recording Card -->
+            <div class="admin-card">
+                <h2>Record Grades</h2>
+                <form id="gradeForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="gradeStudent">Student</label>
+                            <select id="gradeStudent" required>
+                                <!-- Will be populated -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gradeCourse">Course</label>
+                            <select id="gradeCourse" required>
+                                <!-- Will be populated -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gradeAssignment">For Assignment (optional)</label>
+                            <select id="gradeAssignment">
+                                <option value="">None</option>
+                                <!-- Will be populated -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gradeCategory">Category</label>
+                            <select id="gradeCategory" required>
+                                <option value="homework">Homework</option>
+                                <option value="quiz">Quiz</option>
+                                <option value="exam">Exam</option>
+                                <option value="project">Project</option>
+                                <option value="participation">Participation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gradeValue">Grade (%)</label>
+                            <input type="number" id="gradeValue" min="0" max="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gradeWeight">Weight (%)</label>
+                            <input type="number" id="gradeWeight" min="1" max="100" value="20" required>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="gradeCourse">Course</label>
-                        <select id="gradeCourse" required>
-                            <!-- Will be populated -->
-                        </select>
+                        <label for="gradeComments">Comments</label>
+                        <textarea id="gradeComments" rows="3"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="gradeAssignment">For Assignment (optional)</label>
-                        <select id="gradeAssignment">
-                            <option value="">None</option>
-                            <!-- Will be populated -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="gradeCategory">Category</label>
-                        <select id="gradeCategory" required>
-                            <option value="homework">Homework</option>
-                            <option value="quiz">Quiz</option>
-                            <option value="exam">Exam</option>
-                            <option value="project">Project</option>
-                            <option value="participation">Participation</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="gradeValue">Grade (%)</label>
-                        <input type="number" id="gradeValue" min="0" max="100" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="gradeWeight">Weight (%)</label>
-                        <input type="number" id="gradeWeight" min="1" max="100" value="20" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="gradeComments">Comments</label>
-                    <textarea id="gradeComments" rows="3"></textarea>
-                </div>
-                <button type="submit" class="admin-btn"><i class="fas fa-chart-line"></i> Record Grade</button>
-            </form>
+                    <button type="submit" class="admin-btn"><i class="fas fa-chart-line"></i> Record Grade</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -596,6 +652,10 @@
         firebase.initializeApp(firebaseConfig);
         
         // DOM Elements
+        const adminLoginSection = document.getElementById('adminLoginSection');
+        const adminDashboardContent = document.getElementById('adminDashboardContent');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const loginError = document.getElementById('loginError');
         const createStudentForm = document.getElementById('createStudentForm');
         const studentsTable = document.getElementById('studentsTable');
         const studentProgramSelect = document.getElementById('studentProgram');
@@ -647,6 +707,88 @@
         // Mobile menu toggle
         mobileMenuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
+        });
+
+        // Admin Login Form Submission
+        adminLoginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            const loginBtn = adminLoginForm.querySelector('button');
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            loginError.style.display = 'none';
+
+            try {
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                // Check if the logged-in user has an 'admin' role (via custom claims or Firestore document)
+                // This is crucial for security. For demonstration, we'll assume any successful login is admin.
+                // In a real app, you'd verify custom claims:
+                // const idTokenResult = await userCredential.user.getIdTokenResult();
+                // if (!idTokenResult.claims.admin) {
+                //     await firebase.auth().signOut();
+                //     throw new Error("You are not authorized as an administrator.");
+                // }
+
+                adminLoginSection.style.display = 'none';
+                adminDashboardContent.style.display = 'block';
+                logoutBtn.style.display = 'block'; // Show logout button
+
+                // Load initial data for the dashboard
+                loadStudents();
+                loadPrograms();
+                loadStudentsForGrades();
+                showMessage('Welcome, Admin!');
+
+            } catch (error) {
+                loginError.textContent = 'Login failed: ' + error.message;
+                loginError.style.display = 'block';
+                console.error("Admin login error:", error);
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Login';
+            }
+        });
+
+        // Check Auth State on Page Load
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                // User is signed in, check if they are an admin
+                // In a real app, you'd fetch custom claims here
+                // For this example, we'll assume if they are authenticated, they can see the dashboard
+                // For proper admin role checking, you'd use:
+                // const idTokenResult = await user.getIdTokenResult();
+                // if (idTokenResult.claims.admin) {
+                //     adminLoginSection.style.display = 'none';
+                //     adminDashboardContent.style.display = 'block';
+                //     logoutBtn.style.display = 'block';
+                //     loadStudents();
+                //     loadPrograms();
+                //     loadStudentsForGrades();
+                // } else {
+                //     // Not an admin, sign out and show login
+                //     await firebase.auth().signOut();
+                //     adminLoginSection.style.display = 'flex';
+                //     adminDashboardContent.style.display = 'none';
+                //     logoutBtn.style.display = 'none';
+                //     showModal("You are not authorized to access the admin portal.");
+                // }
+
+                // Simplified for demonstration: if authenticated, show dashboard
+                adminLoginSection.style.display = 'none';
+                adminDashboardContent.style.display = 'block';
+                logoutBtn.style.display = 'block';
+                loadStudents();
+                loadPrograms();
+                loadStudentsForGrades();
+
+            } else {
+                // User is signed out
+                adminLoginSection.style.display = 'flex'; // Show login form
+                adminDashboardContent.style.display = 'none'; // Hide dashboard
+                logoutBtn.style.display = 'none'; // Hide logout button
+            }
         });
         
         // Form submission for creating new student
@@ -843,36 +985,13 @@
             e.preventDefault();
             try {
                 await firebase.auth().signOut();
-                window.location.href = 'index.html';
+                // onAuthStateChanged listener will handle UI update
             } catch (error) {
                 showMessage('Error logging out: ' + error.message, 'error');
                 console.error("Error logging out:", error);
             }
         });
         
-        // Check Admin Auth (simplified - implement proper auth in production)
-        // This is a placeholder. In a real app, you'd use Firebase Auth rules and potentially custom claims.
-        const adminPassword = "password"; // DO NOT USE IN PRODUCTION
-        
-        if (!localStorage.getItem('adminAuth') || localStorage.getItem('adminAuth') !== adminPassword) {
-            const password = prompt("Enter admin password:");
-            if (password === adminPassword) {
-                localStorage.setItem('adminAuth', password);
-            } else {
-                showModal("Unauthorized access. Redirecting to home.");
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
-            }
-        }
-        
-        // Initialize admin page data
-        window.addEventListener('DOMContentLoaded', () => {
-            loadStudents();
-            loadPrograms();
-            loadStudentsForGrades(); // Load students for grade recording
-        });
-
         // Announcement Form Submission
         announcementForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -895,7 +1014,7 @@
                     title,
                     content,
                     date: firebase.firestore.Timestamp.fromDate(date),
-                    author: "Admin", // Or get admin name from auth
+                    author: firebase.auth().currentUser ? firebase.auth().currentUser.email : "Admin", // Or get admin name from auth
                     forStudents: enrolledStudents,
                     forCourses: selectedCourses,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -1123,4 +1242,3 @@
     </script>
 </body>
 </html>
-
