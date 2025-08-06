@@ -471,9 +471,151 @@
             loadStudents();
             loadPrograms();
         });
+        // Edit Student Functionality
+async function editStudent(studentId) {
+  const studentRef = firebase.firestore().collection('students').doc(studentId);
+  const doc = await studentRef.get();
+  
+  if (doc.exists) {
+    const student = doc.data();
+    
+    // Fill the form with student data
+    document.getElementById('studentFirstName').value = student.firstName;
+    document.getElementById('studentLastName').value = student.lastName;
+    document.getElementById('studentEmail').value = student.email;
+    document.getElementById('studentProgram').value = student.program;
+    document.getElementById('studentId').value = student.studentId;
+    
+    // Change button text to "Update Student"
+    const submitBtn = document.querySelector('#createStudentForm button[type="submit"]');
+    submitBtn.textContent = 'Update Student';
+    
+    // Store the student ID being edited
+    submitBtn.dataset.editingId = studentId;
+    
+    // Scroll to form
+    document.getElementById('studentFirstName').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// Reset Password Functionality
+async function resetPassword(studentEmail) {
+  if (!confirm(`Reset password for ${studentEmail}? A reset link will be emailed.`)) return;
+  
+  try {
+    await firebase.auth().sendPasswordResetEmail(studentEmail);
+    alert(`Password reset email sent to ${studentEmail}`);
+  } catch (error) {
+    alert(`Error resetting password: ${error.message}`);
+  }
+}
+
+// Update form submission handler
+document.getElementById('createStudentForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const firstName = document.getElementById('studentFirstName').value;
+  const lastName = document.getElementById('studentLastName').value;
+  const email = document.getElementById('studentEmail').value;
+  const program = document.getElementById('studentProgram').value;
+  const studentId = document.getElementById('studentId').value;
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  
+  // Check if we're editing or creating
+  const isEditing = submitBtn.dataset.editingId;
+  
+  try {
+    if (isEditing) {
+      // Update existing student
+      await firebase.firestore().collection('students').doc(isEditingId).update({
+        firstName,
+        lastName,
+        email,
+        program,
+        studentId
+      });
+      
+      alert('Student updated successfully!');
+    } else {
+      // Create new student
+      const password = document.getElementById('studentPassword').value;
+      const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      
+      await firebase.firestore().collection('students').doc(user.uid).set({
+        firstName,
+        lastName,
+        email,
+        studentId,
+        program,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        status: 'active'
+      });
+      
+      alert('Student account created successfully!');
+    }
+    
+    // Reset form
+    e.target.reset();
+    submitBtn.textContent = 'Create Account';
+    delete submitBtn.dataset.editingId;
+    loadStudents();
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
+});
+
+// Update the loadStudents function to include event listeners
+async function loadStudents() {
+  studentsTable.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
+  
+  try {
+    const snapshot = await firebase.firestore().collection('students').orderBy('createdAt', 'desc').get();
+    studentsTable.innerHTML = '';
+    
+    if (snapshot.empty) {
+      studentsTable.innerHTML = '<tr><td colspan="6">No students found</td></tr>';
+      return;
+    }
+    
+    snapshot.forEach(doc => {
+      const student = doc.data();
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${student.studentId}</td>
+        <td>${student.firstName} ${student.lastName}</td>
+        <td>${student.email}</td>
+        <td>${student.program}</td>
+        <td><span class="status-badge status-active">Active</span></td>
+        <td>
+          <button class="outline-btn edit-student" data-id="${doc.id}">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="outline-btn reset-pw" data-email="${student.email}">
+            <i class="fas fa-key"></i> Reset PW
+          </button>
+        </td>
+      `;
+      studentsTable.appendChild(row);
+    });
+    
+    // Add event listeners to new buttons
+    document.querySelectorAll('.edit-student').forEach(btn => {
+      btn.addEventListener('click', () => editStudent(btn.dataset.id));
+    });
+    
+    document.querySelectorAll('.reset-pw').forEach(btn => {
+      btn.addEventListener('click', () => resetPassword(btn.dataset.email));
+    });
+    
+  } catch (error) {
+    console.error("Error loading students:", error);
+    studentsTable.innerHTML = '<tr><td colspan="6">Error loading students</td></tr>';
+  }
+}
     </script>
 </body>
 
 </html>
+
 
 
