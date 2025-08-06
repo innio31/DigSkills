@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal | Academy Name</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -49,6 +54,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
         
         .logo-icon {
@@ -195,8 +202,9 @@
         /* Dashboard Styles */
         .dashboard {
             display: none;
+            /* Adjusted margin-top to clear fixed header for larger screens */
+            margin: 7rem auto 2rem;
             max-width: 1400px;
-            margin: 6rem auto 2rem;
             padding: 0 5%;
         }
         
@@ -491,6 +499,178 @@
             color: var(--danger);
         }
         
+        /* Grades Styles */
+        .grade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .grade-course {
+            flex: 2;
+            font-weight: 500;
+        }
+
+        .grade-value {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--accent); }
+        .text-danger { color: var(--danger); }
+
+        /* Messages Styles */
+        .message-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+        }
+
+        .message-item.unread {
+            background-color: rgba(37, 99, 235, 0.05);
+            border-left: 3px solid var(--primary);
+        }
+
+        .message-sender {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .message-subject {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .message-preview {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-align: right;
+        }
+
+        /* Settings Styles */
+        .settings-form {
+            padding: 1rem 0;
+        }
+
+        .settings-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        /* General UI Improvements */
+        .no-data, .error {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .no-data i, .error i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: #cbd5e1;
+        }
+
+        .error i {
+            color: var(--danger);
+        }
+
+        .text-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+        }
+
+        .outline-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .outline-btn:hover {
+            background: #f1f5f9;
+        }
+
+        /* Notification Badge */
+        .notification-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background-color: var(--danger); /* Red color for badge */
+            color: white;
+            border-radius: 50%;
+            padding: 2px 7px;
+            font-size: 0.7em;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+            z-index: 1;
+            min-width: 20px; /* Ensure it's a circle even with 1 digit */
+            text-align: center;
+        }
+
+        /* Modal Styles (reused from admin portal for consistency) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 200; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            position: relative;
+            text-align: center;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
         /* Responsive Styles */
         @media (max-width: 768px) {
             .dashboard-grid {
@@ -521,130 +701,23 @@
             }
             
             .login-container {
-                margin: 8rem auto 3rem;
+                /* Adjusted for mobile devices */
+                margin: 6rem auto 3rem; /* Reduced from 8rem to give more space */
                 padding: 1.5rem;
             }
-        }
-        /* Grades Styles */
-.grade-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #e2e8f0;
-}
 
-.grade-course {
-    flex: 2;
-    font-weight: 500;
-}
-
-.grade-value {
-    flex: 1;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-.text-success { color: var(--success); }
-.text-warning { color: var(--accent); }
-.text-danger { color: var(--danger); }
-
-/* Messages Styles */
-.message-item {
-    padding: 1rem;
-    border-bottom: 1px solid #e2e8f0;
-    cursor: pointer;
-}
-
-.message-item.unread {
-    background-color: rgba(37, 99, 235, 0.05);
-    border-left: 3px solid var(--primary);
-}
-
-.message-sender {
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-}
-
-.message-subject {
-    font-weight: 500;
-    color: var(--dark);
-}
-
-.message-preview {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin: 0.3rem 0;
-}
-
-.message-time {
-    font-size: 0.8rem;
-    color: #94a3b8;
-    text-align: right;
-}
-
-/* Settings Styles */
-.settings-form {
-    padding: 1rem 0;
-}
-
-.settings-form .form-group {
-    margin-bottom: 1.5rem;
-}
-
-/* General UI Improvements */
-.no-data, .error {
-    text-align: center;
-    padding: 2rem;
-}
-
-.no-data i, .error i {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    display: block;
-    color: #cbd5e1;
-}
-
-.error i {
-    color: var(--danger);
-}
-
-.text-btn {
-    background: none;
-    border: none;
-    color: var(--primary);
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-}
-
-.outline-btn {
-    padding: 0.5rem 1rem;
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.outline-btn:hover {
-    background: #f1f5f9;
+            .dashboard {
+                /* Adjusted for mobile devices to clear fixed header */
+                margin-top: 6rem; /* Adjusted from 7rem, might need further tweaking based on actual header height */
+            }
         }
     </style>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">
-                <img src="images/logo.png" alt="Logo" class="logo-icon">
+                <img src="https://placehold.co/32x32/2563eb/ffffff?text=S" alt="Logo" class="logo-icon">
                 <span>Student Portal</span>
             </div>
             <button class="mobile-menu-btn">
@@ -652,7 +725,17 @@
             </button>
             <ul class="nav-links">
                 <li><a href="index.html">Back to Academy</a></li>
-                <li><a href="#" id="dashboardLink" style="display: none;">Dashboard</a></li>
+                <li><a href="#" id="dashboardLink" class="active" style="display: none;">Dashboard</a></li>
+                <li><a href="#" id="coursesLink" style="display: none;">My Courses</a></li>
+                <li><a href="#" id="assignmentsLink" style="display: none;">Assignments</a></li>
+                <li><a href="#" id="gradesLink" style="display: none;">Grades</a></li>
+                <li>
+                    <a href="#" id="messagesLink" style="display: none;">
+                        Messages
+                        <span id="notification-badge" class="notification-badge">0</span>
+                    </a>
+                </li>
+                <li><a href="#" id="settingsLink" style="display: none;">Settings</a></li>
                 <li><a href="#" id="logoutBtn" style="display: none;">Logout</a></li>
             </ul>
         </nav>
@@ -690,7 +773,7 @@
                 <p>Here's what's happening with your courses today.</p>
             </div>
             <div>
-                <button class="cta-button"><i class="fas fa-plus"></i> Join Course</button>
+                <button class="admin-btn"><i class="fas fa-plus"></i> Join Course</button>
             </div>
         </div>
         
@@ -698,7 +781,7 @@
             <aside class="sidebar">
                 <div class="user-profile">
                     <div class="user-avatar-container">
-                        <img id="userAvatarImg" src="images/default-avatar.png" alt="Profile Picture">
+                        <img id="userAvatarImg" src="https://placehold.co/100x100/e2e8f0/64748b?text=User" alt="Profile Picture">
                         <label for="avatarUpload" class="avatar-upload-label">
                             <i class="fas fa-camera"></i>
                             <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
@@ -709,28 +792,33 @@
                 </div>
                 
                 <ul class="sidebar-nav">
-                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> My Courses</a></li>
-                    <li><a href="#"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
-                    <li><a href="#"><i class="fas fa-tasks"></i> Assignments</a></li>
-                    <li><a href="#"><i class="fas fa-chart-bar"></i> Grades</a></li>
-                    <li><a href="#"><i class="fas fa-envelope"></i> Messages</a></li>
-                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" data-section="dashboard" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#" data-section="my-courses"><i class="fas fa-book"></i> My Courses</a></li>
+                    <li><a href="#" data-section="assignments"><i class="fas fa-tasks"></i> Assignments</a></li>
+                    <li><a href="#" data-section="grades"><i class="fas fa-chart-bar"></i> Grades</a></li>
+                    <li>
+                        <a href="#" data-section="messages">
+                            <i class="fas fa-envelope"></i> Messages
+                            <span id="sidebar-notification-badge" class="notification-badge">0</span>
+                        </a>
+                    </li>
+                    <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
                 </ul>
             </aside>
             
             <main class="main-content">
-                <div class="dashboard-card">
+                <!-- Dashboard Section (default view) -->
+                <div class="dashboard-card" id="dashboardCards">
                     <div class="card-header">
                         <h3>Current Courses</h3>
-                        <a href="#">View All</a>
+                        <a href="#" data-section="my-courses">View All</a>
                     </div>
                     <div class="courses-grid" id="currentCourses">
                         <div class="loading">Loading your courses...</div>
                     </div>
                 </div>
                 
-                <div class="dashboard-card">
+                <div class="dashboard-card" id="announcementsCard">
                     <div class="card-header">
                         <h3>Recent Announcements</h3>
                         <a href="#">View All</a>
@@ -740,17 +828,17 @@
                     </div>
                 </div>
                 
-                <div class="dashboard-card">
+                <div class="dashboard-card" id="upcomingAssignmentsCard">
                     <div class="card-header">
                         <h3>Upcoming Assignments</h3>
-                        <a href="#">View All</a>
+                        <a href="#" data-section="assignments">View All</a>
                     </div>
                     <div id="assignmentsList">
                         <div class="loading">Loading assignments...</div>
                     </div>
                 </div>
                 
-                <div class="dashboard-card">
+                <div class="dashboard-card" id="upcomingEventsCard">
                     <div class="card-header">
                         <h3>Upcoming Events</h3>
                         <a href="#">View Calendar</a>
@@ -759,59 +847,90 @@
                         <div class="loading">Loading events...</div>
                     </div>
                 </div>
+
+                <!-- My Courses Section -->
+                <div class="dashboard-card" id="myCoursesSection" style="display: none;">
+                    <div class="card-header">
+                        <h3>All My Courses</h3>
+                    </div>
+                    <div class="courses-grid" id="allCoursesList">
+                        <div class="loading">Loading all your courses...</div>
+                    </div>
+                </div>
+
+                <!-- Assignments Section -->
+                <div class="dashboard-card" id="assignmentsSection" style="display: none;">
+                    <div class="card-header">
+                        <h3>All Assignments</h3>
+                    </div>
+                    <div id="allAssignmentsList">
+                        <div class="loading">Loading all assignments...</div>
+                    </div>
+                </div>
+
                 <!-- Grades Section -->
-<div class="dashboard-card" id="gradesSection" style="display: none;">
-    <div class="card-header">
-        <h3>My Grades</h3>
-        <a href="#">View All</a>
-    </div>
-    <div id="gradesList">
-        <div class="loading">Loading grades...</div>
-    </div>
-</div>
+                <div class="dashboard-card" id="gradesSection" style="display: none;">
+                    <div class="card-header">
+                        <h3>My Grades</h3>
+                        <a href="#">View All</a>
+                    </div>
+                    <div id="gradesList">
+                        <div class="loading">Loading grades...</div>
+                    </div>
+                </div>
 
-<!-- Messages Section -->
-<div class="dashboard-card" id="messagesSection" style="display: none;">
-    <div class="card-header">
-        <h3>Messages</h3>
-        <a href="#">View All</a>
-    </div>
-    <div id="messagesList">
-        <div class="loading">Loading messages...</div>
-    </div>
-</div>
+                <!-- Messages Section -->
+                <div class="dashboard-card" id="messagesSection" style="display: none;">
+                    <div class="card-header">
+                        <h3>Messages</h3>
+                        <a href="#">View All</a>
+                    </div>
+                    <div id="messagesList">
+                        <div class="loading">Loading messages...</div>
+                    </div>
+                </div>
 
-<!-- Settings Section -->
-<div class="dashboard-card" id="settingsSection" style="display: none;">
-    <div class="card-header">
-        <h3>Account Settings</h3>
-    </div>
-    <div class="settings-form">
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="settingsEmail" disabled>
-        </div>
-        <div class="form-group">
-            <label>Change Password</label>
-            <div class="password-container">
-                <input type="password" id="newPassword" placeholder="New password">
-                <span class="toggle-password" onclick="togglePasswordVisibility('newPassword')">
-                    <i class="far fa-eye"></i>
-                </span>
-            </div>
-        </div>
-        <button class="admin-btn" id="saveSettings">Save Changes</button>
-    </div>
-</div>
+                <!-- Settings Section -->
+                <div class="dashboard-card" id="settingsSection" style="display: none;">
+                    <div class="card-header">
+                        <h3>Account Settings</h3>
+                    </div>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="settingsEmail" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Change Password</label>
+                            <div class="password-container">
+                                <input type="password" id="newPassword" placeholder="New password">
+                                <span class="toggle-password" onclick="togglePasswordVisibility('newPassword')">
+                                    <i class="far fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="admin-btn" id="saveSettings">Save Changes</button>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
     
+    <!-- Custom Alert/Message Modal (reused from admin portal for consistency) -->
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p id="modalMessage"></p>
+            <button class="admin-btn" onclick="document.getElementById('customModal').style.display = 'none'">OK</button>
+        </div>
+    </div>
+
     <script>
-        // Add to the top of your script section
-window.addEventListener('load', () => {
-    window.scrollTo(0, 0);
-});
+        // Ensure the page starts at the top
+        window.addEventListener('load', () => {
+            window.scrollTo(0, 0);
+        });
+
         // Initialize Firebase with your config
         const firebaseConfig = {
             apiKey: "AIzaSyBxNLV0sCUeKh_qCPIlkIitL119LmRnLzE",
@@ -830,14 +949,57 @@ window.addEventListener('load', () => {
         const loginSection = document.getElementById('loginSection');
         const dashboardSection = document.getElementById('dashboardSection');
         const logoutBtn = document.getElementById('logoutBtn');
-        const dashboardLink = document.getElementById('dashboardLink');
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
         const avatarUpload = document.getElementById('avatarUpload');
         const userAvatarImg = document.getElementById('userAvatarImg');
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
-        
+
+        // Navigation Links
+        const dashboardLink = document.getElementById('dashboardLink');
+        const coursesLink = document.getElementById('coursesLink');
+        const assignmentsLink = document.getElementById('assignmentsLink');
+        const gradesLink = document.getElementById('gradesLink');
+        const messagesLink = document.getElementById('messagesLink');
+        const settingsLink = document.getElementById('settingsLink');
+
+        // Section Containers
+        const dashboardCards = document.getElementById('dashboardCards'); // Contains current courses, announcements, assignments, events
+        const announcementsCard = document.getElementById('announcementsCard');
+        const upcomingAssignmentsCard = document.getElementById('upcomingAssignmentsCard');
+        const upcomingEventsCard = document.getElementById('upcomingEventsCard');
+        const myCoursesSection = document.getElementById('myCoursesSection');
+        const assignmentsSection = document.getElementById('assignmentsSection');
+        const gradesSection = document.getElementById('gradesSection');
+        const messagesSection = document.getElementById('messagesSection');
+        const settingsSection = document.getElementById('settingsSection');
+
+        // Notification Badges
+        const notificationBadgeNav = document.getElementById('notification-badge');
+        const notificationBadgeSidebar = document.getElementById('sidebar-notification-badge');
+
+        // Custom Modal Elements
+        const customModal = document.getElementById('customModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeButton = document.querySelector('.close-button');
+
+        // Function to display custom messages
+        function showModal(message) {
+            modalMessage.textContent = message;
+            customModal.style.display = 'flex'; // Use flex to center
+        }
+
+        closeButton.onclick = function() {
+            customModal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == customModal) {
+                customModal.style.display = 'none';
+            }
+        }
+
         // Mobile menu toggle
         mobileMenuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
@@ -849,9 +1011,17 @@ window.addEventListener('load', () => {
             passwordInput.setAttribute('type', type);
             togglePassword.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
         });
+
+        function togglePasswordVisibility(id) {
+            const input = document.getElementById(id);
+            const icon = input.nextElementSibling.querySelector('i');
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            icon.className = type === 'password' ? 'far fa-eye' : 'far fa-eye-slash';
+        }
         
         // Login Form Submission
-        loginForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -861,71 +1031,87 @@ window.addEventListener('load', () => {
             loginBtn.disabled = true;
             loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
             
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Hide login, show dashboard
-                    loginSection.style.display = 'none';
-                    dashboardSection.style.display = 'block';
-                    dashboardLink.style.display = 'block';
-                    logoutBtn.style.display = 'block';
-                    
-                    // Load user data
-                    updateDashboard(userCredential.user);
-                })
-                .catch((error) => {
-                    alert(error.message);
-                    loginBtn.disabled = false;
-                    loginBtn.textContent = 'Login';
-                });
+            try {
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                // Hide login, show dashboard
+                loginSection.style.display = 'none';
+                dashboardSection.style.display = 'block';
+                // Show navigation links
+                dashboardLink.style.display = 'block';
+                coursesLink.style.display = 'block';
+                assignmentsLink.style.display = 'block';
+                gradesLink.style.display = 'block';
+                messagesLink.style.display = 'block';
+                settingsLink.style.display = 'block';
+                logoutBtn.style.display = 'block';
+                
+                // Load user data
+                await updateDashboard(userCredential.user);
+                await loadNotificationCount(userCredential.user.uid); // Load notification count on login
+            } catch (error) {
+                showModal(error.message);
+                console.error("Login error:", error);
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
         });
         
         // Logout Functionality
-        logoutBtn.addEventListener('click', (e) => {
+        logoutBtn.addEventListener('click', async (e) => {
             e.preventDefault();
-            firebase.auth().signOut().then(() => {
+            try {
+                await firebase.auth().signOut();
                 // Show login form
                 loginSection.style.display = 'block';
                 dashboardSection.style.display = 'none';
+                // Hide navigation links
                 dashboardLink.style.display = 'none';
+                coursesLink.style.display = 'none';
+                assignmentsLink.style.display = 'none';
+                gradesLink.style.display = 'none';
+                messagesLink.style.display = 'none';
+                settingsLink.style.display = 'none';
                 logoutBtn.style.display = 'none';
                 
                 // Clear form
                 loginForm.reset();
                 passwordInput.type = 'password';
                 togglePassword.innerHTML = '<i class="far fa-eye"></i>';
-            });
+            } catch (error) {
+                showModal('Error logging out: ' + error.message);
+                console.error("Error logging out:", error);
+            }
         });
         
         // Profile picture handling
-        avatarUpload.addEventListener('change', (e) => {
+        avatarUpload.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (file) {
                 const userId = firebase.auth().currentUser.uid;
                 const storageRef = firebase.storage().ref();
-                const uploadTask = storageRef.child(`profile-pictures/${userId}`).put(file);
+                const fileRef = storageRef.child(`profile-pictures/${userId}`);
                 
                 // Show loading state
                 userAvatarImg.style.opacity = '0.5';
                 
-                uploadTask.on('state_changed',
-                    null,
-                    (error) => {
-                        console.error("Upload error:", error);
-                        alert("Error uploading picture: " + error.message);
-                        userAvatarImg.style.opacity = '1';
-                    },
-                    () => {
-                        // Upload complete
-                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                            userAvatarImg.src = downloadURL;
-                            userAvatarImg.style.opacity = '1';
-                            // Save URL to user's Firestore document
-                            firebase.firestore().collection('students').doc(userId).update({
-                                profilePicture: downloadURL
-                            });
-                        });
-                    }
-                );
+                try {
+                    const uploadTask = fileRef.put(file);
+                    await uploadTask; // Wait for upload to complete
+                    const downloadURL = await fileRef.getDownloadURL();
+                    
+                    userAvatarImg.src = downloadURL;
+                    userAvatarImg.style.opacity = '1';
+                    // Save URL to user's Firestore document
+                    await firebase.firestore().collection('students').doc(userId).update({
+                        profilePicture: downloadURL
+                    });
+                    showModal('Profile picture updated successfully!');
+                } catch (error) {
+                    console.error("Upload error:", error);
+                    showModal("Error uploading picture: " + error.message);
+                    userAvatarImg.style.opacity = '1';
+                }
             }
         });
         
@@ -947,14 +1133,15 @@ window.addEventListener('load', () => {
                     document.getElementById('greetingName').textContent = userData.firstName;
                     document.getElementById('userEmail').textContent = user.email;
                     
-                    // Load other data
-                    await loadCourses(user.uid);
+                    // Load other data for dashboard view
+                    await loadCourses(user.uid, 'currentCourses');
                     await loadAnnouncements(user.uid);
-                    await loadAssignments(user.uid);
+                    await loadAssignments(user.uid, 'assignmentsList', true); // Load upcoming assignments
                     await loadCalendarEvents(user.uid);
                 }
             } catch (error) {
                 console.error("Error loading user data:", error);
+                showModal("Error loading user data: " + error.message);
             }
         }
         
@@ -966,19 +1153,20 @@ window.addEventListener('load', () => {
                 })
                 .catch(() => {
                     // Use default if no picture exists
-                    userAvatarImg.src = "images/default-avatar.png";
+                    userAvatarImg.src = "https://placehold.co/100x100/e2e8f0/64748b?text=User";
                 });
         }
         
         // Load courses
-        async function loadCourses(userId) {
-            const container = document.getElementById('currentCourses');
+        async function loadCourses(userId, containerId, allCourses = false) {
+            const container = document.getElementById(containerId);
             container.innerHTML = '<div class="loading">Loading courses...</div>';
             
             try {
-                const snapshot = await firebase.firestore().collection('enrollments')
-                    .where('studentId', '==', userId)
-                    .get();
+                let query = firebase.firestore().collection('enrollments')
+                    .where('studentId', '==', userId);
+                
+                const snapshot = await query.get();
                     
                 if (snapshot.empty) {
                     container.innerHTML = '<div class="no-data">No courses enrolled yet</div>';
@@ -994,22 +1182,24 @@ window.addEventListener('load', () => {
                 
                 const courses = await Promise.all(coursesPromises);
                 courses.forEach(course => {
-                    const courseCard = document.createElement('div');
-                    courseCard.className = 'course-card';
-                    courseCard.innerHTML = `
-                        <div class="course-image" style="background: ${getCategoryColor(course.category)}">
-                            <div class="course-progress" style="width: ${Math.floor(Math.random() * 100)}%"></div>
-                        </div>
-                        <div class="course-content">
-                            <h4 class="course-title">${course.name}</h4>
-                            <p class="course-instructor">${course.duration}</p>
-                            <div class="course-meta">
-                                <span><i class="fas fa-book"></i> ${course.category.toUpperCase()}</span>
-                                <span><i class="fas fa-calendar"></i> Started: ${new Date().toLocaleDateString()}</span>
+                    if (course) { // Ensure course data exists
+                        const courseCard = document.createElement('div');
+                        courseCard.className = 'course-card';
+                        courseCard.innerHTML = `
+                            <div class="course-image" style="background: ${getCategoryColor(course.category)}">
+                                <div class="course-progress" style="width: ${Math.floor(Math.random() * 100)}%"></div>
                             </div>
-                        </div>
-                    `;
-                    container.appendChild(courseCard);
+                            <div class="course-content">
+                                <h4 class="course-title">${course.name}</h4>
+                                <p class="course-instructor">${course.duration}</p>
+                                <div class="course-meta">
+                                    <span><i class="fas fa-book"></i> ${course.category ? course.category.toUpperCase() : 'N/A'}</span>
+                                    <span><i class="fas fa-calendar"></i> Started: ${new Date().toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(courseCard);
+                    }
                 });
             } catch (error) {
                 console.error("Error loading courses:", error);
@@ -1065,17 +1255,20 @@ window.addEventListener('load', () => {
         }
         
         // Load assignments
-        async function loadAssignments(userId) {
-            const container = document.getElementById('assignmentsList');
+        async function loadAssignments(userId, containerId, upcomingOnly = false) {
+            const container = document.getElementById(containerId);
             container.innerHTML = '<div class="loading">Loading assignments...</div>';
             
             try {
-                const snapshot = await firebase.firestore().collection('assignments')
-                    .where('forStudents', 'array-contains', userId)
-                    .where('dueDate', '>=', new Date())
-                    .orderBy('dueDate', 'asc')
-                    .limit(5)
-                    .get();
+                let query = firebase.firestore().collection('assignments')
+                    .where('forStudents', 'array-contains', userId);
+                
+                if (upcomingOnly) {
+                    query = query.where('dueDate', '>=', new Date());
+                }
+                query = query.orderBy('dueDate', 'asc').limit(5); // Limit for dashboard, remove for 'View All'
+
+                const snapshot = await query.get();
                     
                 if (snapshot.empty) {
                     container.innerHTML = '<div class="no-data">No upcoming assignments</div>';
@@ -1087,6 +1280,16 @@ window.addEventListener('load', () => {
                     const assignment = doc.data();
                     const assignmentItem = document.createElement('div');
                     assignmentItem.className = 'assignment-item';
+                    let attachmentsHtml = '';
+                    if (assignment.attachmentUrls && assignment.attachmentUrls.length > 0) {
+                        attachmentsHtml = `
+                            <div style="margin-top: 10px;">
+                                <strong>Attachments:</strong>
+                                ${assignment.attachmentUrls.map(file => `<a href="${file.url}" target="_blank" style="margin-left: 5px;"><i class="fas fa-file-download"></i> ${file.name}</a>`).join('')}
+                            </div>
+                        `;
+                    }
+
                     assignmentItem.innerHTML = `
                         <div class="assignment-header">
                             <h4 class="assignment-title">${assignment.title}</h4>
@@ -1097,9 +1300,11 @@ window.addEventListener('load', () => {
                         <div class="assignment-meta">
                             <span><i class="fas fa-book"></i> ${assignment.course}</span>
                             <span><i class="fas fa-clock"></i> Due: ${new Date(assignment.dueDate.seconds * 1000).toLocaleString()}</span>
+                            <span><i class="fas fa-tag"></i> Category: ${assignment.gradeCategory || 'N/A'}</span>
                         </div>
                         <p class="assignment-description">${assignment.description}</p>
-                        <button class="assignment-action">View Details</button>
+                        ${attachmentsHtml}
+                        <button class="admin-btn" style="margin-top: 10px;">View Details</button>
                     `;
                     container.appendChild(assignmentItem);
                 });
@@ -1152,156 +1357,267 @@ window.addEventListener('load', () => {
         }
         
         // Check Auth State on Page Load
-        firebase.auth().onAuthStateChanged((user) => {
+        firebase.auth().onAuthStateChanged(async (user) => {
             if (user) {
                 // User is signed in
                 loginSection.style.display = 'none';
                 dashboardSection.style.display = 'block';
+                // Show navigation links
                 dashboardLink.style.display = 'block';
+                coursesLink.style.display = 'block';
+                assignmentsLink.style.display = 'block';
+                gradesLink.style.display = 'block';
+                messagesLink.style.display = 'block';
+                settingsLink.style.display = 'block';
                 logoutBtn.style.display = 'block';
-                updateDashboard(user);
+                await updateDashboard(user);
+                await loadNotificationCount(user.uid); // Load notification count on auth state change
             } else {
                 // User is signed out
                 loginSection.style.display = 'block';
                 dashboardSection.style.display = 'none';
+                // Hide navigation links
                 dashboardLink.style.display = 'none';
+                coursesLink.style.display = 'none';
+                assignmentsLink.style.display = 'none';
+                gradesLink.style.display = 'none';
+                messagesLink.style.display = 'none';
+                settingsLink.style.display = 'none';
                 logoutBtn.style.display = 'none';
             }
         });
+
         // Navigation handling
-document.querySelectorAll('.sidebar-nav a').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const section = link.textContent.trim();
-        
-        // Hide all sections first
-        document.querySelectorAll('.dashboard-card').forEach(card => {
-            card.style.display = 'none';
+        document.querySelectorAll('.sidebar-nav a, .card-header a[data-section]').forEach(link => {
+            link.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const sectionName = e.currentTarget.dataset.section;
+                const userId = firebase.auth().currentUser.uid;
+                
+                // Hide all sections first
+                dashboardCards.style.display = 'none'; // This card contains the dashboard overview
+                announcementsCard.style.display = 'none';
+                upcomingAssignmentsCard.style.display = 'none';
+                upcomingEventsCard.style.display = 'none';
+                myCoursesSection.style.display = 'none';
+                assignmentsSection.style.display = 'none';
+                gradesSection.style.display = 'none';
+                messagesSection.style.display = 'none';
+                settingsSection.style.display = 'none';
+                
+                // Show selected section and load data
+                switch(sectionName) {
+                    case 'dashboard':
+                        dashboardCards.style.display = 'block';
+                        announcementsCard.style.display = 'block';
+                        upcomingAssignmentsCard.style.display = 'block';
+                        upcomingEventsCard.style.display = 'block';
+                        await loadCourses(userId, 'currentCourses');
+                        await loadAnnouncements(userId);
+                        await loadAssignments(userId, 'assignmentsList', true);
+                        await loadCalendarEvents(userId);
+                        break;
+                    case 'my-courses':
+                        myCoursesSection.style.display = 'block';
+                        await loadCourses(userId, 'allCoursesList', false); // Load all courses
+                        break;
+                    case 'assignments':
+                        assignmentsSection.style.display = 'block';
+                        await loadAssignments(userId, 'allAssignmentsList', false); // Load all assignments
+                        break;
+                    case 'grades':
+                        gradesSection.style.display = 'block';
+                        await loadGrades(userId);
+                        break;
+                    case 'messages':
+                        messagesSection.style.display = 'block';
+                        await loadMessages(userId);
+                        await markNotificationsAsRead(userId); // Mark messages as read when viewed
+                        break;
+                    case 'settings':
+                        settingsSection.style.display = 'block';
+                        loadSettings();
+                        break;
+                }
+                
+                // Update active nav item in sidebar
+                document.querySelectorAll('.sidebar-nav a').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                e.currentTarget.classList.add('active');
+            });
         });
-        
-        // Show selected section
-        switch(section) {
-            case 'Dashboard':
-                document.getElementById('currentCourses').closest('.dashboard-card').style.display = 'block';
-                document.getElementById('announcementsList').closest('.dashboard-card').style.display = 'block';
-                document.getElementById('assignmentsList').closest('.dashboard-card').style.display = 'block';
-                document.getElementById('calendarEvents').closest('.dashboard-card').style.display = 'block';
-                break;
-            case 'My Courses':
-                document.getElementById('currentCourses').closest('.dashboard-card').style.display = 'block';
-                break;
-            case 'Grades':
-                document.getElementById('gradesSection').style.display = 'block';
-                loadGrades(firebase.auth().currentUser.uid);
-                break;
-            case 'Messages':
-                document.getElementById('messagesSection').style.display = 'block';
-                loadMessages(firebase.auth().currentUser.uid);
-                break;
-            case 'Settings':
-                document.getElementById('settingsSection').style.display = 'block';
-                loadSettings();
-                break;
+
+        // Load Grades
+        async function loadGrades(userId) {
+            const container = document.getElementById('gradesList');
+            container.innerHTML = '<div class="loading">Loading grades...</div>';
+            try {
+                const snapshot = await firebase.firestore().collection('grades')
+                    .where('studentId', '==', userId)
+                    .orderBy('date', 'desc')
+                    .get(); // Removed limit for full view
+                    
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="no-data">No grades recorded yet</div>';
+                    return;
+                }
+                
+                container.innerHTML = snapshot.docs.map(doc => {
+                    const grade = doc.data();
+                    let gradeClass = 'text-danger';
+                    if (grade.value >= 70) {
+                        gradeClass = 'text-success';
+                    } else if (grade.value >= 50) {
+                        gradeClass = 'text-warning';
+                    }
+                    return `
+                        <div class="grade-item">
+                            <div class="grade-course">${grade.course} - ${grade.category || 'General'}</div>
+                            <div class="grade-value ${gradeClass}">
+                                ${grade.value}%
+                            </div>
+                            <div class="grade-meta">
+                                ${grade.assignmentId ? `(Assignment: ${grade.assignmentId})<br>` : ''}
+                                ${new Date(grade.date.seconds * 1000).toLocaleDateString()}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error("Grades error:", error);
+                container.innerHTML = '<div class="error">Error loading grades</div>';
+            }
         }
-        
-        // Update active nav item
-        document.querySelectorAll('.sidebar-nav a').forEach(navLink => {
-            navLink.classList.remove('active');
+
+        // Load Messages
+        async function loadMessages(userId) {
+            const container = document.getElementById('messagesList');
+            container.innerHTML = '<div class="loading">Loading messages...</div>';
+            try {
+                const snapshot = await firebase.firestore().collection('messages')
+                    .where('recipientId', '==', userId)
+                    .orderBy('timestamp', 'desc')
+                    .get(); // Removed limit for full view
+                    
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="no-data">No messages</div>';
+                    return;
+                }
+                
+                container.innerHTML = snapshot.docs.map(doc => {
+                    const msg = doc.data();
+                    return `
+                        <div class="message-item ${!msg.read ? 'unread' : ''}" data-message-id="${doc.id}">
+                            <div class="message-sender">${msg.senderName}</div>
+                            <div class="message-subject">${msg.subject}</div>
+                            <div class="message-preview">${msg.content.substring(0, 100)}...</div>
+                            <div class="message-time">
+                                ${new Date(msg.timestamp.seconds * 1000).toLocaleTimeString()}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Add event listeners to mark messages as read on click
+                document.querySelectorAll('.message-item').forEach(item => {
+                    item.addEventListener('click', async () => {
+                        const messageId = item.dataset.messageId;
+                        if (messageId) {
+                            await firebase.firestore().collection('messages').doc(messageId).update({ read: true });
+                            item.classList.remove('unread');
+                            await loadNotificationCount(userId); // Update badge after reading
+                        }
+                        // Optionally, show full message content in a modal
+                        showModal(`Full Message: <br><br><strong>${msg.subject}</strong><br>${msg.content}`);
+                    });
+                });
+
+            } catch (error) {
+                console.error("Messages error:", error);
+                container.innerHTML = '<div class="error">Error loading messages</div>';
+            }
+        }
+
+        // Load Settings
+        function loadSettings() {
+            const user = firebase.auth().currentUser;
+            if (user) {
+                document.getElementById('settingsEmail').value = user.email;
+            }
+        }
+
+        // Save Settings
+        document.getElementById('saveSettings').addEventListener('click', async () => {
+            const newPassword = document.getElementById('newPassword').value;
+            const saveBtn = document.getElementById('saveSettings');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            if (newPassword) {
+                try {
+                    await firebase.auth().currentUser.updatePassword(newPassword);
+                    showModal('Password updated successfully!');
+                    document.getElementById('newPassword').value = '';
+                } catch (error) {
+                    showModal('Error updating password: ' + error.message);
+                    console.error("Error updating password:", error);
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Save Changes';
+                }
+            } else {
+                showModal('Please enter a new password.');
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Changes';
+            }
         });
-        link.classList.add('active');
-    });
-});
 
-// Load Grades
-async function loadGrades(userId) {
-    const container = document.getElementById('gradesList');
-    try {
-        const snapshot = await firebase.firestore().collection('grades')
-            .where('studentId', '==', userId)
-            .orderBy('date', 'desc')
-            .limit(5)
-            .get();
-            
-        if (snapshot.empty) {
-            container.innerHTML = '<div class="no-data">No grades recorded yet</div>';
-            return;
+        // Notification Badge Logic
+        async function loadNotificationCount(userId) {
+            try {
+                // Listen for unread messages (can be expanded to other notification types)
+                firebase.firestore().collection('messages')
+                    .where('recipientId', '==', userId)
+                    .where('read', '==', false)
+                    .onSnapshot(snapshot => {
+                        const count = snapshot.size;
+                        if (count > 0) {
+                            notificationBadgeNav.textContent = count;
+                            notificationBadgeSidebar.textContent = count;
+                            notificationBadgeNav.style.display = 'inline-block';
+                            notificationBadgeSidebar.style.display = 'inline-block';
+                        } else {
+                            notificationBadgeNav.style.display = 'none';
+                            notificationBadgeSidebar.style.display = 'none';
+                        }
+                    }, error => {
+                        console.error("Error loading notification count:", error);
+                    });
+            } catch (error) {
+                console.error("Failed to set up notification listener:", error);
+            }
         }
-        
-        container.innerHTML = snapshot.docs.map(doc => {
-            const grade = doc.data();
-            return `
-                <div class="grade-item">
-                    <div class="grade-course">${grade.course}</div>
-                    <div class="grade-value ${grade.value >= 70 ? 'text-success' : grade.value >= 50 ? 'text-warning' : 'text-danger'}">
-                        ${grade.value}%
-                    </div>
-                    <div class="grade-meta">
-                        ${new Date(grade.date.seconds * 1000).toLocaleDateString()}
-                    </div>
-                </div>
-            `;
-        }).join('');
-    } catch (error) {
-        console.error("Grades error:", error);
-        container.innerHTML = '<div class="error">Error loading grades</div>';
-    }
-}
 
-// Load Messages
-async function loadMessages(userId) {
-    const container = document.getElementById('messagesList');
-    try {
-        const snapshot = await firebase.firestore().collection('messages')
-            .where('recipientId', '==', userId)
-            .orderBy('timestamp', 'desc')
-            .limit(5)
-            .get();
-            
-        if (snapshot.empty) {
-            container.innerHTML = '<div class="no-data">No messages</div>';
-            return;
+        // Function to mark notifications as read (e.g., when message section is opened)
+        async function markNotificationsAsRead(userId) {
+            try {
+                const unreadMessagesSnapshot = await firebase.firestore().collection('messages')
+                    .where('recipientId', '==', userId)
+                    .where('read', '==', false)
+                    .get();
+                
+                const batch = firebase.firestore().batch();
+                unreadMessagesSnapshot.docs.forEach(doc => {
+                    batch.update(doc.ref, { read: true });
+                });
+                await batch.commit();
+                // The onSnapshot listener in loadNotificationCount will automatically update the badge
+            } catch (error) {
+                console.error("Error marking messages as read:", error);
+            }
         }
-        
-        container.innerHTML = snapshot.docs.map(doc => {
-            const msg = doc.data();
-            return `
-                <div class="message-item ${!msg.read ? 'unread' : ''}">
-                    <div class="message-sender">${msg.senderName}</div>
-                    <div class="message-subject">${msg.subject}</div>
-                    <div class="message-preview">${msg.content.substring(0, 50)}...</div>
-                    <div class="message-time">
-                        ${new Date(msg.timestamp.seconds * 1000).toLocaleTimeString()}
-                    </div>
-                </div>
-            `;
-        }).join('');
-    } catch (error) {
-        console.error("Messages error:", error);
-        container.innerHTML = '<div class="error">Error loading messages</div>';
-    }
-}
 
-// Load Settings
-function loadSettings() {
-    const user = firebase.auth().currentUser;
-    document.getElementById('settingsEmail').value = user.email;
-}
-
-// Save Settings
-document.getElementById('saveSettings').addEventListener('click', async () => {
-    const newPassword = document.getElementById('newPassword').value;
-    if (newPassword) {
-        try {
-            await firebase.auth().currentUser.updatePassword(newPassword);
-            alert('Password updated successfully!');
-            document.getElementById('newPassword').value = '';
-        } catch (error) {
-            alert('Error updating password: ' + error.message);
-        }
-    }
-});
     </script>
 </body>
 </html>
-
-
