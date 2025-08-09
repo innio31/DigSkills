@@ -288,20 +288,20 @@
                         case 'admin':
                             // Redirect to admin dashboard (placeholder for now)
                             console.log("Admin login successful. Redirecting to admin dashboard.");
-                            window.location.href = '#admin-dashboard';
+                            window.location.href = 'estate-admin.html';
                             break;
                         case 'landlord':
                             // Redirect to landlord dashboard (placeholder for now)
                             console.log("Landlord login successful. Redirecting to landlord dashboard.");
-                            window.location.href = '#landlord-dashboard';
+                            window.location.href = 'estate-landlord.html';
                             break;
                         case 'tenant':
                             // Redirect to the tenant dashboard
-                            window.location.href = './tenant_dashboard.html'; // Or a relevant URL for the tenant dashboard
+                            window.location.href = 'estate-resident.html'; // Or a relevant URL for the tenant dashboard
                             break;
                         case 'security':
                             // Redirect to the security guard dashboard
-                            window.location.href = './security_dashboard.html'; // Or a relevant URL for the security dashboard
+                            window.location.href = 'estate-security.html'; // Or a relevant URL for the security dashboard
                             break;
                         default:
                             loginStatusMessage.textContent = `Login successful, but your user role is unknown. Please contact support.`;
@@ -375,3 +375,4 @@
     </script>
 </body>
 </html>
+
