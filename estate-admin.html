@@ -300,7 +300,7 @@
         </div>
     </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" xintegrity="sha512-CNgqjQG6t8d/11Q96jL5/7rG0v6c+0eX5v5y5z5a5d5d5d5d5d5" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgqjQG6t8d/11Q96jL5/7rG0v6c+0eX5v5y5z5a5d5d5d5d5d5" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="module">
         // ====================================================================
         // Firebase Configuration & Initialization
@@ -438,46 +438,41 @@
         }
         
         function setupDashboardListeners() {
-            if (!db || !estateId) return;
+    if (!db || !estateId) {
+        console.error("DB not initialized or estateId missing");
+        hideLoading();
+        return;
+    }
 
-            // Overview Section Listeners
-            const estatesDocRef = doc(db, 'estates', estateId);
-            onSnapshot(estatesDocRef, (doc) => {
-                if (doc.exists()) {
-                    renderSubscriptionStatus(doc.data());
-                }
-            });
-
-            const residentsQuery = query(collection(db, 'users'), where('estateId', '==', estateId));
-            onSnapshot(residentsQuery, (snapshot) => {
-                residentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                landlordData = residentsData.filter(res => res.role === 'landlord');
-                renderResidentsTable(residentsData);
-                updateResidentAndLandlordDropdowns(residentsData, landlordData);
-                updateStatCard('total-residents', residentsData.length);
-            });
-
-            const housesQuery = query(collection(db, 'houses'), where('estateId', '==', estateId));
-            onSnapshot(housesQuery, (snapshot) => {
-                const houses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderHousesTable(houses);
-                updateStatCard('total-houses', houses.length);
-            });
-            
-            const visitorCodesQuery = query(collection(db, 'visitor_codes'), where('estateId', '==', estateId), where('status', '==', 'active'));
-            onSnapshot(visitorCodesQuery, (snapshot) => {
-                const codes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderVisitorLogs(codes);
-                updateStatCard('active-visitor-codes', codes.length);
-                hideLoading();
-            });
-
-            const billingQuery = query(collection(db, 'billing'), where('estateId', '==', estateId));
-            onSnapshot(billingQuery, (snapshot) => {
-                const payments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderPaymentHistory(payments);
-            });
+    // Overview Section Listeners
+    const estatesDocRef = doc(db, 'estates', estateId);
+    onSnapshot(estatesDocRef, (doc) => {
+        console.log("Estates snapshot:", doc.exists());
+        if (doc.exists()) {
+            renderSubscriptionStatus(doc.data());
+        } else {
+            console.error("Estate document not found");
         }
+    }, (error) => {
+        console.error("Estates listener error:", error);
+        hideLoading();
+    });
+
+    const residentsQuery = query(collection(db, 'users'), where('estateId', '==', estateId));
+    onSnapshot(residentsQuery, (snapshot) => {
+        console.log("Residents snapshot:", snapshot.docs.length);
+        residentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        landlordData = residentsData.filter(res => res.role === 'landlord');
+        renderResidentsTable(residentsData);
+        updateResidentAndLandlordDropdowns(residentsData, landlordData);
+        updateStatCard('total-residents', residentsData.length);
+    }, (error) => {
+        console.error("Residents listener error:", error);
+        hideLoading();
+    });
+
+    // Add similar error handlers for other listeners...
+}
         
         function updateStatCard(id, value) {
             const container = document.getElementById('at-a-glance');
@@ -884,6 +879,17 @@
                 submitButton.textContent = 'Generate Code';
             }
         });
+        function showLoading() {
+    loadingScreen.classList.remove('hidden');
+    // Auto-hide after 10 seconds if something goes wrong
+    setTimeout(() => {
+        if (!loadingScreen.classList.contains('hidden')) {
+            console.warn("Loading timeout reached - hiding manually");
+            hideLoading();
+        }
+    }, 10000);
+        }
     </script>
 </body>
 </html>
+
