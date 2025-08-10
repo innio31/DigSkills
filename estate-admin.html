@@ -325,7 +325,7 @@
         let app, db, auth;
         let estateId = null;
         let residentsData = [];
-        //let landlordData = [];
+        let landlordData = [];
 
         // DOM Elements
         const loginPage = document.getElementById('login-page');
@@ -448,7 +448,7 @@
                 }
             });
 
-            const residentsQuery = query(collection(db, 'users'), where('estateId', '==', estateId));
+          /*   const residentsQuery = query(collection(db, 'users'), where('estateId', '==', estateId));
             onSnapshot(residentsQuery, (snapshot) => {
                 residentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 landlordData = residentsData.filter(res => res.role === 'landlord');
@@ -460,8 +460,8 @@
             const housesQuery = query(collection(db, 'houses'), where('estateId', '==', estateId));
             onSnapshot(housesQuery, (snapshot) => {
                 const houses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderHousesTable(houses);
-                updateStatCard('total-houses', houses.length);
+               renderHousesTable(houses);
+             updateStatCard('total-houses', houses.length);
             });
             
             const visitorCodesQuery = query(collection(db, 'visitor_codes'), where('estateId', '==', estateId), where('status', '==', 'active'));
@@ -476,7 +476,7 @@
             onSnapshot(billingQuery, (snapshot) => {
                 const payments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderPaymentHistory(payments);
-            });
+            }); */
         }
         
         function updateStatCard(id, value) {
@@ -887,4 +887,5 @@
     </script>
 </body>
 </html>
+
 
