@@ -8,6 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
+    <!-- QRCode.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .nav-link-active { background-color: #e0f2fe; color: #1d4ed8; }
@@ -180,17 +187,21 @@
                                     <button type="submit" id="generate-code-button" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition-colors">Generate Code</button>
                                 </form>
                                 <div id="generated-qr-code" class="mt-6 hidden flex flex-col items-center">
-                                    <h3 class="text-lg font-bold text-gray-800 mb-2">QR Code for Visitor</h3>
-                                    <canvas id="qr-canvas" class="p-4 border rounded-xl shadow-inner bg-gray-50"></canvas>
-                                    <p class="mt-2 text-sm text-gray-500" id="qr-expiry-info"></p>
+                                    <h3 class="text-lg font-bold text-gray-800">Visitor QR Code</h3>
+                                    <div id="qr-canvas" class="p-4 bg-gray-200 rounded-lg mt-4"></div>
+                                    <p id="qr-expiry-info" class="mt-2 text-sm text-gray-500 text-center"></p>
                                 </div>
                             </div>
 
                             <div class="bg-white rounded-xl shadow p-6">
-                                <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Visitor Logs</h2>
-                                <div id="visitor-logs-container" class="space-y-4">
-                                    <!-- Visitor logs will be inserted here -->
+                                <h2 class="text-xl font-bold text-gray-800 mb-4">Security Guard Management</h2>
+                                <p class="text-gray-500 mb-4">Add, view, or remove security guards for your estate.</p>
+                                <div id="security-guards-list" class="space-y-4">
+                                    <!-- Security guards will be listed here -->
                                 </div>
+                                <button id="add-security-button" class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                                    Add New Security Guard
+                                </button>
                             </div>
                         </div>
                     </section>
@@ -199,673 +210,399 @@
                     <section id="billing" class="content-section hidden">
                         <h1 class="text-3xl font-bold text-gray-800 mb-6">Billing & Subscription</h1>
                         <div class="bg-white rounded-xl shadow p-6">
-                            <h2 class="text-xl font-bold text-gray-800 mb-4">Subscription Overview</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <div class="bg-gray-50 rounded-lg p-4">
-                                    <p class="text-gray-500 text-sm">Plan</p>
-                                    <p id="billing-plan" class="text-lg font-bold text-gray-800">...</p>
-                                </div>
-                                <div class="bg-gray-50 rounded-lg p-4">
-                                    <p class="text-gray-500 text-sm">Status</p>
-                                    <p id="billing-status" class="text-lg font-bold text-green-500">...</p>
-                                </div>
-                                <div class="bg-gray-50 rounded-lg p-4">
-                                    <p class="text-gray-500 text-sm">Next Due Date</p>
-                                    <p id="billing-due-date" class="text-lg font-bold text-gray-800">...</p>
-                                </div>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800 mt-8 mb-4">Payment History</h3>
-                            <div id="payment-history-container" class="overflow-x-auto">
-                                <!-- Payment history table will be inserted here -->
-                            </div>
+                            <h2 class="text-xl font-bold text-gray-800 mb-4">Manage Subscription</h2>
+                            <p class="text-gray-600">Your current plan details and billing history will be displayed here.</p>
                         </div>
                     </section>
 
-                    <!-- Settings (Placeholder) -->
+                    <!-- Settings -->
                     <section id="settings" class="content-section hidden">
                         <h1 class="text-3xl font-bold text-gray-800 mb-6">Settings</h1>
-                        <p class="text-gray-500">This section is under development. Future features will include updating estate details and managing the admin profile.</p>
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <h2 class="text-xl font-bold text-gray-800 mb-4">Account Settings</h2>
+                            <p class="text-gray-600">Update your profile information and change your password.</p>
+                        </div>
                     </section>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Mobile sidebar toggle -->
-    <div id="overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-40 hidden md:hidden"></div>
-
+    <!-- Modals -->
     <!-- Add Resident Modal -->
     <div id="add-resident-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6">Add New Resident</h3>
-            <p id="modal-message-resident" class="p-3 rounded-lg mb-4 hidden"></p>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-900">Add New Resident</h2>
+                <button id="close-add-resident-modal" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
             <form id="add-resident-form" class="space-y-4">
                 <div>
-                    <label for="residentFullName" class="block text-sm font-medium text-gray-700">Full Name</label>
-                    <input type="text" id="residentFullName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
+                    <label for="resident-full-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" id="resident-full-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
                 </div>
                 <div>
-                    <label for="residentEmail" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="residentEmail" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
+                    <label for="resident-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="resident-email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
                 </div>
                 <div>
-                    <label for="residentPassword" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="residentPassword" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
-                    <p class="mt-1 text-xs text-gray-500">Min. 6 characters.</p>
+                    <label for="resident-phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <input type="tel" id="resident-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
                 </div>
                 <div>
-                    <label for="residentRole" class="block text-sm font-medium text-gray-700">Role</label>
-                    <select id="residentRole" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required>
-                        <option value="landlord">Landlord</option>
-                        <option value="tenant">Tenant</option>
+                    <label for="resident-house" class="block text-sm font-medium text-gray-700">House/Unit</label>
+                    <select id="resident-house" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required>
+                        <option value="">Select a house</option>
                     </select>
                 </div>
-                <div class="flex justify-end space-x-4 mt-6">
-                    <button type="button" id="close-resident-modal" class="bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit" id="add-resident-submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                        Add Resident
-                    </button>
-                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition-colors">Add Resident</button>
             </form>
         </div>
     </div>
+    <!-- End Add Resident Modal -->
 
     <!-- Add House Modal -->
     <div id="add-house-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6">Add New House</h3>
-            <p id="modal-message-house" class="p-3 rounded-lg mb-4 hidden"></p>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-900">Add New House</h2>
+                <button id="close-add-house-modal" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
             <form id="add-house-form" class="space-y-4">
                 <div>
-                    <label for="houseAddress" class="block text-sm font-medium text-gray-700">House Address</label>
-                    <input type="text" id="houseAddress" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
+                    <label for="house-number" class="block text-sm font-medium text-gray-700">House/Unit Number</label>
+                    <input type="text" id="house-number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
                 </div>
                 <div>
-                    <label for="landlordSelect" class="block text-sm font-medium text-gray-700">Landlord (Optional)</label>
-                    <select id="landlordSelect" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
-                        <option value="">Select a landlord</option>
-                    </select>
+                    <label for="house-type" class="block text-sm font-medium text-gray-700">Type</label>
+                    <input type="text" id="house-type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="e.g., Duplex, Apartment" required />
                 </div>
-                <div class="flex justify-end space-x-4 mt-6">
-                    <button type="button" id="close-house-modal" class="bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit" id="add-house-submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                        Add House
-                    </button>
-                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition-colors">Add House</button>
             </form>
         </div>
     </div>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgqjQG6t8d/11Q96jL5/7rG0v6c+0eX5v5y5z5a5d5d5d5d5d5" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- End Add House Modal -->
+
+    <!-- Add Security Guard Modal -->
+    <div id="add-security-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-900">Add New Security Guard</h2>
+                <button id="close-add-security-modal" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <form id="add-security-form" class="space-y-4">
+                <div>
+                    <label for="security-full-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" id="security-full-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
+                </div>
+                <div>
+                    <label for="security-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="security-email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
+                </div>
+                <div>
+                    <label for="security-password" class="block text-sm font-medium text-gray-700">Temporary Password</label>
+                    <input type="text" id="security-password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition-colors">Add Security Guard</button>
+            </form>
+        </div>
+    </div>
+    <!-- End Add Security Guard Modal -->
+
+    <!-- Scripts -->
     <script type="module">
-        // ====================================================================
-        // Firebase Configuration & Initialization
-        // ====================================================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, query, where, onSnapshot, doc, getDoc, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, onSnapshot, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // IMPORTANT: Paste your Firebase config object here.
-        // You can find this in your Firebase console under "Project settings".
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        // Firebase SDKs - IMPORTANT: Replace with your actual Firebase config
         const firebaseConfig = {
-          apiKey: "AIzaSyAI7vUwO3B36biuw5BzpiYaa3lafqVGsK0",
-            authDomain: "digskills-estate-app.firebaseapp.com",
-              projectId: "digskills-estate-app",
-                storageBucket: "digskills-estate-app.firebasestorage.app",
-                  messagingSenderId: "154722128946",
-                    appId: "1:154722128946:web:07973f09ba2a9907c8d82b",
-                      measurementId: "G-646V2WTPEP"
-                      };
-
-        let app, db, auth;
-        let estateId = null;
-        let residentsData = [];
-        let landlordData = [];
+        apiKey: "AIzaSyAI7vUwO3B36biuw5BzpiYaa3lafqVGsK0",
+        authDomain: "digskills-estate-app.firebaseapp.com",
+        projectId: "digskills-estate-app",
+        storageBucket: "digskills-estate-app.firebasestorage.app",
+        messagingSenderId: "154722128946",
+        appId: "1:154722128946:web:07973f09ba2a9907c8d82b",
+        measurementId: "G-646V2WTPEP"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
         // DOM Elements
         const loginPage = document.getElementById('login-page');
         const dashboardWrapper = document.getElementById('dashboard-wrapper');
         const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const loadingScreen = document.getElementById('loading-screen');
         const logoutButton = document.getElementById('logout-button');
-        const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
-        const overlay = document.getElementById('overlay');
+        const sidebar = document.getElementById('sidebar');
         const navLinks = document.querySelectorAll('.nav-link');
         const contentSections = document.querySelectorAll('.content-section');
-        const loadingScreen = document.getElementById('loading-screen');
-        const loginError = document.getElementById('login-error');
-        
-        // Modals
+
+        // Modals and Forms
         const addResidentModal = document.getElementById('add-resident-modal');
         const addResidentButton = document.getElementById('add-resident-button');
-        const closeResidentModalButton = document.getElementById('close-resident-modal');
+        const closeAddResidentModal = document.getElementById('close-add-resident-modal');
         const addResidentForm = document.getElementById('add-resident-form');
-        const modalMessageResident = document.getElementById('modal-message-resident');
+        const residentHouseSelect = document.getElementById('resident-house');
 
         const addHouseModal = document.getElementById('add-house-modal');
         const addHouseButton = document.getElementById('add-house-button');
-        const closeHouseModalButton = document.getElementById('close-house-modal');
+        const closeAddHouseModal = document.getElementById('close-add-house-modal');
         const addHouseForm = document.getElementById('add-house-form');
-        const modalMessageHouse = document.getElementById('modal-message-house');
 
-        // Security
+        const addSecurityModal = document.getElementById('add-security-modal');
+        const addSecurityButton = document.getElementById('add-security-button');
+        const closeAddSecurityModal = document.getElementById('close-add-security-modal');
+        const addSecurityForm = document.getElementById('add-security-form');
+        
         const generateCodeForm = document.getElementById('generate-code-form');
-        const qrCanvas = document.getElementById('qr-canvas');
-        const generatedQrCodeDiv = document.getElementById('generated-qr-code');
-        const qrExpiryInfo = document.getElementById('qr-expiry-info');
         const residentSelect = document.getElementById('resident-select');
-        const visitorLogsContainer = document.getElementById('visitor-logs-container');
-        
-        // Billing
-        const paymentHistoryContainer = document.getElementById('payment-history-container');
+        const generatedQrCodeDiv = document.getElementById('generated-qr-code');
+        const qrCanvas = document.getElementById('qr-canvas');
+        const qrExpiryInfo = document.getElementById('qr-expiry-info');
 
-        const statCards = [
-            { id: 'total-houses', title: "Total Houses", icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 13h6m-3 6v-6" /></svg>` },
-            { id: 'total-residents', title: "Residents", icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>` },
-            { id: 'active-visitor-codes', title: "Active Visitor Codes", icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 22h-1.259c-.218-.324-.472-.659-.762-1S9 12s-4 4-6 6-4-4-6-6-4-4-6-6-4-6-6-6z" /></svg>` }
-        ];
-        
-        function showLoading() {
-            loadingScreen.classList.remove('hidden');
-        }
+        let userRole = null;
+        let userEstateId = null;
 
-        function hideLoading() {
-            loadingScreen.classList.add('hidden');
-        }
-
-        async function initFirebase() {
-            try {
-                if (Object.values(firebaseConfig).some(value => value.includes('YOUR_'))) {
-                    console.error("Firebase config is not set. Please update the `firebaseConfig` object with your project's details.");
-                    loginError.textContent = 'Firebase config is not set. Please check the code and update your details.';
-                    loginError.classList.remove('hidden');
-                    return;
-                }
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        renderDashboard(user);
-                    } else {
-                        renderLogin();
-                    }
-                });
-            } catch (e) {
-                console.error("Error initializing Firebase:", e);
-                loginError.textContent = 'Error initializing Firebase. Please check your config.';
-                loginError.classList.remove('hidden');
-            }
-        }
-        
-        function renderLogin() {
-            loginPage.classList.remove('hidden');
-            dashboardWrapper.classList.add('hidden');
-        }
-
-        async function renderDashboard(user) {
-            loginPage.classList.add('hidden');
-            dashboardWrapper.classList.remove('hidden');
-            showLoading();
-            
-            const userDocRef = doc(db, 'users', user.uid);
-            try {
-                const docSnap = await getDoc(userDocRef);
-                if (docSnap.exists() && docSnap.data().estateId && docSnap.data().role === 'admin') {
-                    estateId = docSnap.data().estateId;
-                    console.log("Admin user logged in. Estate ID:", estateId);
-                    setupDashboardListeners();
-                } else {
-                    console.error("User is not an admin or is not linked to an estate.");
-                    loginError.textContent = "Access denied. Only admin users with a valid estateId are allowed. Please ensure your Firestore 'users' collection is set up correctly.";
-                    loginError.classList.remove('hidden');
-                    await signOut(auth); // Log out non-admin users
-                    hideLoading();
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-                loginError.textContent = "Error fetching user data. Please ensure your Firestore 'users' collection is set up correctly.";
-                loginError.classList.remove('hidden');
-                await signOut(auth);
-                hideLoading();
-            }
-        }
-        
-        function setupDashboardListeners() {
-            if (!db || !estateId) return;
-
-            // Overview Section Listeners
-            const estatesDocRef = doc(db, 'estates', estateId);
-            onSnapshot(estatesDocRef, (doc) => {
-                if (doc.exists()) {
-                    renderSubscriptionStatus(doc.data());
-                }
-            });
-
-          /*   const residentsQuery = query(collection(db, 'users'), where('estateId', '==', estateId));
-            onSnapshot(residentsQuery, (snapshot) => {
-                residentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                landlordData = residentsData.filter(res => res.role === 'landlord');
-                renderResidentsTable(residentsData);
-                updateResidentAndLandlordDropdowns(residentsData, landlordData);
-                updateStatCard('total-residents', residentsData.length);
-            });
-
-            const housesQuery = query(collection(db, 'houses'), where('estateId', '==', estateId));
-            onSnapshot(housesQuery, (snapshot) => {
-                const houses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-               renderHousesTable(houses);
-             updateStatCard('total-houses', houses.length);
-            });
-            
-            const visitorCodesQuery = query(collection(db, 'visitor_codes'), where('estateId', '==', estateId), where('status', '==', 'active'));
-            onSnapshot(visitorCodesQuery, (snapshot) => {
-                const codes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderVisitorLogs(codes);
-                updateStatCard('active-visitor-codes', codes.length);
-                hideLoading();
-            });
-
-            const billingQuery = query(collection(db, 'billing'), where('estateId', '==', estateId));
-            onSnapshot(billingQuery, (snapshot) => {
-                const payments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderPaymentHistory(payments);
-            }); */
-        }
-        
-        function updateStatCard(id, value) {
-            const container = document.getElementById('at-a-glance');
-            let card = container.querySelector(`[data-id="${id}"]`);
-            if (!card) {
-                const stat = statCards.find(s => s.id === id);
-                card = document.createElement('div');
-                card.dataset.id = id;
-                card.className = "bg-white rounded-xl shadow p-6 flex items-center space-x-4";
-                card.innerHTML = `
-                    <div class="p-3 bg-blue-100 rounded-full text-blue-600">${stat.icon}</div>
-                    <div>
-                        <p class="text-gray-500 text-sm">${stat.title}</p>
-                        <h3 class="text-2xl font-bold text-gray-800" id="${id}-value">${value}</h3>
-                    </div>
-                `;
-                container.appendChild(card);
-            } else {
-                document.getElementById(`${id}-value`).textContent = value;
-            }
-        }
-        
-        function renderSubscriptionStatus(data) {
-            const statusLabel = document.getElementById('status-label');
-            statusLabel.textContent = data.subscriptionStatus;
-            document.getElementById('expiry-date').textContent = new Date(data.subscriptionEndDate.seconds * 1000).toDateString();
-            statusLabel.className = `font-semibold ${data.subscriptionStatus === 'active' ? 'text-green-500' : 'text-yellow-500'}`;
-            
-            document.getElementById('billing-plan').textContent = data.plan;
-            document.getElementById('billing-status').textContent = data.subscriptionStatus;
-            document.getElementById('billing-status').className = `text-lg font-bold ${data.subscriptionStatus === 'active' ? 'text-green-500' : 'text-yellow-500'}`;
-            document.getElementById('billing-due-date').textContent = new Date(data.subscriptionEndDate.seconds * 1000).toDateString();
-        }
-
-        function renderResidentsTable(residents) {
-            const tableBody = residents.map(resident => {
-                const statusColor = { 'pending': 'bg-yellow-100 text-yellow-800', 'approved': 'bg-green-100 text-green-800', }[resident.status] || 'bg-gray-100 text-gray-800';
-                return `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${resident.fullName}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${resident.role}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${resident.email}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">
-                                ${resident.status}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${resident.id}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button class="text-blue-600 hover:text-blue-900 transition-colors">Edit</button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-            const tableHTML = `
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        ${tableBody}
-                    </tbody>
-                </table>
-            `;
-            document.getElementById('residents-table-container').innerHTML = tableHTML;
-        }
-
-        function renderHousesTable(houses) {
-            const tableBody = houses.map(house => {
-                const statusColor = house.status === 'occupied' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-                return `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${house.address}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${house.landlordUid}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${house.tenantUid || 'N/A'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">
-                                ${house.status}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button class="text-blue-600 hover:text-blue-900 transition-colors">View</button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-            const tableHTML = `
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Landlord UID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tenant UID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        ${tableBody}
-                    </tbody>
-                </table>
-            `;
-            document.getElementById('houses-table-container').innerHTML = tableHTML;
-        }
-
-        function updateResidentAndLandlordDropdowns(allResidents, landlords) {
-            // Update resident dropdown for security page
-            residentSelect.innerHTML = `<option value="">Select a resident</option>` + allResidents.map(r => `<option value="${r.id}">${r.fullName} (${r.role})</option>`).join('');
-
-            // Update landlord dropdown for add house modal
-            const landlordSelect = document.getElementById('landlordSelect');
-            landlordSelect.innerHTML = `<option value="">Select a landlord</option>` + landlords.map(l => `<option value="${l.id}">${l.fullName}</option>`).join('');
-        }
-        
-        function renderVisitorLogs(codes) {
-            if (codes.length === 0) {
-                visitorLogsContainer.innerHTML = `<p class="text-gray-500">No active visitor codes found.</p>`;
-                return;
-            }
-            const logsHTML = codes.map(code => {
-                const expiryTime = new Date(code.expiry.seconds * 1000).toLocaleString();
-                const resident = residentsData.find(r => r.id === code.residentId);
-                const residentName = resident ? resident.fullName : 'N/A';
-                return `
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm font-medium text-gray-900">Visitor: <span class="font-normal">${code.visitorName}</span></p>
-                                <p class="text-xs text-gray-500">For: ${residentName}</p>
-                            </div>
-                            <p class="text-xs text-gray-400">Expires: ${expiryTime}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            visitorLogsContainer.innerHTML = logsHTML;
-        }
-
-        function renderPaymentHistory(payments) {
-             if (payments.length === 0) {
-                paymentHistoryContainer.innerHTML = `<p class="text-gray-500">No payment history found.</p>`;
-                return;
-            }
-            const tableBody = payments.map(p => {
-                const statusColor = p.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-                return `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${p.invoiceId}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$${p.amount}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${new Date(p.paymentDate.seconds * 1000).toDateString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">
-                                ${p.status}
-                            </span>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-            const tableHTML = `
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        ${tableBody}
-                    </tbody>
-                </table>
-            `;
-            paymentHistoryContainer.innerHTML = tableHTML;
-        }
-        
-        // Event Listeners
-        window.onload = function() {
-            initFirebase();
-            document.querySelector('a[href="#overview"]').classList.add('nav-link-active');
-        };
-
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                loginError.classList.add('hidden');
-            } catch (error) {
-                loginError.textContent = 'Login failed. Please check your credentials.';
-                loginError.classList.remove('hidden');
-                console.error("Login Error:", error);
-            }
-        });
-
-        logoutButton.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-            } catch (error) {
-                console.error("Logout Error:", error);
-            }
-        });
-
+        // Function to toggle sidebar for mobile
         sidebarToggle.addEventListener('click', () => {
             sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
         });
 
-        overlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
+        // Function to handle login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = loginForm['login-email'].value;
+            const password = loginForm['login-password'].value;
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                // The onAuthStateChanged listener will handle the UI update
+            } catch (error) {
+                console.error("Login failed:", error);
+                loginError.textContent = "Invalid email or password.";
+                loginError.classList.remove('hidden');
+            }
         });
 
+        // Function to handle logout
+        logoutButton.addEventListener('click', async () => {
+            await signOut(auth);
+            // The onAuthStateChanged listener will handle the UI update
+        });
+
+        // Function to fetch all necessary dashboard data
+        const fetchDashboardData = async (estateId) => {
+            try {
+                // Example of fetching resident and house data
+                const residentsQuery = query(collection(db, "users"), where("estateId", "==", estateId), where("role", "==", "tenant"));
+                const housesQuery = query(collection(db, "houses"), where("estateId", "==", estateId));
+                
+                const [residentsSnapshot, housesSnapshot] = await Promise.all([
+                    getDocs(residentsQuery),
+                    getDocs(housesQuery)
+                ]);
+
+                const residents = residentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const houses = housesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                // Populate UI with fetched data
+                populateResidentTable(residents);
+                populateHouseSelect(houses);
+
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+                loadingScreen.innerHTML = `<p class="text-red-500">Error loading data. Please try again.</p>`;
+            } finally {
+                // Hide loading screen after all data is fetched
+                setTimeout(() => {
+                    loadingScreen.classList.add('opacity-0');
+                    setTimeout(() => loadingScreen.classList.add('hidden'), 300);
+                }, 500);
+            }
+        };
+
+        // UI population functions
+        const populateResidentTable = (residents) => {
+            const residentsTableContainer = document.getElementById('residents-table-container');
+            let tableHtml = `<table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">House</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">`;
+            residents.forEach(resident => {
+                tableHtml += `<tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${resident.fullName}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${resident.email}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${resident.houseId || 'N/A'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Active</td>
+                </tr>`;
+            });
+            tableHtml += `</tbody></table>`;
+            residentsTableContainer.innerHTML = tableHtml;
+        };
+
+        const populateHouseSelect = (houses) => {
+            let optionsHtml = '<option value="">Select a house</option>';
+            houses.forEach(house => {
+                optionsHtml += `<option value="${house.id}">${house.number}</option>`;
+            });
+            residentHouseSelect.innerHTML = optionsHtml;
+        };
+
+        // Firebase Auth State Observer
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in, get their data
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists()) {
+                        userRole = userDoc.data().role;
+                        userEstateId = userDoc.data().estateId;
+
+                        // Check if the user has a valid role for this dashboard
+                        if (userRole === 'admin' || userRole === 'landlord') {
+                            // Hide login, show dashboard and loading screen
+                            loginPage.classList.add('hidden');
+                            dashboardWrapper.classList.remove('hidden');
+                            loadingScreen.classList.remove('hidden', 'opacity-0');
+                            
+                            // Fetch all dashboard data
+                            await fetchDashboardData(userEstateId);
+                            
+                            // Show first content section by default
+                            document.querySelector('.nav-link').classList.add('nav-link-active');
+                            document.querySelector('.content-section').classList.remove('hidden');
+                        } else {
+                            // If the user's role is not admin/landlord, log them out
+                            await signOut(auth);
+                            alert("You do not have permission to access this dashboard.");
+                        }
+                    } else {
+                        // User document not found
+                        console.error("User document not found.");
+                        await signOut(auth);
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    await signOut(auth);
+                }
+            } else {
+                // User is signed out
+                loginPage.classList.remove('hidden');
+                dashboardWrapper.classList.add('hidden');
+                userRole = null;
+                userEstateId = null;
+                // Clear any active links and content
+                navLinks.forEach(link => link.classList.remove('nav-link-active'));
+                contentSections.forEach(section => section.classList.add('hidden'));
+            }
+        });
+
+        // Navigation link functionality
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetId = e.currentTarget.getAttribute('href').substring(1);
-                
-                contentSections.forEach(section => {
-                    section.classList.add('hidden');
-                });
-                
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    targetSection.classList.remove('hidden');
-                }
-
                 navLinks.forEach(nav => nav.classList.remove('nav-link-active'));
-                e.currentTarget.classList.add('nav-link-active');
-
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
+                link.classList.add('nav-link-active');
+                
+                const targetId = link.getAttribute('href').substring(1);
+                contentSections.forEach(section => {
+                    if (section.id === targetId) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
             });
         });
 
-        // Add Resident Modal
-        addResidentButton.addEventListener('click', () => {
-            if (!estateId) { 
-                const loginError = document.getElementById('login-error');
-                loginError.textContent = "Please log in as an admin to perform this action.";
-                loginError.classList.remove('hidden');
-                return; 
-            }
-            addResidentModal.classList.remove('hidden');
-        });
+        // Modals functionality
+        addResidentButton.addEventListener('click', () => addResidentModal.classList.remove('hidden'));
+        closeAddResidentModal.addEventListener('click', () => addResidentModal.classList.add('hidden'));
 
-        closeResidentModalButton.addEventListener('click', () => {
-            addResidentModal.classList.add('hidden');
-            addResidentForm.reset();
-            modalMessageResident.classList.add('hidden');
-        });
+        addHouseButton.addEventListener('click', () => addHouseModal.classList.remove('hidden'));
+        closeAddHouseModal.addEventListener('click', () => addHouseModal.classList.add('hidden'));
 
+        addSecurityButton.addEventListener('click', () => addSecurityModal.classList.remove('hidden'));
+        closeAddSecurityModal.addEventListener('click', () => addSecurityModal.classList.add('hidden'));
+
+        // Form submission for adding resident
         addResidentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('residentEmail').value;
-            const password = document.getElementById('residentPassword').value;
-            const fullName = document.getElementById('residentFullName').value;
-            const role = document.getElementById('residentRole').value;
-            const submitButton = document.getElementById('add-resident-submit');
-            
-            submitButton.disabled = true;
-            submitButton.textContent = 'Adding...';
-            modalMessageResident.classList.add('hidden');
+            const fullName = addResidentForm['resident-full-name'].value;
+            const email = addResidentForm['resident-email'].value;
+            const phone = addResidentForm['resident-phone'].value;
+            const houseId = addResidentForm['resident-house'].value;
 
             try {
-                const { user: newUser } = await createUserWithEmailAndPassword(auth, email, password);
-                const newUserDoc = {
-                    email: email,
-                    fullName: fullName,
-                    role: role,
-                    estateId: estateId,
-                    createdAt: new Date(),
-                    status: 'approved',
-                };
-                await setDoc(doc(db, 'users', newUser.uid), newUserDoc);
-                modalMessageResident.textContent = 'Resident added successfully!';
-                modalMessageResident.classList.remove('hidden', 'bg-red-100');
-                modalMessageResident.classList.add('bg-green-100', 'text-green-700');
+                // Add resident to Firestore
+                await addDoc(collection(db, "users"), {
+                    fullName,
+                    email,
+                    phone,
+                    houseId,
+                    estateId: userEstateId,
+                    role: 'tenant',
+                    createdAt: serverTimestamp(),
+                });
+                alert("Resident added successfully!");
                 addResidentForm.reset();
-                setTimeout(() => { addResidentModal.classList.add('hidden'); modalMessageResident.classList.add('hidden'); }, 2000);
+                addResidentModal.classList.add('hidden');
             } catch (error) {
                 console.error("Error adding resident:", error);
-                modalMessageResident.textContent = `Error: ${error.message}`;
-                modalMessageResident.classList.remove('hidden', 'bg-green-100');
-                modalMessageResident.classList.add('bg-red-100', 'text-red-700');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Add Resident';
-            }
-        });
-        
-        // Add House Modal
-        addHouseButton.addEventListener('click', () => {
-            if (!estateId) {
-                const loginError = document.getElementById('login-error');
-                loginError.textContent = "Please log in as an admin to perform this action.";
-                loginError.classList.remove('hidden');
-                return;
-            }
-            addHouseModal.classList.remove('hidden');
-        });
-
-        closeHouseModalButton.addEventListener('click', () => {
-            addHouseModal.classList.add('hidden');
-            addHouseForm.reset();
-            modalMessageHouse.classList.add('hidden');
-        });
-        
-        addHouseForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const address = document.getElementById('houseAddress').value;
-            const landlordUid = document.getElementById('landlordSelect').value;
-            const submitButton = document.getElementById('add-house-submit');
-
-            submitButton.disabled = true;
-            submitButton.textContent = 'Adding...';
-            modalMessageHouse.classList.add('hidden');
-
-            try {
-                const houseData = {
-                    address: address,
-                    estateId: estateId,
-                    landlordUid: landlordUid || null,
-                    tenantUid: null,
-                    status: landlordUid ? 'occupied' : 'vacant',
-                    createdAt: new Date(),
-                };
-                await addDoc(collection(db, 'houses'), houseData);
-
-                modalMessageHouse.textContent = 'House added successfully!';
-                modalMessageHouse.classList.remove('hidden', 'bg-red-100');
-                modalMessageHouse.classList.add('bg-green-100', 'text-green-700');
-                addHouseForm.reset();
-                setTimeout(() => { addHouseModal.classList.add('hidden'); modalMessageHouse.classList.add('hidden'); }, 2000);
-            } catch (error) {
-                console.error("Error adding house:", error);
-                modalMessageHouse.textContent = `Error: ${error.message}`;
-                modalMessageHouse.classList.remove('hidden', 'bg-green-100');
-                modalMessageHouse.classList.add('bg-red-100', 'text-red-700');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Add House';
+                alert("Failed to add resident. Please try again.");
             }
         });
 
-        // Security
+        // Form submission for generating QR code
         generateCodeForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const residentId = document.getElementById('resident-select').value;
+            const residentId = residentSelect.value;
             const visitorName = document.getElementById('visitor-name').value;
-            const submitButton = document.getElementById('generate-code-button');
-
-            submitButton.disabled = true;
-            submitButton.textContent = 'Generating...';
+            
+            // Generate a random 6-digit code
+            const code = Math.floor(100000 + Math.random() * 900000).toString();
 
             try {
-                const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+                // Set expiry time for 24 hours
                 const expiryTime = new Date();
-                expiryTime.setHours(expiryTime.getHours() + 2); // Code expires in 2 hours
+                expiryTime.setHours(expiryTime.getHours() + 24);
 
                 const codeData = {
                     code: code,
                     residentId: residentId,
                     visitorName: visitorName,
-                    estateId: estateId,
-                    createdAt: new Date(),
+                    estateId: userEstateId,
+                    createdAt: serverTimestamp(),
                     expiry: expiryTime,
                     status: 'active',
                 };
-                await addDoc(collection(db, 'visitor_codes'), codeData);
+                
+                // Save the visitor code
+                await addDoc(collection(db, `users/${residentId}/visitorCodes`), codeData);
 
                 const qrData = JSON.stringify({
                     type: 'visitor_code',
                     code: code,
-                    estateId: estateId
+                    estateId: userEstateId
                 });
                 
                 qrCanvas.innerHTML = ''; // Clear previous QR code
-                const qrcode = new QRCode(qrCanvas, {
+                new QRCode(qrCanvas, {
                     text: qrData,
                     width: 256,
                     height: 256,
@@ -879,13 +616,9 @@
 
             } catch (error) {
                 console.error("Error generating QR code:", error);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Generate Code';
+                alert("Failed to generate QR code. Please try again.");
             }
         });
     </script>
 </body>
 </html>
-
-
