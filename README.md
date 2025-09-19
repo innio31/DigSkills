@@ -1,1 +1,1 @@
-# DigSkills
+# Impact Digital Academy
