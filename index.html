@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DigSkills | Digital Solutions & Skills Training</title>
+    <title>Impact Digital Academy | Digital Solutions & Skills Training</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#008080">
-    
+
     <style>
         :root {
             --primary: #2563eb;
@@ -17,20 +18,20 @@
             --dark: #1e293b;
             --success: #10b981;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background-color: var(--light);
             color: var(--dark);
             overflow-x: hidden;
         }
-        
+
         /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -39,15 +40,15 @@
             position: fixed;
             width: 100%;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
-        
+
         header.scrolled {
             padding: 0.5rem 5%;
             background: var(--primary);
         }
-        
+
         /* Navigation Styles */
         nav {
             display: flex;
@@ -127,7 +128,7 @@
             .mobile-menu-btn {
                 display: block;
             }
-            
+
             .nav-links {
                 display: none;
                 position: absolute;
@@ -137,17 +138,17 @@
                 background: var(--primary);
                 flex-direction: column;
                 padding: 1rem 5%;
-                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
             }
-            
+
             .nav-links.active {
                 display: flex;
             }
-            
+
             .nav-links li {
                 margin: 0.8rem 0;
             }
-            
+
             .cta-button {
                 margin-left: 0;
                 margin-top: 1rem;
@@ -155,7 +156,7 @@
                 text-align: center;
             }
         }
-        
+
         /* Hero Section */
         .hero {
             height: 100vh;
@@ -243,7 +244,7 @@
             flex-wrap: wrap;
             padding: 2rem 5%;
             background-color: white;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
             position: relative;
             z-index: 3;
             margin-top: -50px;
@@ -303,14 +304,14 @@
             background-color: white;
             border-radius: 15px;
             padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             text-align: left;
         }
 
         .service-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
         .service-icon {
@@ -367,7 +368,7 @@
             background-color: white;
             border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             position: relative;
         }
 
@@ -461,7 +462,7 @@
         }
 
         .cta-section .section-subtitle {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         /* Footer Styles */
@@ -517,7 +518,7 @@
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: #adb5bd;
             font-size: 0.8rem;
         }
@@ -546,7 +547,7 @@
             justify-content: center;
             width: 40px;
             height: 40px;
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             color: white;
             transition: all 0.3s ease;
@@ -577,7 +578,7 @@
             border-radius: 50%;
             color: white;
             font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
 
@@ -616,40 +617,40 @@
                 min-height: 100vh;
                 padding: 3rem 5%;
             }
-            
+
             .hero-content {
                 padding: 1.5rem;
             }
-            
+
             .hero h1 {
                 font-size: 1.8rem;
             }
-            
+
             .stats {
                 margin-top: 0;
                 border-radius: 0;
                 margin-left: 0;
                 margin-right: 0;
             }
-            
+
             .section {
                 padding: 3rem 5%;
             }
-            
+
             .section-title {
                 font-size: 1.8rem;
             }
-            
+
             .cta-section {
                 margin: 0 0 3rem;
                 border-radius: 0;
             }
-            
+
             .floating-social {
                 bottom: 20px;
                 right: 20px;
             }
-            
+
             .floating-social a {
                 width: 45px;
                 height: 45px;
@@ -658,18 +659,19 @@
         }
     </style>
 </head>
+
 <body>
     <header id="header">
         <nav>
             <div class="logo">
-                <img src="images/logo.png" alt="DigSkills Logo" class="logo-icon" />
-                <span>DigSkills</span>
+                <img src="images/logo.png" alt="Impact Digital Academy Logo" class="logo-icon" />
+                <span>Impact Digital Academy</span>
             </div>
-            
+
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
             </button>
-            
+
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="services.html">Services</a></li>
@@ -684,20 +686,31 @@
     <section class="hero" id="home">
         <div class="hero-slider">
             <!-- Slide 1 -->
-            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="slide active"
+                style="background-image: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');">
+            </div>
             <!-- Slide 2 -->
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+            </div>
             <!-- Slide 3 -->
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+            </div>
             <!-- Slide 4 -->
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1677442135136-760c813a743e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1677442135136-760c813a743e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+            </div>
             <!-- Slide 5 -->
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+            </div>
         </div>
-        
+
         <div class="hero-content">
             <h1>Empowering Institutions & Learners with Digital Excellence</h1>
-            <p>We provide cutting-edge digital solutions for organizations and transformative education programs to prepare the workforce of tomorrow.</p>
+            <p>Impact Digital Academy provides cutting-edge digital solutions for organizations and transformative
+                education programs to prepare the workforce of tomorrow.</p>
             <div class="hero-buttons">
                 <a href="services.html" class="cta-button">Explore Solutions</a>
                 <a href="academy.html" class="secondary-button">View Courses</a>
@@ -726,8 +739,9 @@
 
     <section class="section" id="services">
         <h2 class="section-title">Our Digital Solutions</h2>
-        <p class="section-subtitle">Comprehensive services to drive your digital transformation and empower your workforce</p>
-        
+        <p class="section-subtitle">Comprehensive services to drive your digital transformation and empower your
+            workforce</p>
+
         <div class="services-grid">
             <!-- Data & Analytics -->
             <div class="service-card">
@@ -735,41 +749,45 @@
                     <i class="fas fa-chart-line"></i>
                 </div>
                 <h3 class="service-title">Data Solutions</h3>
-                <p class="service-description">Transform raw data into actionable insights with our advanced analytics, business intelligence systems, and comprehensive database management solutions.</p>
+                <p class="service-description">Transform raw data into actionable insights with our advanced analytics,
+                    business intelligence systems, and comprehensive database management solutions.</p>
                 <a href="services.html#data" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
             </div>
-            
+
             <!-- Custom Development -->
             <div class="service-card">
                 <div class="service-icon">
                     <i class="fas fa-laptop-code"></i>
                 </div>
                 <h3 class="service-title">Custom Development</h3>
-                <p class="service-description">Tailored web, mobile, and enterprise software solutions designed to meet your unique business requirements and operational workflows.</p>
+                <p class="service-description">Tailored web, mobile, and enterprise software solutions designed to meet
+                    your unique business requirements and operational workflows.</p>
                 <a href="services.html#development" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
             </div>
-            
+
             <!-- System Integration -->
             <div class="service-card">
                 <div class="service-icon">
                     <i class="fas fa-server"></i>
                 </div>
                 <h3 class="service-title">System Integration</h3>
-                <p class="service-description">Seamless integration of CBT systems, accounting software, and IT infrastructure to create unified, efficient operational environments.</p>
+                <p class="service-description">Seamless integration of CBT systems, accounting software, and IT
+                    infrastructure to create unified, efficient operational environments.</p>
                 <a href="services.html#integration" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
             </div>
-            
+
             <!-- Digital Training -->
             <div class="service-card">
                 <div class="service-icon">
                     <i class="fas fa-graduation-cap"></i>
                 </div>
                 <h3 class="service-title">Digital Training</h3>
-                <p class="service-description">Comprehensive upskilling programs in emerging technologies, digital tools, and industry best practices for your workforce.</p>
+                <p class="service-description">Comprehensive upskilling programs in emerging technologies, digital
+                    tools, and industry best practices for your workforce.</p>
                 <a href="academy.html" class="learn-more">Learn more <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
-        
+
         <div class="text-center" style="margin-top: 3rem;">
             <a href="services.html" class="cta-button">Explore All Services</a>
         </div>
@@ -778,10 +796,11 @@
     <section class="testimonials" id="success-stories">
         <h2 class="section-title">Success Stories</h2>
         <p class="section-subtitle">Hear from organizations we've transformed through our digital solutions</p>
-        
+
         <div class="testimonial-grid">
             <div class="testimonial-card">
-                <p class="testimonial-quote">"DigSkills transformed our data management system, giving us real-time insights that improved our decision-making by 40%."</p>
+                <p class="testimonial-quote">"Impact Digital Academy transformed our data management system, giving us
+                    real-time insights that improved our decision-making by 40%."</p>
                 <div class="testimonial-author">
                     <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Adebayo" class="author-avatar">
                     <div class="author-info">
@@ -790,20 +809,23 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="testimonial-card">
-                <p class="testimonial-quote">"The custom LMS developed by DigSkills has revolutionized our training programs with 85% employee engagement."</p>
+                <p class="testimonial-quote">"The custom LMS developed by IDA has revolutionized our training programs
+                    with 85% employee engagement."</p>
                 <div class="testimonial-author">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Amina Mohammed" class="author-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Amina Mohammed"
+                        class="author-avatar">
                     <div class="author-info">
                         <h4>Amina Mohammed</h4>
                         <p>HR Director, FirstBank</p>
                     </div>
                 </div>
             </div>
-            
+
             <div class="testimonial-card">
-                <p class="testimonial-quote">"Our digital transformation journey with DigSkills resulted in 30% operational efficiency gains within 6 months."</p>
+                <p class="testimonial-quote">"Our digital transformation journey with Impact resulted in 30% operational
+                    efficiency gains within 6 months."</p>
                 <div class="testimonial-author">
                     <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Emeka Okonkwo" class="author-avatar">
                     <div class="author-info">
@@ -818,7 +840,7 @@
     <section class="tech-stack" id="technologies">
         <h2 class="section-title">Our Technology Stack</h2>
         <p class="section-subtitle">We work with cutting-edge technologies to deliver robust solutions</p>
-        
+
         <div class="tech-icons">
             <i class="fab fa-js tech-icon" title="JavaScript"></i>
             <i class="fab fa-python tech-icon" title="Python"></i>
@@ -834,21 +856,27 @@
     <section class="section" id="partners">
         <h2 class="section-title">Trusted By Industry Leaders</h2>
         <p class="section-subtitle">We collaborate with top organizations to deliver exceptional results</p>
-        
+
         <div class="partners-logos">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Cisco_logo_blue_2016.svg/1200px-Cisco_logo_blue_2016.svg.png" alt="Cisco" class="partner-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Cisco_logo_blue_2016.svg/1200px-Cisco_logo_blue_2016.svg.png"
+                alt="Cisco" class="partner-logo">
             <img src="images/google.jpeg" alt="Google" class="partner-logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/1200px-IBM_logo.svg.png" alt="IBM" class="partner-logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png" alt="Microsoft" class="partner-logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png" alt="React" class="partner-logo" style="height: 35px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/1200px-IBM_logo.svg.png"
+                alt="IBM" class="partner-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png"
+                alt="Microsoft" class="partner-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png"
+                alt="React" class="partner-logo" style="height: 35px;">
         </div>
     </section>
 
     <section class="cta-section">
         <h2 class="section-title">Ready to Transform Your Digital Landscape?</h2>
-        <p class="section-subtitle">Let's discuss how we can help your organization achieve its digital goals</p>
+        <p class="section-subtitle">Let's discuss how Impact Digital Academy can help your organization achieve its
+            digital goals</p>
         <div style="margin-top: 2rem;">
-            <a href="contact.html" class="cta-button" style="background-color: white; color: var(--primary);">Get In Touch</a>
+            <a href="contact.html" class="cta-button" style="background-color: white; color: var(--primary);">Get In
+                Touch</a>
             <a href="tel:+2349035448295" class="secondary-button">Call Us Now</a>
         </div>
     </section>
@@ -856,10 +884,10 @@
     <footer>
         <div class="footer-content">
             <div class="footer-column">
-                <h3>DigSkills</h3>
+                <h3>Impact Digital Academy</h3>
                 <p>Empowering institutions and individuals through digital transformation and education.</p>
             </div>
-            
+
             <div class="footer-column">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
@@ -870,7 +898,7 @@
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
-            
+
             <div class="footer-column">
                 <h3>Services</h3>
                 <ul class="footer-links">
@@ -880,7 +908,7 @@
                     <li><a href="academy.html">Digital Training</a></li>
                 </ul>
             </div>
-            
+
             <div class="footer-column">
                 <h3>Contact</h3>
                 <ul class="footer-links">
@@ -890,7 +918,7 @@
                 </ul>
             </div>
         </div>
-        
+
         <div class="footer-social">
             <h3>Connect With Us</h3>
             <div class="social-icons">
@@ -911,9 +939,9 @@
                 </a>
             </div>
         </div>
-        
+
         <div class="footer-bottom">
-            <p>&copy; 2025 DigSkills. All rights reserved.</p>
+            <p>&copy; 2025 Impact Digital Academy. All rights reserved.</p>
         </div>
     </footer>
 
@@ -933,20 +961,20 @@
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
-        
-        mobileMenuBtn.addEventListener('click', function() {
+
+        mobileMenuBtn.addEventListener('click', function () {
             navLinks.classList.toggle('active');
         });
-        
+
         // Close mobile menu when clicking a link
         document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function () {
                 navLinks.classList.remove('active');
             });
         });
-        
+
         // Header scroll effect
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const header = document.getElementById('header');
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
@@ -954,37 +982,37 @@
                 header.classList.remove('scrolled');
             }
         });
-        
+
         // Hero slider functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const slides = document.querySelectorAll('.slide');
             let currentSlide = 0;
-            
+
             function showSlide(index) {
                 slides.forEach(slide => slide.classList.remove('active'));
                 slides[index].classList.add('active');
             }
-            
+
             function nextSlide() {
                 currentSlide = (currentSlide + 1) % slides.length;
                 showSlide(currentSlide);
             }
-            
+
             // Change slide every 5 seconds
             setInterval(nextSlide, 5000);
-            
+
             // Show first slide immediately
             showSlide(0);
         });
-        
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
+
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
@@ -996,4 +1024,5 @@
         });
     </script>
 </body>
+
 </html>
